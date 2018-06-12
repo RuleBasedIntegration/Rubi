@@ -12,38 +12,52 @@
 (* :Keywords: *)
 (* :Discussion: *)
 
-BeginPackage["RubiPackageTools`"];
+BeginPackage["Rubi`RubiPackageTools`"];
 
-CreatePackageFilesFromNotebooks::usage = "CreatePackageFilesFromNotebooks[] creates the .m package files for the rules from the notebooks";
+BuildIntegrationRules::usage = "BuildIntegrationRules[] creates the .m package files for the rules from the notebooks";
 
 Begin["`Private`"];
 $dir = DirectoryName@System`Private`$InputFileName;
 $ruleDir = FileNameJoin[{$dir, "..", "IntegrationRuleNotebooks"}];
 
-ClearAll[CreatePackageFilesFromNotebooks];
-CreatePackageFilesFromNotebooks[] := CreatePackageFilesFromNotebooks[
-  FileNameJoin[{$dir, "IntegrationRules"}]
-];
-CreatePackageFilesFromNotebooks[outDir_String /; DirectoryQ[outDir]] := Module[
+$rulePackages = Flatten@{
+  FileNames["*", {FileNameJoin[{$ruleDir, "1 Algebraic functions/1.1 Binomial products"}]}],
+  FileNames["*", {FileNameJoin[{$ruleDir, "1 Algebraic functions/1.2 Trinomial products"}]}],
+  FileNameJoin[{$ruleDir, "1 Algebraic functions/1.3 Miscellaneous"}],
+
+  FileNameJoin[{$ruleDir, "2 Exponentials"}],
+  FileNameJoin[{$ruleDir, "3 Logarithms"}],
+  FileNameJoin[{$ruleDir, "4 Trig functions"}],
+  FileNameJoin[{$ruleDir, "5 Inverse trig functions"}],
+  FileNameJoin[{$ruleDir, "6 Hyperbolic functions"}],
+  FileNameJoin[{$ruleDir, "7 Inverse hyperbolic functions"}],
+  FileNameJoin[{$ruleDir, "8 Special functions"}],
+
+  FileNames["*.nb", FileNameJoin[{$ruleDir, "9 Miscellaneous"}]]
+};
+
+ClearAll[BuildIntegrationRules];
+BuildIntegrationRules[] := BuildIntegrationRules[#, FileNameJoin[{$dir, "IntegrationRules"}]]& /@ $rulePackages;
+BuildIntegrationRules[section_String /; DirectoryQ[section] || FileExistsQ[section], outDir_String /; DirectoryQ[outDir]] := Module[
   {
-    subDirs = FileNames["*", {$ruleDir}]
+    files,
+    sectionName,
+    sourceAsList
   },
-  Function[dir,
-    Module[{
-      files = FileNames["*.nb", {dir}, Infinity],
-      sourceAsList
-    },
-      PrintTemporary["Exporting all notebooks from " <> FileNameSplit[dir][[-1]]];
-      sourceAsList = Flatten@Table[
-        Prepend[
-          exprToSource /@ DeleteCases[NotebookImport[f, "Code" -> "HeldExpression"], HoldComplete[Null]],
-          "\n(* File: " <> FileBaseName[f] <> " *)\n"
-        ], {f, files}];
-      Export[FileNameJoin[{outDir, FileNameSplit[dir][[-1]] <> ".m"}], sourceAsList, "Table"]
-    ]] /@ subDirs;
+  files = If[DirectoryQ[section], FileNames["*.nb", {section}, Infinity], {section}];
+  sectionName = If[DirectoryQ[section], FileNameSplit[section][[-1]], FileBaseName[section]];
+  PrintTemporary["Exporting all notebooks from " <> sectionName];
+  sourceAsList = Flatten@Table[
+    Prepend[
+      exprToSource /@ DeleteCases[NotebookImport[f, "Code" -> "HeldExpression"], HoldComplete[Null]],
+      subSectionComment[FileBaseName[f]]
+    ], {f, files}];
+  Export[FileNameJoin[{outDir, sectionName <> ".m"}], Prepend[sourceAsList, sectionComment[sectionName]], "Table"]
 ];
 
 exprToSource[HoldComplete[expr_]] := ToString[Unevaluated[expr], InputForm];
+sectionComment[message_String] := TemplateApply["\n(* ::Section:: *)\n(* `` *)", message];
+subSectionComment[message_String] := TemplateApply["\n(* ::Subsection::Closed:: *)\n(* `` *)", message];
 
 End[]; (* `Private` *)
 
