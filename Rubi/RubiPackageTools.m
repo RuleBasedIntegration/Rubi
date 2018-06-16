@@ -5,12 +5,13 @@
 (* :Context: RubiPackageTools` *)
 (* :Author: patrick *)
 (* :Date: 2018-06-08 *)
-
-(* :Package Version: 0.1 *)
-(* :Mathematica Version: 11.2 *)
-(* :Copyright: (c) 2018 patrick *)
-(* :Keywords: *)
-(* :Discussion: *)
+(* :Discussion: This package is only intended for development purpose! It extracts all integration rules from the
+  * notebooks and zips them together in several packages that are then loaded by Rubi. The structure, i.e. which notebooks
+  * are packed into one package, is as important as the order in which they are loaded in Rubi.m.
+  *
+  * The core function of this package imports the "Code" cells from a notebook and converts them to Expressions which
+  * are then exported into the .m package file.
+  * *)
 
 BeginPackage["Rubi`RubiPackageTools`"];
 
@@ -36,7 +37,6 @@ $rulePackages = Flatten@{
   FileNames["*.nb", FileNameJoin[{$ruleDir, "9 Miscellaneous"}]]
 };
 
-ClearAll[BuildIntegrationRules];
 BuildIntegrationRules[] := BuildIntegrationRules[#, FileNameJoin[{$dir, "IntegrationRules"}]]& /@ $rulePackages;
 BuildIntegrationRules[section_String /; DirectoryQ[section] || FileExistsQ[section], outDir_String /; DirectoryQ[outDir]] := Module[
   {

@@ -4,25 +4,6 @@ SimplifyFlag = True;
 $StepCounter = 0;
 $RuleList = {};
 
-(*Int[u_, x_Symbol, flag_] :=*)
-(*If[flag === Step,*)
-(*Block[{$ShowSteps = True}, Int[u, x]],*)
-(*If[flag === Steps,*)
-(*Block[{$ShowSteps = True},*)
-(*FixedPoint[*)
-(*Function[Sow[RubiIntermediateResult[HoldComplete[#]]];*)
-(*ReplaceAll[#, {Defer[Int] -> Int, Defer[Dist] -> Dist, Defer[Subst] -> Subst}]], Int[u, x]]],*)
-(*If[flag === Stats,*)
-(*Block[{$ShowSteps = False, $StepCounter = 0, $RuleList = {}},*)
-(*With[{result = Int[u, x]},*)
-(*Print[{$StepCounter, Length[$RuleList], LeafCount[u], LeafCount[result], N[Length[$RuleList] / LeafCount[u], 4]}];*)
-(*result]],*)
-(*Int[u, x]]]]*)
-
-
-(* If func is a function defined using properly defined transformation rules,
-   StepFunction[func] modifies the rules to display steps when the control
-   variable $ShowSteps is True. *)
 StepFunction::usage = "StepFunction[func] modifies the rules to display steps when the control variable $ShowSteps is True";
 StepFunction[func_] :=
     Module[{lst = DownValues[func]},

@@ -7,14 +7,16 @@
 BeginPackage["Rubi`"];
 
 Int::usage = "Int[expn, var] returns the antiderivative (indefinite integral) of <expn> with respect to <var>.\n" <>
-    "Int[{expn1, expn2, ...},var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>." <>
+    "Int[{expn1, expn2, ...},var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>.\n" <>
     "Int[expn, {var, a, b}] returns the limit of the antiderivative of <expn> as <var> approaches <b> minus the limit as <var> approaches <a>. " <>
     "Note that this difference will NOT always equal the definite integral of <expn> from <a> to <b>.";
 Dist::usage = "Dist[expn1,expn2,var] distributes <expn1> over <expn2>.";
 Subst::usage = "Subst[expn1,var,expn2] substitutes <expn2> for <var> in <expn1>.";
-Step::usage = "Int[expn, var, Step] displays the first step in the integration of <expn> with respect to <var> and returns the intermediate result.";
-Steps::usage = "Int[expn, var, Steps] displays all the steps in the integration of <expn> with respect to <var> and returns the antiderivative.";
-Stats::usage = "Int[expn, var, Stats] before returning the antiderivative <expn> with respect to <var>, displays a list {a, b, c, d, e} of statistics.";
+Step::usage = "Step[Int[expn, var]] displays the first step in the integration of <expn> with respect to <var> and returns the intermediate result.";
+Steps::usage = "Steps[Int[expn, var]] displays all the steps in the integration of <expn> with respect to <var> and returns the antiderivative.";
+Stats::usage = "Stats[Int[expn, var]] prints statistical information of the integration before returning the antiderivative <expn> with respect to <var>." <>
+    "It consists of (a) the number of steps used to integrate, (b) the number of distinct rules used, (c) is the leaf count size of the input," <>
+    "(d) the leaf count size of the antiderivative, and (e) the rule-to-size ratio of the integration (i.e. the quotient of (b) and (c)).";
 
 RubiRule::usage = "RubiRule is a symbolic wrapper that is used when displaying integration steps.";
 RubiIntermediateResult::usage = "RubiIntermediateResult is a symbolic wrapper that is used when displaying integration steps.";
@@ -28,9 +30,6 @@ CannotIntegrate::usage = "CannotIntegrate[expn,var] indicates Rubi is unable to 
 
 $Unintegrable::usage = "If $Unintegrable is True and <expn> is not integrable with respect to <var> in terms of the functions Rubi uses to express antiderivatives, Int[expn,var] returns Unintegrable[expn,var].";
 
-
-$RuleColor::usage = "$RuleColor is the color used to display rules when showing integration steps. The default rule color is red.";
-$ConditionColor::usage = "$ConditionColor is the color used to display application conditions when showing integration steps. The default condition color is blue.";
 $StepCounter::usage = "If the ShowSteps package has been loaded and $StepCounter is an integer, it is incremented each time an integration rule is applied.";
 
 
@@ -105,7 +104,6 @@ $RuleCount = Length[DownValues[Int]];
 
 If[$LoadShowSteps === True,
   LoadRules[$stepRoutines];
-  LoadRules[$ruleFormatting];
 ];
 
 StatusBarPrint["Modifying " <> ToString[$RuleCount] <> " integration rules to distribute coefficients over sums..."];
@@ -116,7 +114,8 @@ If[$LoadShowSteps === True,
   StepFunction[Int];
 ];
 
-Rubi::argFlag = "The `` routine can only be used with the form Int[expr, x] where x is a symbol.";
+Int::argFlag = "The `` routine can only be used with the form Int[expr, x] where x is a symbol.";
+Int::noShowSteps = "To use this function, you need to define $LoadShowSteps=True before loading the Rubi package"
 SetAttributes[Steps, {HoldAllComplete}];
 Steps[Int[expr_, x_Symbol]] := Module[{result, steps},
   {result, steps} = Reap@Block[{$ShowSteps = True},
@@ -130,24 +129,27 @@ Steps[Int[expr_, x_Symbol]] := Module[{result, steps},
   ];
   PrintRubiSteps[steps];
   result
-];
-Steps[___] := Null /; Message[Rubi::argFlag, "Steps"];
+] /; TrueQ[$LoadShowSteps];
+Steps[int : Int[_, _Symbol]] := (Message[Int::noShowSteps]; int);
+Steps[___] := Null /; Message[Int::argFlag, "Steps"];
 
 SetAttributes[Step, {HoldAllComplete}];
 Step[Int[expr_, x_Symbol]] := Module[{result, step},
   {result, step} = Reap@Block[{$ShowSteps = True}, Int[expr, x]];
   PrintRubiSteps[step];
   result
-];
-Step[___] := Null /; Message[Rubi::argFlag, "Step"];
+] /; TrueQ[$LoadShowSteps];
+Step[int : Int[_, _Symbol]] := (Message[Int::noShowSteps]; int);
+Step[___] := Null /; Message[Int::argFlag, "Step"];
 
 SetAttributes[Stats, {HoldAllComplete}];
 Stats[Int[expr_, x_Symbol]] := Block[{$ShowSteps = False, $StepCounter = 0, $RuleList = {}},
   With[{result = Int[expr, x]},
     Print[RubiStats@{$StepCounter, Length[$RuleList], LeafCount[expr], LeafCount[result], N[Length[$RuleList] / LeafCount[expr], 4]}];
     result]
-];
-Stats[___] := Null /; Message[Rubi::argFlag, "Stats"];
+] /; TrueQ[$LoadShowSteps];
+Stats[int : Int[_, _Symbol]] := (Message[Int::noShowSteps]; int);
+Stats[___] := Null /; Message[Int::argFlag, "Stats"];
 
 
 (* Print a warning when users use the old style routines for showing steps *)
@@ -176,6 +178,7 @@ Unintegrable[u_, x_] :=
       Defer[Int][u, x]];
 
 CannotIntegrate[u_, x_] := Defer[Int][u, x];
+LoadRules[$ruleFormatting];
 ClearStatusBar[];
 
 End[];
