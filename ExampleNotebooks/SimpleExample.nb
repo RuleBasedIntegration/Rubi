@@ -1,0 +1,2776 @@
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[StyleBox["Rubi",
+ FontSlant->"Italic"]], "Title",
+ TextAlignment->Center,ExpressionUUID->"4a4e13cb-5e7b-4420-a5cd-8d5bbb11432d"],
+
+Cell["Rule-Based Integrator", "Subtitle",
+ CellChangeTimes->{{3.4897814556796412`*^9, 3.4897814580976458`*^9}, {
+  3.5769621785283117`*^9, 3.576962186368323*^9}},
+ TextAlignment->Center,
+ FontWeight->"Bold",ExpressionUUID->"312a4c65-89e3-41bf-ba8d-85374180f686"],
+
+Cell["Crafted by Albert D. Rich, Applied Logician", "Subsubtitle",
+ TextAlignment->Center,ExpressionUUID->"752a4a5a-2796-4353-95fb-4caf7f2c7dfb"],
+
+Cell[TextData[{
+ "Store this ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " notebook file and the ",
+ StyleBox["Rubi",
+  FontSlant->"Italic"],
+ " package files in a directory of your choice.  Then use ",
+ StyleBox["Mathematica'",
+  FontSlant->"Italic"],
+ "s Evaluation>Evaluate Initialization Cells command to evaluate the cells in \
+this notebook.  This loads ",
+ StyleBox["Rubi",
+  FontSlant->"Italic"],
+ "\[CloseCurlyQuote]s integration rules, show-step routines and required \
+utility functions.  This process may require a few minutes, depending on the \
+speed of your computer."
+}], "Text",
+ CellChangeTimes->{{3.4897816406959662`*^9, 3.489781641288767*^9}, {
+   3.4897816777304316`*^9, 3.489781737369336*^9}, {3.489781785947821*^9, 
+   3.4897818697199683`*^9}, {3.4905072763181257`*^9, 3.490507283291338*^9}, {
+   3.4905073468458495`*^9, 3.490507371852693*^9}, {3.4905080078118114`*^9, 
+   3.490508028559848*^9}, {3.4905107317414007`*^9, 3.4905107735806737`*^9}, 
+   3.490510813766344*^9, {3.4905108637176323`*^9, 3.490510901812899*^9}, {
+   3.490511168120967*^9, 3.4905112618615313`*^9}, {3.490511322108837*^9, 
+   3.490511340345269*^9}, {3.490511371077323*^9, 3.4905113713113236`*^9}, {
+   3.5769622262183785`*^9, 3.5769622320083866`*^9}, {3.5769666010375414`*^9, 
+   3.576966623167572*^9}, {3.5769666536376147`*^9, 3.5769667748577843`*^9}, {
+   3.581811338675887*^9, 3.581811339045888*^9}, {3.5880143026080236`*^9, 
+   3.5880143030292244`*^9}, {3.593314440145001*^9, 3.5933144404550014`*^9}, 
+   3.623557507675606*^9, {3.633631105913694*^9, 3.6336311099999275`*^9}, {
+   3.6414292622226253`*^9, 3.641429263969828*^9}, {3.6669851340075035`*^9, 
+   3.6669851344275045`*^9}, {3.685735975257767*^9, 3.6857359759677677`*^9}, {
+   3.686330797987679*^9, 3.6863307983126974`*^9}, {3.696617275962763*^9, 
+   3.6966172778627653`*^9}, {3.697679910094166*^9, 3.6976799160475063`*^9}, {
+   3.706393246928695*^9, 3.7063932472577143`*^9}, {3.735757806789486*^9, 
+   3.735757807522687*^9}},
+ FontSize->16,ExpressionUUID->"44cb19da-4358-41b3-bc72-36bc1c3df9ad"],
+
+Cell[TextData[{
+ "If ",
+ StyleBox["$LoadShowSteps",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " is ",
+ StyleBox["True",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " when the rules are being loaded, their definitions are modified so the \
+steps used to integrate expressions can be displayed.  To load ",
+ StyleBox["Rubi",
+  FontSlant->"Italic"],
+ " without this considerable overhead, change the value of the following \
+assignment to ",
+ StyleBox["False",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " ",
+ StyleBox["before",
+  FontSlant->"Italic"],
+ " loading the system."
+}], "Text",
+ CellChangeTimes->{{3.4897816406959662`*^9, 3.489781641288767*^9}, {
+   3.4897816777304316`*^9, 3.489781737369336*^9}, {3.489781785947821*^9, 
+   3.4897818697199683`*^9}, {3.48978190503843*^9, 3.489781921356059*^9}, {
+   3.489781958094124*^9, 3.4897819858777723`*^9}, 3.4905074310943985`*^9, {
+   3.4905074899377017`*^9, 3.4905075045861273`*^9}, {3.4905076088723106`*^9, 
+   3.4905077000388703`*^9}, {3.4905077353105326`*^9, 
+   3.4905077417533436`*^9}, {3.4905077785850086`*^9, 
+   3.4905078144338713`*^9}, {3.490507855789544*^9, 3.4905078566007457`*^9}, {
+   3.490507922557661*^9, 3.490507970886546*^9}, {3.4905082544950447`*^9, 
+   3.4905082803130894`*^9}, {3.4905083779848614`*^9, 
+   3.4905083782812614`*^9}, {3.4905084158617277`*^9, 3.490508416033328*^9}, {
+   3.4905088136396275`*^9, 3.490508818304035*^9}, {3.490511426847421*^9, 
+   3.4905114499666615`*^9}, {3.576966785177799*^9, 3.5769668198978477`*^9}, {
+   3.7063765327261815`*^9, 3.706376547279014*^9}, {3.706376654571151*^9, 
+   3.706376659223417*^9}, {3.7063932941673975`*^9, 3.706393305249031*^9}, {
+   3.706393380809353*^9, 3.7063934646011457`*^9}, {3.7063935962866774`*^9, 
+   3.7063935965546927`*^9}, {3.706399491723877*^9, 3.706399495302082*^9}, {
+   3.7063997364058723`*^9, 3.706399779607343*^9}, {3.735582387345081*^9, 
+   3.735582389544685*^9}, 3.7355825724906073`*^9, {3.735582629219307*^9, 
+   3.7355826918468175`*^9}, {3.735582746140913*^9, 3.7355827463125134`*^9}},
+ FontSize->16,ExpressionUUID->"a4e546c0-360a-49b1-ae23-fb42895fa296"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$LoadShowSteps", " ", "=", " ", "True"}], ";"}]], "Code",
+ CellChangeTimes->{{3.4897820121794186`*^9, 3.4897820382626643`*^9}, {
+  3.7062395371073294`*^9, 3.706239538477331*^9}, {3.7063765636919527`*^9, 
+  3.7063765650210285`*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"c4527556-e2a1-4e30-95b7-b2be75858e1a"],
+
+Cell[TextData[{
+ "If ",
+ StyleBox["$LoadElementaryFunctionRules",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " is ",
+ StyleBox["True",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " when the rules are being loaded, elementary and special function \
+integration rules are loaded in addition to rational and algebraic function \
+integration rules.  To load ",
+ StyleBox["Rubi",
+  FontSlant->"Italic"],
+ " without this considerable overhead, use  ",
+ StyleBox["False",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " ",
+ StyleBox["before",
+  FontSlant->"Italic"],
+ " loading the system."
+}], "Text",
+ FontSize->16,ExpressionUUID->"51493182-9fd7-42cb-8e00-aeee6c2decf3"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$LoadElementaryFunctionRules", " ", "=", " ", "False"}], 
+  ";"}]], "Code",ExpressionUUID->"181e4499-74dc-4bf6-af24-aac176aaf73f"],
+
+Cell[TextData[{
+ "If you have installed Rubi as package on your system, you can easily load \
+it with ",
+ Cell[BoxData[
+  FormBox[
+   StyleBox[
+    RowBox[{"<<", "Rubi`"}], "Code"], TraditionalForm]],ExpressionUUID->
+  "50775313-2f16-45d5-9b78-6dd654240648"],
+ ". However, you don\[CloseCurlyQuote]t need to install it in order to use \
+the functionality of Rubi. You can load ",
+ Cell[BoxData[
+  FormBox[
+   StyleBox[
+    RowBox[{"Rubi", ".", "m"}], "Code"], TraditionalForm]],ExpressionUUID->
+  "908f4260-ebbb-4a0a-8880-e6d7f8657d54"],
+ " from the directory where you have downloaded it. If you are using the \
+repository version from GitHub and opened this notebook from its \
+examples-directory, you can use the following to load the package:"
+}], "Text",ExpressionUUID->"ca489fb1-39e0-4fcf-894a-bfa2406c32cd"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Get", "[", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<..\>\"", ",", " ", 
+      "\"\<Rubi\>\"", ",", " ", "\"\<Rubi.m\>\""}], "}"}], "]"}], "]"}], 
+  ";"}]], "Code",
+ CellLabel->"In[3]:=",ExpressionUUID->"ee7ed83f-be06-4266-b268-1c01f316a754"],
+
+Cell[CellGroupData[{
+
+Cell["Integration", \
+"Section",ExpressionUUID->"5be8cfa8-9e20-4e26-a0e0-8be7a23e7304"],
+
+Cell[TextData[{
+ "Use the function ",
+ StyleBox["Int",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " to find the antiderivative (indefinite integral) of expressions, and to \
+optionally display the steps required to integrate them. "
+}], "Text",
+ CellChangeTimes->{{3.4897816406959662`*^9, 3.489781641288767*^9}, {
+   3.4897816777304316`*^9, 3.489781737369336*^9}, {3.489781785947821*^9, 
+   3.4897818697199683`*^9}, {3.48978190503843*^9, 3.489781921356059*^9}, {
+   3.489781958094124*^9, 3.4897819858777723`*^9}, {3.4897820637063093`*^9, 
+   3.4897820981199694`*^9}, 3.4897822161497765`*^9, {3.4897840774906487`*^9, 
+   3.4897840907506723`*^9}, {3.4897842079224777`*^9, 
+   3.4897842092952805`*^9}, {3.4905088717965293`*^9, 3.490508881172146*^9}, {
+   3.4905089196730137`*^9, 3.4905089314354343`*^9}, {3.5769669579280405`*^9, 
+   3.5769671537783155`*^9}, {3.5770818401387987`*^9, 3.577082065184794*^9}, {
+   3.5770821198940897`*^9, 3.577082170594179*^9}, 3.577082332896864*^9, {
+   3.7063936678217688`*^9, 3.7063936685528107`*^9}, {3.706399437183758*^9, 
+   3.706399471405715*^9}, {3.706399511039982*^9, 3.7063995141081576`*^9}, {
+   3.706400022249222*^9, 3.7064000373220835`*^9}, {3.7064000680278397`*^9, 
+   3.7064001117953434`*^9}, {3.7064001435691605`*^9, 3.706400148399437*^9}, {
+   3.706400178509159*^9, 3.706400204874667*^9}, {3.7064005515774975`*^9, 
+   3.7064005938339148`*^9}, {3.7064006957517433`*^9, 
+   3.7064007156428814`*^9}, {3.7070019314478283`*^9, 3.707001951677985*^9}, {
+   3.7070039353025103`*^9, 3.707004082873951*^9}, {3.735582880738351*^9, 
+   3.7355830482531333`*^9}},
+ FontSize->16,ExpressionUUID->"5dbc7b19-f4e1-4b4a-9da8-580331cd6896"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", " ", "Int"}]], "Code",
+ CellChangeTimes->{
+  3.4905089424334536`*^9, {3.7063777742591934`*^9, 3.706377775711276*^9}},
+ CellLabel->"In[16]:=",ExpressionUUID->"123f219c-e15c-41ca-ab09-bcb400c5d32f"],
+
+Cell[BoxData["\<\"Int[expn, var] returns the antiderivative (indefinite \
+integral) of <expn> with respect to <var>.\\nInt[{expn1, expn2, ...},var] \
+returns a list of the antiderivatives of <expn1>, <expn2>, ... each with \
+respect to <var>.\\nInt[expn, {var, a, b}] returns the limit of the \
+antiderivative of <expn> as <var> approaches <b> minus the limit as <var> \
+approaches <a>. Note that this difference will NOT always equal the definite \
+integral of <expn> from <a> to <b>.\"\>"], "Print", "PrintUsage",
+ CellTags->
+  "Info163738154573-6023306",ExpressionUUID->"321501f1-9fdc-45ac-b0bd-\
+76deb2c6c4f4"]
+}, Open  ]],
+
+Cell[TextData[{
+ "The following call on ",
+ Cell[BoxData[
+  StyleBox["Int",
+   FontSize->14,
+   FontWeight->"Bold"]],
+  CellChangeTimes->{
+   3.4905089424334536`*^9, {3.7063777742591934`*^9, 3.706377775711276*^9}, {
+    3.7064006167422247`*^9, 3.7064006200564137`*^9}, {3.706400992084693*^9, 
+    3.7064010187052155`*^9}, {3.7070016839306707`*^9, 3.7070017095881386`*^9},
+     3.7070041689718757`*^9, 3.7356035490497756`*^9},
+  Background->None,ExpressionUUID->"228a68d7-380e-4127-ab41-03780e626447"],
+ " returns the antiderivative of ",
+ Cell[BoxData[
+  StyleBox[
+   FractionBox[
+    RowBox[{"c", "+", 
+     RowBox[{"d", " ", "x"}]}], 
+    RowBox[{"x", " ", 
+     RowBox[{"(", 
+      RowBox[{"a", "+", 
+       RowBox[{"b", " ", "x"}], "+", 
+       RowBox[{"c", " ", 
+        SuperscriptBox["x", "2"]}]}], ")"}]}]],
+   FontWeight->"Bold"]],
+  CellChangeTimes->{
+   3.4905089424334536`*^9, {3.7063777742591934`*^9, 3.706377775711276*^9}, {
+    3.7064006167422247`*^9, 3.7064006200564137`*^9}, {3.706400992084693*^9, 
+    3.7064010187052155`*^9}, {3.7070016839306707`*^9, 3.7070017095881386`*^9},
+     3.7070041689718757`*^9, 3.7356035490497756`*^9},
+  Background->None,ExpressionUUID->"1a67a1c7-f482-4fde-a022-e4150f554130"],
+ " with respect to ",
+ Cell[BoxData[
+  StyleBox["x",
+   FontSize->14,
+   FontWeight->"Bold"]],
+  CellChangeTimes->{
+   3.4905089424334536`*^9, {3.7063777742591934`*^9, 3.706377775711276*^9}, {
+    3.7064006167422247`*^9, 3.7064006200564137`*^9}, {3.706400992084693*^9, 
+    3.7064010187052155`*^9}, {3.7070016839306707`*^9, 3.7070017095881386`*^9},
+     3.7070041689718757`*^9, 3.7356035490497756`*^9},
+  Background->None,ExpressionUUID->"e62f6b4b-1fab-4d28-b3f8-a237ab053131"],
+ ":"
+}], "Text",
+ CellChangeTimes->{{3.4897816406959662`*^9, 3.489781641288767*^9}, {
+   3.4897816777304316`*^9, 3.489781737369336*^9}, {3.489781785947821*^9, 
+   3.4897818697199683`*^9}, {3.48978190503843*^9, 3.489781921356059*^9}, {
+   3.489781958094124*^9, 3.4897819858777723`*^9}, {3.4897820637063093`*^9, 
+   3.4897820981199694`*^9}, 3.4897822161497765`*^9, {3.4897840774906487`*^9, 
+   3.4897840907506723`*^9}, {3.4897842079224777`*^9, 
+   3.4897842092952805`*^9}, {3.4905088717965293`*^9, 3.490508881172146*^9}, {
+   3.4905089196730137`*^9, 3.4905089314354343`*^9}, {3.5769669579280405`*^9, 
+   3.5769671537783155`*^9}, {3.5770818401387987`*^9, 3.577082065184794*^9}, {
+   3.5770821198940897`*^9, 3.577082170594179*^9}, 3.577082332896864*^9, {
+   3.7063936678217688`*^9, 3.7063936685528107`*^9}, {3.706399437183758*^9, 
+   3.706399471405715*^9}, {3.706399511039982*^9, 3.7063995141081576`*^9}, {
+   3.706400253238433*^9, 3.706400285841298*^9}, {3.7064003254025607`*^9, 
+   3.706400351123032*^9}, {3.7064003851039753`*^9, 3.7064004756851563`*^9}, {
+   3.7064005442440777`*^9, 3.7064005499824057`*^9}, {3.70640085250871*^9, 
+   3.7064008527707243`*^9}, 3.7064008935520573`*^9, {3.7064009277310123`*^9, 
+   3.706400928899079*^9}, 3.706401268059478*^9, 3.7064013005593367`*^9, {
+   3.7064013410226507`*^9, 3.706401345291895*^9}, {3.7355831079635487`*^9, 
+   3.7355831094636345`*^9}, {3.735604041248995*^9, 3.7356041559567986`*^9}},
+ FontSize->16,ExpressionUUID->"2966d8ad-9ab0-42e3-9dad-0cfaddf9a595"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Int", "[", 
+  RowBox[{
+   FractionBox[
+    RowBox[{"c", "+", 
+     RowBox[{"d", " ", "x"}]}], 
+    RowBox[{"x", " ", 
+     RowBox[{"(", 
+      RowBox[{"a", "+", 
+       RowBox[{"b", " ", "x"}], "+", 
+       RowBox[{"c", " ", 
+        SuperscriptBox["x", "2"]}]}], ")"}]}]], ",", "x"}], "]"}]], "Code",
+ CellChangeTimes->{
+  3.4905089424334536`*^9, {3.7063777742591934`*^9, 3.706377775711276*^9}, {
+   3.7064006167422247`*^9, 3.7064006200564137`*^9}, {3.706400992084693*^9, 
+   3.7064010187052155`*^9}, {3.7070016839306707`*^9, 3.7070017095881386`*^9}, 
+   3.7070041689718757`*^9, 3.7356035490497756`*^9},
+ Background->None,
+ CellLabel->"In[15]:=",ExpressionUUID->"c32a5985-6cbd-401b-8d01-887ec508a108"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"b", " ", "c"}], "-", 
+      RowBox[{"2", " ", "a", " ", "d"}]}], ")"}], " ", 
+    RowBox[{"ArcTanh", "[", 
+     FractionBox[
+      RowBox[{"b", "+", 
+       RowBox[{"2", " ", "c", " ", "x"}]}], 
+      SqrtBox[
+       RowBox[{
+        SuperscriptBox["b", "2"], "-", 
+        RowBox[{"4", " ", "a", " ", "c"}]}]]], "]"}]}], 
+   RowBox[{"a", " ", 
+    SqrtBox[
+     RowBox[{
+      SuperscriptBox["b", "2"], "-", 
+      RowBox[{"4", " ", "a", " ", "c"}]}]]}]], "+", 
+  FractionBox[
+   RowBox[{"c", " ", 
+    RowBox[{"Log", "[", "x", "]"}]}], "a"], "-", 
+  FractionBox[
+   RowBox[{"c", " ", 
+    RowBox[{"Log", "[", 
+     RowBox[{"a", "+", 
+      RowBox[{"b", " ", "x"}], "+", 
+      RowBox[{"c", " ", 
+       SuperscriptBox["x", "2"]}]}], "]"}]}], 
+   RowBox[{"2", " ", "a"}]]}]], "Output",
+ CellLabel->
+  "Out[15]=",ExpressionUUID->"a65cbd9d-e314-4f1a-afaf-4a034ddf3e32"]
+}, Open  ]],
+
+Cell[TextData[{
+ "The following call on ",
+ Cell[BoxData[
+  FormBox[
+   StyleBox["Int", "Code"], TraditionalForm]],ExpressionUUID->
+  "a8a2ce5c-2df0-4416-b4fa-1296463af8c7"],
+ " returns the limit of the antiderivative of ",
+ Cell[BoxData[
+  FormBox[
+   FractionBox[
+    RowBox[{"1", "+", 
+     RowBox[{"2", " ", "x"}]}], 
+    RowBox[{"x", " ", 
+     RowBox[{"(", 
+      RowBox[{"2", "+", 
+       RowBox[{"3", " ", "x"}], "+", 
+       RowBox[{"5", " ", 
+        SuperscriptBox["x", "2"]}]}], ")"}]}]], TraditionalForm]],
+  ExpressionUUID->"9eca5cb9-ca1a-4446-8a49-712800b4b1db"],
+ " as ",
+ Cell[BoxData[
+  FormBox[
+   StyleBox["x", "Code"], TraditionalForm]],ExpressionUUID->
+  "db2e7b04-6ae6-4b76-911b-c006588a68d4"],
+ " approaches 2 minus the limit as x approaches 1:"
+}], "Text",
+ FontSize->16,ExpressionUUID->"7cc01fef-a014-475c-862f-ebdbebeaf709"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Int", "[", 
+  RowBox[{
+   FractionBox[
+    RowBox[{"1", "+", 
+     RowBox[{"2", " ", "x"}]}], 
+    RowBox[{"x", " ", 
+     RowBox[{"(", 
+      RowBox[{"2", "+", 
+       RowBox[{"3", " ", "x"}], "+", 
+       RowBox[{"5", " ", 
+        SuperscriptBox["x", "2"]}]}], ")"}]}]], ",", 
+   RowBox[{"{", 
+    RowBox[{"x", ",", "1", ",", "2"}], "}"}]}], "]"}]], "Code",
+ CellChangeTimes->{
+  3.4905089424334536`*^9, {3.7063777742591934`*^9, 3.706377775711276*^9}, {
+   3.7064006167422247`*^9, 3.7064006200564137`*^9}, {3.706400992084693*^9, 
+   3.7064010187052155`*^9}, {3.7070016839306707`*^9, 3.7070017095881386`*^9}, 
+   3.7070041689718757`*^9, 3.7356035490497756`*^9, 3.735758325724005*^9},
+ Background->None,
+ CellLabel->"In[14]:=",ExpressionUUID->"25139f01-33d0-401f-905c-3280496bbf5b"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"-", 
+   FractionBox[
+    RowBox[{"5", " ", 
+     RowBox[{"ArcTan", "[", 
+      FractionBox["13", 
+       SqrtBox["31"]], "]"}]}], 
+    RowBox[{"2", " ", 
+     SqrtBox["31"]}]]}], "+", 
+  FractionBox[
+   RowBox[{"5", " ", 
+    RowBox[{"ArcTan", "[", 
+     FractionBox["23", 
+      SqrtBox["31"]], "]"}]}], 
+   RowBox[{"2", " ", 
+    SqrtBox["31"]}]], "+", 
+  FractionBox[
+   RowBox[{"Log", "[", "2", "]"}], "2"], "+", 
+  FractionBox[
+   RowBox[{"Log", "[", "10", "]"}], "4"], "-", 
+  FractionBox[
+   RowBox[{"Log", "[", "28", "]"}], "4"]}]], "Output",
+ CellLabel->
+  "Out[14]=",ExpressionUUID->"7cd404a3-ae5d-4c41-850f-4f0597c39609"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Showing Integration Steps", \
+"Section",ExpressionUUID->"9cb07ac4-3a35-4ba9-b9a1-adcafae56bd2"],
+
+Cell[TextData[{
+ "If ",
+ StyleBox["$LoadShowSteps",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " was ",
+ StyleBox["True",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " when the rules were being loaded, the following call on ",
+ Cell[BoxData[
+  StyleBox["Int",
+   FontSize->14,
+   FontWeight->"Bold"]],
+  CellChangeTimes->{
+   3.4905089424334536`*^9, {3.7063777742591934`*^9, 3.706377775711276*^9}, {
+    3.7064006167422247`*^9, 3.7064006200564137`*^9}, {3.706400992084693*^9, 
+    3.7064010187052155`*^9}, {3.7070016839306707`*^9, 3.7070017095881386`*^9},
+     3.7070041689718757`*^9, 3.7356035490497756`*^9},
+  Background->None,ExpressionUUID->"ddb3399d-e966-4027-aa2c-eb5734528007"],
+ " shows the steps used to integrate ",
+ Cell[BoxData[
+  StyleBox[
+   FractionBox[
+    RowBox[{"c", "+", 
+     RowBox[{"d", " ", "x"}]}], 
+    RowBox[{"x", " ", 
+     RowBox[{"(", 
+      RowBox[{"a", "+", 
+       RowBox[{"b", " ", "x"}], "+", 
+       RowBox[{"c", " ", 
+        SuperscriptBox["x", "2"]}]}], ")"}]}]],
+   FontWeight->"Bold"]],
+  CellChangeTimes->{
+   3.4905089424334536`*^9, {3.7063777742591934`*^9, 3.706377775711276*^9}, {
+    3.7064006167422247`*^9, 3.7064006200564137`*^9}, {3.706400992084693*^9, 
+    3.7064010187052155`*^9}, {3.7070016839306707`*^9, 3.7070017095881386`*^9},
+     3.7070041689718757`*^9, 3.7356035490497756`*^9},
+  Background->None,ExpressionUUID->"95471e6e-bc9f-4065-a96b-263b798566e7"],
+ " with respect to ",
+ Cell[BoxData[
+  StyleBox["x",
+   FontSize->14,
+   FontWeight->"Bold"]],
+  CellChangeTimes->{
+   3.4905089424334536`*^9, {3.7063777742591934`*^9, 3.706377775711276*^9}, {
+    3.7064006167422247`*^9, 3.7064006200564137`*^9}, {3.706400992084693*^9, 
+    3.7064010187052155`*^9}, {3.7070016839306707`*^9, 3.7070017095881386`*^9},
+     3.7070041689718757`*^9, 3.7356035490497756`*^9},
+  Background->None,ExpressionUUID->"c372d5c0-e45b-4228-852e-ee9ab7176a69"],
+ ", and returns the antiderivative:"
+}], "Text",
+ CellChangeTimes->{{3.4897816406959662`*^9, 3.489781641288767*^9}, {
+   3.4897816777304316`*^9, 3.489781737369336*^9}, {3.489781785947821*^9, 
+   3.4897818697199683`*^9}, {3.48978190503843*^9, 3.489781921356059*^9}, {
+   3.489781958094124*^9, 3.4897819858777723`*^9}, {3.4897820637063093`*^9, 
+   3.4897820981199694`*^9}, 3.4897822161497765`*^9, {3.4897840774906487`*^9, 
+   3.4897840907506723`*^9}, {3.4897842079224777`*^9, 
+   3.4897842092952805`*^9}, {3.4905088717965293`*^9, 3.490508881172146*^9}, {
+   3.4905089196730137`*^9, 3.4905089314354343`*^9}, {3.5769669579280405`*^9, 
+   3.5769671537783155`*^9}, {3.5770818401387987`*^9, 3.577082065184794*^9}, {
+   3.5770821198940897`*^9, 3.577082170594179*^9}, 3.577082332896864*^9, {
+   3.7063936678217688`*^9, 3.7063936685528107`*^9}, {3.706399437183758*^9, 
+   3.706399471405715*^9}, {3.706399511039982*^9, 3.7063995141081576`*^9}, {
+   3.706400253238433*^9, 3.706400285841298*^9}, {3.7064003254025607`*^9, 
+   3.706400351123032*^9}, {3.7064003851039753`*^9, 3.7064004756851563`*^9}, {
+   3.7064005442440777`*^9, 3.7064005499824057`*^9}, {3.70640085250871*^9, 
+   3.7064008527707243`*^9}, 3.7064008935520573`*^9, {3.7064009277310123`*^9, 
+   3.706400928899079*^9}, 3.706401268059478*^9, 3.7064013005593367`*^9, {
+   3.7064013410226507`*^9, 3.706401345291895*^9}, {3.7355831079635487`*^9, 
+   3.7355831094636345`*^9}, {3.735604041248995*^9, 3.7356041559567986`*^9}, {
+   3.7356042491917653`*^9, 3.73560431455888*^9}, {3.735757761575796*^9, 
+   3.735757781655031*^9}},
+ FontSize->16,ExpressionUUID->"79e63915-df12-45c2-9f33-715e746eede8"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Steps", "[", 
+  RowBox[{"Int", "[", 
+   RowBox[{
+    FractionBox[
+     RowBox[{"c", "+", 
+      RowBox[{"d", " ", "x"}]}], 
+     RowBox[{"x", " ", 
+      RowBox[{"(", 
+       RowBox[{"a", "+", 
+        RowBox[{"b", " ", "x"}], "+", 
+        RowBox[{"c", " ", 
+         SuperscriptBox["x", "2"]}]}], ")"}]}]], ",", "x"}], "]"}], 
+  "]"}]], "Code",
+ Background->None,
+ CellLabel->
+  "In[156]:=",ExpressionUUID->"e2d0e46d-d708-4c1b-9dd5-639c471a5ea8"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     ItemBox[
+      DynamicModuleBox[{Rubi`Private`open$$ = True}, 
+       TagBox[
+        FrameBox[
+         TagBox[GridBox[{
+            {
+             OpenerBox[Dynamic[Rubi`Private`open$$]], 
+             PaneSelectorBox[{False->
+              TemplateBox[{StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox[
+                    RowBox[{"(", 
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], ")"}], "m"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{"f", "+", 
+                    RowBox[{"g", " ", "x"}]}], ")"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                   TraditionalForm], TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                "\"\[LongRightArrow]\"", 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    RowBox[{"ExpandIntegrand", "(", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox[
+                    RowBox[{"(", 
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], ")"}], "m"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{"f", "+", 
+                    RowBox[{"g", " ", "x"}]}], ")"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], ",", "x"}], ")"}], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                   TraditionalForm], TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False]},
+               "Row",
+               DisplayFunction->(PaneBox[
+                 RowBox[{
+                   TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+               InterpretationFunction->(RowBox[{"Row", "[", 
+                  RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )], 
+              True->
+              TagBox[GridBox[{
+                 {
+                  StyleBox["\<\"Rubi Rule:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  StyleBox["928", "Label",
+                   StripOnInput->False]},
+                 {
+                  StyleBox["\<\"Condition:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  
+                  StyleBox["\<\"If \\!\\(\\*RowBox[{RowBox[{\\\"NeQ\\\", \
+\\\"[\\\", RowBox[{RowBox[{SuperscriptBox[\\\"b\\\", \\\"2\\\"], \\\"-\\\", \
+RowBox[{\\\"4\\\", \\\" \\\", \\\"a\\\", \\\" \\\", \\\"c\\\"}]}], \\\",\\\", \
+\\\"0\\\"}], \\\"]\\\"}], \\\"&&\\\", RowBox[{\\\"NeQ\\\", \\\"[\\\", \
+RowBox[{RowBox[{RowBox[{\\\"c\\\", \\\" \\\", SuperscriptBox[\\\"d\\\", \\\"2\
+\\\"]}], \\\"-\\\", RowBox[{\\\"b\\\", \\\" \\\", \\\"d\\\", \\\" \\\", \\\"e\
+\\\"}], \\\"+\\\", RowBox[{\\\"a\\\", \\\" \\\", SuperscriptBox[\\\"e\\\", \\\
+\"2\\\"]}]}], \\\",\\\", \\\"0\\\"}], \\\"]\\\"}], \\\"&&\\\", \
+RowBox[{\\\"IntegerQ\\\", \\\"[\\\", \\\"m\\\", \\\"]\\\"}]}]\\)\"\>",
+                   StripOnInput->False,
+                   LineColor->Hue[0.39, 0.8, 0.5],
+                   FrontFaceColor->Hue[0.39, 0.8, 0.5],
+                   BackFaceColor->Hue[0.39, 0.8, 0.5],
+                   GraphicsColor->Hue[0.39, 0.8, 0.5],
+                   FontColor->Hue[0.39, 0.8, 0.5]]},
+                 {
+                  StyleBox["\<\"Transformation:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  TemplateBox[{StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox[
+                    RowBox[{"(", 
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], ")"}], "m"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{"f", "+", 
+                    RowBox[{"g", " ", "x"}]}], ")"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    "\"\[LongRightArrow]\"", 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    RowBox[{"ExpandIntegrand", "(", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox[
+                    RowBox[{"(", 
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], ")"}], "m"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{"f", "+", 
+                    RowBox[{"g", " ", "x"}]}], ")"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], ",", "x"}], ")"}], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False]},
+                   "Row",
+                   DisplayFunction->(PaneBox[
+                    RowBox[{
+                    TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+                   InterpretationFunction->(RowBox[{"Row", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )]}
+                },
+                AllowScriptLevelChange->False,
+                AutoDelete->False,
+                
+                GridBoxAlignment->{
+                 "Columns" -> {Right, Left}, 
+                  "Rows" -> {Center, Center, Center}},
+                
+                GridBoxDividers->{
+                 "Columns" -> {{False}}, 
+                  "RowsIndexed" -> {
+                   2 -> GrayLevel[0.85], 3 -> GrayLevel[0.85]}},
+                
+                GridBoxItemSize->{
+                 "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+                GridBoxSpacings->{"Columns" -> {{1}}, "Rows" -> {{2}}}],
+               "Grid"]}, Dynamic[Rubi`Private`open$$],
+              ImageSize->Automatic]}
+           },
+           AllowScriptLevelChange->False,
+           AutoDelete->False,
+           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Center}}},
+           
+           GridBoxItemSize->{
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+          "Grid"],
+         AllowScriptLevelChange -> False,
+         FrameMargins->10,
+         FrameStyle->{
+           AbsoluteThickness[1], 
+           GrayLevel[0.85]},
+         RoundingRadius->3,
+         StripOnInput->False],
+        Deploy,
+        DefaultBaseStyle->"Deploy"],
+       DynamicModuleValues:>{}],
+      Alignment->Right,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      TagBox[
+       TooltipBox[
+        ButtonBox[
+         TagBox[
+          FrameBox[
+           StyleBox[
+            TagBox[
+             FormBox[
+              TagBox[
+               RowBox[{"Int", "[", 
+                RowBox[{
+                 RowBox[{
+                  FractionBox["c", 
+                   RowBox[{"a", " ", "x"}]], "+", 
+                  FractionBox[
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"-", "b"}], " ", "c"}], "+", 
+                    RowBox[{"a", " ", "d"}], "-", 
+                    RowBox[{
+                    SuperscriptBox["c", "2"], " ", "x"}]}], 
+                   RowBox[{"a", " ", 
+                    RowBox[{"(", 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}], ")"}]}]]}], ",", "x"}], 
+                "]"}],
+               HoldForm],
+              StandardForm],
+             StandardForm,
+             Editable->True],
+            StripOnInput->False,
+            LineColor->Hue[0.6, 0.8, 0.5],
+            FrontFaceColor->Hue[0.6, 0.8, 0.5],
+            BackFaceColor->Hue[0.6, 0.8, 0.5],
+            GraphicsColor->Hue[0.6, 0.8, 0.5],
+            FontColor->Hue[0.6, 0.8, 0.5]],
+           FrameMargins->10,
+           FrameStyle->{
+             AbsoluteThickness[1], 
+             GrayLevel[0.85]},
+           RoundingRadius->3,
+           StripOnInput->False],
+          Deploy,
+          DefaultBaseStyle->"Deploy"],
+         Appearance->None,
+         BaseStyle->{},
+         ButtonFunction:>CopyToClipboard[
+           Defer[
+            
+            Rubi`Int[$CellContext`a^(-1) $CellContext`c/$CellContext`x + \
+$CellContext`a^(-1) (-$CellContext`b $CellContext`c + $CellContext`a \
+$CellContext`d - $CellContext`c^2 $CellContext`x)/($CellContext`a + \
+$CellContext`b $CellContext`x + $CellContext`c $CellContext`x^2), \
+$CellContext`x]]],
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        "\"Click to copy as input\"",
+        TooltipStyle->"TextStyling"],
+       Annotation[#, "Click to copy as input", "Tooltip"]& ],
+      Alignment->Left,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      DynamicModuleBox[{Rubi`Private`open$$ = False}, 
+       TagBox[
+        FrameBox[
+         TagBox[GridBox[{
+            {
+             OpenerBox[Dynamic[Rubi`Private`open$$]], 
+             PaneSelectorBox[{False->
+              TemplateBox[{StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"a", " ", "u"}], "+", 
+                    RowBox[{"b", " ", "v"}], "+", "\[CenterEllipsis]"}], 
+                    ")"}], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], HoldForm], TraditionalForm], 
+                  TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                "\"\[LongRightArrow]\"", 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{
+                    RowBox[{"a", " ", 
+                    RowBox[{"\[Integral]", 
+                    RowBox[{"u", 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}]}], "+", 
+                    RowBox[{"b", " ", 
+                    RowBox[{"\[Integral]", 
+                    RowBox[{"v", 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}]}], "+", 
+                    "\[CenterEllipsis]"}], HoldForm], TraditionalForm], 
+                  TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False]},
+               "Row",
+               DisplayFunction->(PaneBox[
+                 RowBox[{
+                   TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+               InterpretationFunction->(RowBox[{"Row", "[", 
+                  RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )], 
+              True->
+              TagBox[GridBox[{
+                 {
+                  StyleBox["\<\"Rubi Rule:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  StyleBox["\<\"General\"\>", "Label",
+                   StripOnInput->False]},
+                 {
+                  StyleBox["\<\"Condition:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  StyleBox["\<\"\"\>",
+                   StripOnInput->False,
+                   LineColor->Hue[0.39, 0.8, 0.5],
+                   FrontFaceColor->Hue[0.39, 0.8, 0.5],
+                   BackFaceColor->Hue[0.39, 0.8, 0.5],
+                   GraphicsColor->Hue[0.39, 0.8, 0.5],
+                   FontColor->Hue[0.39, 0.8, 0.5]]},
+                 {
+                  StyleBox["\<\"Transformation:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  TemplateBox[{StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"a", " ", "u"}], "+", 
+                    RowBox[{"b", " ", "v"}], "+", "\[CenterEllipsis]"}], 
+                    ")"}], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], HoldForm], TraditionalForm], 
+                    TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    "\"\[LongRightArrow]\"", 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{
+                    RowBox[{"a", " ", 
+                    RowBox[{"\[Integral]", 
+                    RowBox[{"u", 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}]}], "+", 
+                    RowBox[{"b", " ", 
+                    RowBox[{"\[Integral]", 
+                    RowBox[{"v", 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}]}], "+", 
+                    "\[CenterEllipsis]"}], HoldForm], TraditionalForm], 
+                    TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False]},
+                   "Row",
+                   DisplayFunction->(PaneBox[
+                    RowBox[{
+                    TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+                   InterpretationFunction->(RowBox[{"Row", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )]}
+                },
+                AllowScriptLevelChange->False,
+                AutoDelete->False,
+                
+                GridBoxAlignment->{
+                 "Columns" -> {Right, Left}, 
+                  "Rows" -> {Center, Center, Center}},
+                
+                GridBoxDividers->{
+                 "Columns" -> {{False}}, 
+                  "RowsIndexed" -> {
+                   2 -> GrayLevel[0.85], 3 -> GrayLevel[0.85]}},
+                
+                GridBoxItemSize->{
+                 "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+                GridBoxSpacings->{"Columns" -> {{1}}, "Rows" -> {{2}}}],
+               "Grid"]}, Dynamic[Rubi`Private`open$$],
+              ImageSize->Automatic]}
+           },
+           AllowScriptLevelChange->False,
+           AutoDelete->False,
+           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Center}}},
+           
+           GridBoxItemSize->{
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+          "Grid"],
+         AllowScriptLevelChange -> False,
+         FrameMargins->10,
+         FrameStyle->{
+           AbsoluteThickness[1], 
+           GrayLevel[0.85]},
+         RoundingRadius->3,
+         StripOnInput->False],
+        Deploy,
+        DefaultBaseStyle->"Deploy"],
+       DynamicModuleValues:>{}],
+      Alignment->Right,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      TagBox[
+       TooltipBox[
+        ButtonBox[
+         TagBox[
+          FrameBox[
+           StyleBox[
+            TagBox[
+             FormBox[
+              TagBox[
+               RowBox[{
+                FractionBox[
+                 RowBox[{"c", " ", 
+                  RowBox[{"Log", "[", "x", "]"}]}], "a"], "+", 
+                RowBox[{"Dist", "[", 
+                 RowBox[{
+                  FractionBox["1", "a"], ",", 
+                  RowBox[{"Int", "[", 
+                   RowBox[{
+                    FractionBox[
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"-", "b"}], " ", "c"}], "+", 
+                    RowBox[{"a", " ", "d"}], "-", 
+                    RowBox[{
+                    SuperscriptBox["c", "2"], " ", "x"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], ",", "x"}], "]"}], ",", 
+                  "x"}], "]"}]}],
+               HoldForm],
+              StandardForm],
+             StandardForm,
+             Editable->True],
+            StripOnInput->False,
+            LineColor->Hue[0.6, 0.8, 0.5],
+            FrontFaceColor->Hue[0.6, 0.8, 0.5],
+            BackFaceColor->Hue[0.6, 0.8, 0.5],
+            GraphicsColor->Hue[0.6, 0.8, 0.5],
+            FontColor->Hue[0.6, 0.8, 0.5]],
+           FrameMargins->10,
+           FrameStyle->{
+             AbsoluteThickness[1], 
+             GrayLevel[0.85]},
+           RoundingRadius->3,
+           StripOnInput->False],
+          Deploy,
+          DefaultBaseStyle->"Deploy"],
+         Appearance->None,
+         BaseStyle->{},
+         ButtonFunction:>CopyToClipboard[
+           
+           Defer[$CellContext`a^(-1) $CellContext`c Log[$CellContext`x] + 
+            Rubi`Dist[$CellContext`a^(-1), 
+              
+              Rubi`Int[(-$CellContext`b $CellContext`c + $CellContext`a \
+$CellContext`d - $CellContext`c^2 $CellContext`x)/($CellContext`a + \
+$CellContext`b $CellContext`x + $CellContext`c $CellContext`x^2), \
+$CellContext`x], $CellContext`x]]],
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        "\"Click to copy as input\"",
+        TooltipStyle->"TextStyling"],
+       Annotation[#, "Click to copy as input", "Tooltip"]& ],
+      Alignment->Left,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      DynamicModuleBox[{Rubi`Private`open$$ = False}, 
+       TagBox[
+        FrameBox[
+         TagBox[GridBox[{
+            {
+             OpenerBox[Dynamic[Rubi`Private`open$$]], 
+             PaneSelectorBox[{False->
+              TemplateBox[{StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                   TraditionalForm], TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                "\"\[LongRightArrow]\"", 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{
+                    FormBox[
+                    TagBox[
+                    FractionBox[
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"2", " ", "c", " ", "d"}], "-", 
+                    RowBox[{"b", " ", "e"}]}], ")"}], " ", 
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}]}], 
+                    RowBox[{"2", " ", "c"}]], HoldForm], TraditionalForm], 
+                    "+", 
+                    FormBox[
+                    TagBox[
+                    FractionBox[
+                    RowBox[{"e", " ", 
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{"b", "+", 
+                    RowBox[{"2", " ", "c", " ", "x"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}]}], 
+                    RowBox[{"2", " ", "c"}]], HoldForm], TraditionalForm]}], 
+                    HoldForm], TraditionalForm], TraditionalForm, Editable -> 
+                  True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False]},
+               "Row",
+               DisplayFunction->(PaneBox[
+                 RowBox[{
+                   TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+               InterpretationFunction->(RowBox[{"Row", "[", 
+                  RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )], 
+              True->
+              TagBox[GridBox[{
+                 {
+                  StyleBox["\<\"Rubi Rule:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  StyleBox["766", "Label",
+                   StripOnInput->False]},
+                 {
+                  StyleBox["\<\"Condition:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  
+                  StyleBox["\<\"If \\!\\(\\*RowBox[{RowBox[{\\\"NeQ\\\", \
+\\\"[\\\", RowBox[{RowBox[{RowBox[{\\\"2\\\", \\\" \\\", \\\"c\\\", \\\" \
+\\\", \\\"d\\\"}], \\\"-\\\", RowBox[{\\\"b\\\", \\\" \\\", \\\"e\\\"}]}], \\\
+\",\\\", \\\"0\\\"}], \\\"]\\\"}], \\\"&&\\\", RowBox[{\\\"NeQ\\\", \
+\\\"[\\\", RowBox[{RowBox[{SuperscriptBox[\\\"b\\\", \\\"2\\\"], \\\"-\\\", \
+RowBox[{\\\"4\\\", \\\" \\\", \\\"a\\\", \\\" \\\", \\\"c\\\"}]}], \\\",\\\", \
+\\\"0\\\"}], \\\"]\\\"}], \\\"&&\\\", RowBox[{\\\"!\\\", \
+RowBox[{\\\"NiceSqrtQ\\\", \\\"[\\\", RowBox[{SuperscriptBox[\\\"b\\\", \\\"2\
+\\\"], \\\"-\\\", RowBox[{\\\"4\\\", \\\" \\\", \\\"a\\\", \\\" \\\", \\\"c\\\
+\"}]}], \\\"]\\\"}]}]}]\\)\"\>",
+                   StripOnInput->False,
+                   LineColor->Hue[0.39, 0.8, 0.5],
+                   FrontFaceColor->Hue[0.39, 0.8, 0.5],
+                   BackFaceColor->Hue[0.39, 0.8, 0.5],
+                   GraphicsColor->Hue[0.39, 0.8, 0.5],
+                   FontColor->Hue[0.39, 0.8, 0.5]]},
+                 {
+                  StyleBox["\<\"Transformation:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  TemplateBox[{StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    "\"\[LongRightArrow]\"", 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{
+                    FormBox[
+                    TagBox[
+                    FractionBox[
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"2", " ", "c", " ", "d"}], "-", 
+                    RowBox[{"b", " ", "e"}]}], ")"}], " ", 
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}]}], 
+                    RowBox[{"2", " ", "c"}]], HoldForm], TraditionalForm], 
+                    "+", 
+                    FormBox[
+                    TagBox[
+                    FractionBox[
+                    RowBox[{"e", " ", 
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{"b", "+", 
+                    RowBox[{"2", " ", "c", " ", "x"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}]}], 
+                    RowBox[{"2", " ", "c"}]], HoldForm], TraditionalForm]}], 
+                    HoldForm], TraditionalForm], TraditionalForm, Editable -> 
+                    True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False]},
+                   "Row",
+                   DisplayFunction->(PaneBox[
+                    RowBox[{
+                    TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+                   InterpretationFunction->(RowBox[{"Row", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )]}
+                },
+                AllowScriptLevelChange->False,
+                AutoDelete->False,
+                
+                GridBoxAlignment->{
+                 "Columns" -> {Right, Left}, 
+                  "Rows" -> {Center, Center, Center}},
+                
+                GridBoxDividers->{
+                 "Columns" -> {{False}}, 
+                  "RowsIndexed" -> {
+                   2 -> GrayLevel[0.85], 3 -> GrayLevel[0.85]}},
+                
+                GridBoxItemSize->{
+                 "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+                GridBoxSpacings->{"Columns" -> {{1}}, "Rows" -> {{2}}}],
+               "Grid"]}, Dynamic[Rubi`Private`open$$],
+              ImageSize->Automatic]}
+           },
+           AllowScriptLevelChange->False,
+           AutoDelete->False,
+           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Center}}},
+           
+           GridBoxItemSize->{
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+          "Grid"],
+         AllowScriptLevelChange -> False,
+         FrameMargins->10,
+         FrameStyle->{
+           AbsoluteThickness[1], 
+           GrayLevel[0.85]},
+         RoundingRadius->3,
+         StripOnInput->False],
+        Deploy,
+        DefaultBaseStyle->"Deploy"],
+       DynamicModuleValues:>{}],
+      Alignment->Right,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      TagBox[
+       TooltipBox[
+        ButtonBox[
+         TagBox[
+          FrameBox[
+           StyleBox[
+            TagBox[
+             FormBox[
+              TagBox[
+               RowBox[{
+                FractionBox[
+                 RowBox[{"c", " ", 
+                  RowBox[{"Log", "[", "x", "]"}]}], "a"], "-", 
+                RowBox[{"Dist", "[", 
+                 RowBox[{
+                  FractionBox["c", 
+                   RowBox[{"2", " ", "a"}]], ",", 
+                  RowBox[{"Int", "[", 
+                   RowBox[{
+                    FractionBox[
+                    RowBox[{"b", "+", 
+                    RowBox[{"2", " ", "c", " ", "x"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], ",", "x"}], "]"}], ",", 
+                  "x"}], "]"}], "+", 
+                RowBox[{"Dist", "[", 
+                 RowBox[{
+                  FractionBox[
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"-", "b"}], " ", "c"}], "+", 
+                    RowBox[{"2", " ", "a", " ", "d"}]}], 
+                   RowBox[{"2", " ", "a"}]], ",", 
+                  RowBox[{"Int", "[", 
+                   RowBox[{
+                    FractionBox["1", 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], ",", "x"}], "]"}], ",", 
+                  "x"}], "]"}]}],
+               HoldForm],
+              StandardForm],
+             StandardForm,
+             Editable->True],
+            StripOnInput->False,
+            LineColor->Hue[0.6, 0.8, 0.5],
+            FrontFaceColor->Hue[0.6, 0.8, 0.5],
+            BackFaceColor->Hue[0.6, 0.8, 0.5],
+            GraphicsColor->Hue[0.6, 0.8, 0.5],
+            FontColor->Hue[0.6, 0.8, 0.5]],
+           FrameMargins->10,
+           FrameStyle->{
+             AbsoluteThickness[1], 
+             GrayLevel[0.85]},
+           RoundingRadius->3,
+           StripOnInput->False],
+          Deploy,
+          DefaultBaseStyle->"Deploy"],
+         Appearance->None,
+         BaseStyle->{},
+         ButtonFunction:>CopyToClipboard[
+           
+           Defer[$CellContext`a^(-1) $CellContext`c Log[$CellContext`x] - 
+            Rubi`Dist[Rational[1, 2] $CellContext`a^(-1) $CellContext`c, 
+             
+             Rubi`Int[($CellContext`b + 
+               2 $CellContext`c $CellContext`x)/($CellContext`a + \
+$CellContext`b $CellContext`x + $CellContext`c $CellContext`x^2), \
+$CellContext`x], $CellContext`x] + 
+            Rubi`Dist[
+             Rational[
+               1, 2] $CellContext`a^(-1) (-$CellContext`b $CellContext`c + 
+               2 $CellContext`a $CellContext`d), 
+              
+              Rubi`Int[($CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2)^(-1), $CellContext`x], $CellContext`x]]],
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        "\"Click to copy as input\"",
+        TooltipStyle->"TextStyling"],
+       Annotation[#, "Click to copy as input", "Tooltip"]& ],
+      Alignment->Left,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      DynamicModuleBox[{Rubi`Private`open$$ = False}, 
+       TagBox[
+        FrameBox[
+         TagBox[GridBox[{
+            {
+             OpenerBox[Dynamic[Rubi`Private`open$$]], 
+             PaneSelectorBox[{False->
+              TemplateBox[{StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["Pp", "Qq"], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                   TraditionalForm], TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                "\"\[LongRightArrow]\"", 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    FractionBox[
+                    RowBox[{
+                    RowBox[{"Coeff", "(", 
+                    RowBox[{"Pp", ",", "x", ",", "p"}], ")"}], " ", 
+                    RowBox[{"log", "(", 
+                    RowBox[{"RemoveContent", "(", 
+                    RowBox[{"Qq", ",", "x"}], ")"}], ")"}]}], 
+                    RowBox[{"q", " ", 
+                    RowBox[{"Coeff", "(", 
+                    RowBox[{"Qq", ",", "x", ",", "q"}], ")"}]}]], HoldForm], 
+                   TraditionalForm], TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False]},
+               "Row",
+               DisplayFunction->(PaneBox[
+                 RowBox[{
+                   TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+               InterpretationFunction->(RowBox[{"Row", "[", 
+                  RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )], 
+              True->
+              TagBox[GridBox[{
+                 {
+                  StyleBox["\<\"Rubi Rule:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  StyleBox["31", "Label",
+                   StripOnInput->False]},
+                 {
+                  StyleBox["\<\"Condition:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  
+                  StyleBox["\<\"If \\!\\(\\*RowBox[{RowBox[{\\\"PolyQ\\\", \\\
+\"[\\\", RowBox[{\\\"Pp\\\", \\\",\\\", \\\"x\\\"}], \\\"]\\\"}], \\\"&&\\\", \
+RowBox[{\\\"PolyQ\\\", \\\"[\\\", RowBox[{\\\"Qq\\\", \\\",\\\", \\\"x\\\"}], \
+\\\"]\\\"}]}]\\) let \\!\\(\\*RowBox[{\\\"{\\\", RowBox[{RowBox[{\\\"p\\\", \
+\\\"=\\\", RowBox[{\\\"Expon\\\", \\\"[\\\", RowBox[{\\\"Pp\\\", \\\",\\\", \
+\\\"x\\\"}], \\\"]\\\"}]}], \\\",\\\", RowBox[{\\\"q\\\", \\\"=\\\", RowBox[{\
+\\\"Expon\\\", \\\"[\\\", RowBox[{\\\"Qq\\\", \\\",\\\", \\\"x\\\"}], \\\"]\\\
+\"}]}]}], \\\"}\\\"}]\\), then if \\!\\(\\*RowBox[{RowBox[{\\\"EqQ\\\", \\\"[\
+\\\", RowBox[{\\\"p\\\", \\\",\\\", RowBox[{\\\"q\\\", \\\"-\\\", \
+\\\"1\\\"}]}], \\\"]\\\"}], \\\"&&\\\", RowBox[{\\\"EqQ\\\", \\\"[\\\", \
+RowBox[{\\\"Pp\\\", \\\",\\\", RowBox[{\\\"Simplify\\\", \\\"[\\\", \
+FractionBox[RowBox[{RowBox[{\\\"Coeff\\\", \\\"[\\\", RowBox[{\\\"Pp\\\", \
+\\\",\\\", \\\"x\\\", \\\",\\\", \\\"p\\\"}], \\\"]\\\"}], \\\" \\\", \
+RowBox[{SubscriptBox[\\\"\[PartialD]\\\", RowBox[{\\\"x\\\"}]], \
+\\\"Qq\\\"}]}], RowBox[{\\\"q\\\", \\\" \\\", RowBox[{\\\"Coeff\\\", \
+\\\"[\\\", RowBox[{\\\"Qq\\\", \\\",\\\", \\\"x\\\", \\\",\\\", \\\"q\\\"}], \
+\\\"]\\\"}]}]], \\\"]\\\"}]}], \\\"]\\\"}]}]\\)\"\>",
+                   StripOnInput->False,
+                   LineColor->Hue[0.39, 0.8, 0.5],
+                   FrontFaceColor->Hue[0.39, 0.8, 0.5],
+                   BackFaceColor->Hue[0.39, 0.8, 0.5],
+                   GraphicsColor->Hue[0.39, 0.8, 0.5],
+                   FontColor->Hue[0.39, 0.8, 0.5]]},
+                 {
+                  StyleBox["\<\"Transformation:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  TemplateBox[{StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["Pp", "Qq"], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    "\"\[LongRightArrow]\"", 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    FractionBox[
+                    RowBox[{
+                    RowBox[{"Coeff", "(", 
+                    RowBox[{"Pp", ",", "x", ",", "p"}], ")"}], " ", 
+                    RowBox[{"log", "(", 
+                    RowBox[{"RemoveContent", "(", 
+                    RowBox[{"Qq", ",", "x"}], ")"}], ")"}]}], 
+                    RowBox[{"q", " ", 
+                    RowBox[{"Coeff", "(", 
+                    RowBox[{"Qq", ",", "x", ",", "q"}], ")"}]}]], HoldForm], 
+                    TraditionalForm], TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False]},
+                   "Row",
+                   DisplayFunction->(PaneBox[
+                    RowBox[{
+                    TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+                   InterpretationFunction->(RowBox[{"Row", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )]}
+                },
+                AllowScriptLevelChange->False,
+                AutoDelete->False,
+                
+                GridBoxAlignment->{
+                 "Columns" -> {Right, Left}, 
+                  "Rows" -> {Center, Center, Center}},
+                
+                GridBoxDividers->{
+                 "Columns" -> {{False}}, 
+                  "RowsIndexed" -> {
+                   2 -> GrayLevel[0.85], 3 -> GrayLevel[0.85]}},
+                
+                GridBoxItemSize->{
+                 "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+                GridBoxSpacings->{"Columns" -> {{1}}, "Rows" -> {{2}}}],
+               "Grid"]}, Dynamic[Rubi`Private`open$$],
+              ImageSize->Automatic]}
+           },
+           AllowScriptLevelChange->False,
+           AutoDelete->False,
+           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Center}}},
+           
+           GridBoxItemSize->{
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+          "Grid"],
+         AllowScriptLevelChange -> False,
+         FrameMargins->10,
+         FrameStyle->{
+           AbsoluteThickness[1], 
+           GrayLevel[0.85]},
+         RoundingRadius->3,
+         StripOnInput->False],
+        Deploy,
+        DefaultBaseStyle->"Deploy"],
+       DynamicModuleValues:>{}],
+      Alignment->Right,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      DynamicModuleBox[{Rubi`Private`open$$ = False}, 
+       TagBox[
+        FrameBox[
+         TagBox[GridBox[{
+            {
+             OpenerBox[Dynamic[Rubi`Private`open$$]], 
+             PaneSelectorBox[{False->
+              TemplateBox[{StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                   TraditionalForm], TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                "\"\[LongRightArrow]\"", 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{
+                    RowBox[{"-", "2"}], " ", 
+                    RowBox[{"Subst", "(", 
+                    RowBox[{
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{
+                    SuperscriptBox["b", "2"], "-", 
+                    RowBox[{"4", " ", "a", " ", "c"}], "-", 
+                    SuperscriptBox["x", "2"]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], ",", "x", ",", 
+                    RowBox[{"b", "+", 
+                    RowBox[{"2", " ", "c", " ", "x"}]}]}], ")"}]}], HoldForm],
+                     TraditionalForm], HoldForm], TraditionalForm], 
+                  TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False]},
+               "Row",
+               DisplayFunction->(PaneBox[
+                 RowBox[{
+                   TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+               InterpretationFunction->(RowBox[{"Row", "[", 
+                  RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )], 
+              True->
+              TagBox[GridBox[{
+                 {
+                  StyleBox["\<\"Rubi Rule:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  StyleBox["754", "Label",
+                   StripOnInput->False]},
+                 {
+                  StyleBox["\<\"Condition:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  
+                  StyleBox["\<\"If \\!\\(\\*RowBox[{\\\"NeQ\\\", \\\"[\\\", \
+RowBox[{RowBox[{SuperscriptBox[\\\"b\\\", \\\"2\\\"], \\\"-\\\", \
+RowBox[{\\\"4\\\", \\\" \\\", \\\"a\\\", \\\" \\\", \\\"c\\\"}]}], \\\",\\\", \
+\\\"0\\\"}], \\\"]\\\"}]\\)\"\>",
+                   StripOnInput->False,
+                   LineColor->Hue[0.39, 0.8, 0.5],
+                   FrontFaceColor->Hue[0.39, 0.8, 0.5],
+                   BackFaceColor->Hue[0.39, 0.8, 0.5],
+                   GraphicsColor->Hue[0.39, 0.8, 0.5],
+                   FontColor->Hue[0.39, 0.8, 0.5]]},
+                 {
+                  StyleBox["\<\"Transformation:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  TemplateBox[{StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    "\"\[LongRightArrow]\"", 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{
+                    RowBox[{"-", "2"}], " ", 
+                    RowBox[{"Subst", "(", 
+                    RowBox[{
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{
+                    SuperscriptBox["b", "2"], "-", 
+                    RowBox[{"4", " ", "a", " ", "c"}], "-", 
+                    SuperscriptBox["x", "2"]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], ",", "x", ",", 
+                    RowBox[{"b", "+", 
+                    RowBox[{"2", " ", "c", " ", "x"}]}]}], ")"}]}], HoldForm],
+                     TraditionalForm], HoldForm], TraditionalForm], 
+                    TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False]},
+                   "Row",
+                   DisplayFunction->(PaneBox[
+                    RowBox[{
+                    TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+                   InterpretationFunction->(RowBox[{"Row", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )]}
+                },
+                AllowScriptLevelChange->False,
+                AutoDelete->False,
+                
+                GridBoxAlignment->{
+                 "Columns" -> {Right, Left}, 
+                  "Rows" -> {Center, Center, Center}},
+                
+                GridBoxDividers->{
+                 "Columns" -> {{False}}, 
+                  "RowsIndexed" -> {
+                   2 -> GrayLevel[0.85], 3 -> GrayLevel[0.85]}},
+                
+                GridBoxItemSize->{
+                 "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+                GridBoxSpacings->{"Columns" -> {{1}}, "Rows" -> {{2}}}],
+               "Grid"]}, Dynamic[Rubi`Private`open$$],
+              ImageSize->Automatic]}
+           },
+           AllowScriptLevelChange->False,
+           AutoDelete->False,
+           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Center}}},
+           
+           GridBoxItemSize->{
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+          "Grid"],
+         AllowScriptLevelChange -> False,
+         FrameMargins->10,
+         FrameStyle->{
+           AbsoluteThickness[1], 
+           GrayLevel[0.85]},
+         RoundingRadius->3,
+         StripOnInput->False],
+        Deploy,
+        DefaultBaseStyle->"Deploy"],
+       DynamicModuleValues:>{}],
+      Alignment->Right,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      TagBox[
+       TooltipBox[
+        ButtonBox[
+         TagBox[
+          FrameBox[
+           StyleBox[
+            TagBox[
+             FormBox[
+              TagBox[
+               RowBox[{
+                FractionBox[
+                 RowBox[{"c", " ", 
+                  RowBox[{"Log", "[", "x", "]"}]}], "a"], "-", 
+                FractionBox[
+                 RowBox[{"c", " ", 
+                  RowBox[{"Log", "[", 
+                   RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}], "]"}]}], 
+                 RowBox[{"2", " ", "a"}]], "-", 
+                RowBox[{"Dist", "[", 
+                 RowBox[{
+                  FractionBox[
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"-", "b"}], " ", "c"}], "+", 
+                    RowBox[{"2", " ", "a", " ", "d"}]}], "a"], ",", 
+                  RowBox[{"Subst", "[", 
+                   RowBox[{
+                    RowBox[{"Int", "[", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{
+                    SuperscriptBox["b", "2"], "-", 
+                    RowBox[{"4", " ", "a", " ", "c"}], "-", 
+                    SuperscriptBox["x", "2"]}]], ",", "x"}], "]"}], ",", "x", 
+                    ",", 
+                    RowBox[{"b", "+", 
+                    RowBox[{"2", " ", "c", " ", "x"}]}]}], "]"}], ",", "x"}], 
+                 "]"}]}],
+               HoldForm],
+              StandardForm],
+             StandardForm,
+             Editable->True],
+            StripOnInput->False,
+            LineColor->Hue[0.6, 0.8, 0.5],
+            FrontFaceColor->Hue[0.6, 0.8, 0.5],
+            BackFaceColor->Hue[0.6, 0.8, 0.5],
+            GraphicsColor->Hue[0.6, 0.8, 0.5],
+            FontColor->Hue[0.6, 0.8, 0.5]],
+           FrameMargins->10,
+           FrameStyle->{
+             AbsoluteThickness[1], 
+             GrayLevel[0.85]},
+           RoundingRadius->3,
+           StripOnInput->False],
+          Deploy,
+          DefaultBaseStyle->"Deploy"],
+         Appearance->None,
+         BaseStyle->{},
+         ButtonFunction:>CopyToClipboard[
+           
+           Defer[$CellContext`a^(-1) $CellContext`c Log[$CellContext`x] + 
+            Rational[-1, 2] $CellContext`a^(-1) $CellContext`c 
+             Log[$CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2] - 
+            Rubi`Dist[$CellContext`a^(-1) (-$CellContext`b $CellContext`c + 
+              2 $CellContext`a $CellContext`d), 
+             Rubi`Subst[
+              
+              Rubi`Int[($CellContext`b^2 - 
+                4 $CellContext`a $CellContext`c - $CellContext`x^2)^(-1), \
+$CellContext`x], $CellContext`x, $CellContext`b + 
+              2 $CellContext`c $CellContext`x], $CellContext`x]]],
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        "\"Click to copy as input\"",
+        TooltipStyle->"TextStyling"],
+       Annotation[#, "Click to copy as input", "Tooltip"]& ],
+      Alignment->Left,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      DynamicModuleBox[{Rubi`Private`open$$ = False}, 
+       TagBox[
+        FrameBox[
+         TagBox[GridBox[{
+            {
+             OpenerBox[Dynamic[Rubi`Private`open$$]], 
+             PaneSelectorBox[{False->
+              TemplateBox[{StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                   TraditionalForm], TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                "\"\[LongRightArrow]\"", 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox["tanh", 
+                    RowBox[{"-", "1"}]], "(", 
+                    FractionBox[
+                    RowBox[{
+                    SqrtBox[
+                    RowBox[{"-", "b"}]], " ", "x"}], 
+                    SqrtBox["a"]], ")"}], 
+                    RowBox[{
+                    SqrtBox["a"], " ", 
+                    SqrtBox[
+                    RowBox[{"-", "b"}]]}]], HoldForm], TraditionalForm], 
+                  TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False]},
+               "Row",
+               DisplayFunction->(PaneBox[
+                 RowBox[{
+                   TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+               InterpretationFunction->(RowBox[{"Row", "[", 
+                  RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )], 
+              True->
+              TagBox[GridBox[{
+                 {
+                  StyleBox["\<\"Rubi Rule:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  StyleBox["263", "Label",
+                   StripOnInput->False]},
+                 {
+                  StyleBox["\<\"Condition:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  
+                  StyleBox["\<\"If \\!\\(\\*RowBox[{RowBox[{\\\"NegQ\\\", \
+\\\"[\\\", FractionBox[\\\"a\\\", \\\"b\\\"], \\\"]\\\"}], \\\"&&\\\", \
+RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"GtQ\\\", \\\"[\\\", RowBox[{\\\"a\\\", \
+\\\",\\\", \\\"0\\\"}], \\\"]\\\"}], \\\"||\\\", RowBox[{\\\"LtQ\\\", \\\"[\\\
+\", RowBox[{\\\"b\\\", \\\",\\\", \\\"0\\\"}], \\\"]\\\"}]}], \
+\\\")\\\"}]}]\\)\"\>",
+                   StripOnInput->False,
+                   LineColor->Hue[0.39, 0.8, 0.5],
+                   FrontFaceColor->Hue[0.39, 0.8, 0.5],
+                   BackFaceColor->Hue[0.39, 0.8, 0.5],
+                   GraphicsColor->Hue[0.39, 0.8, 0.5],
+                   FontColor->Hue[0.39, 0.8, 0.5]]},
+                 {
+                  StyleBox["\<\"Transformation:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  TemplateBox[{StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox["1", 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    "\"\[LongRightArrow]\"", 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox["tanh", 
+                    RowBox[{"-", "1"}]], "(", 
+                    FractionBox[
+                    RowBox[{
+                    SqrtBox[
+                    RowBox[{"-", "b"}]], " ", "x"}], 
+                    SqrtBox["a"]], ")"}], 
+                    RowBox[{
+                    SqrtBox["a"], " ", 
+                    SqrtBox[
+                    RowBox[{"-", "b"}]]}]], HoldForm], TraditionalForm], 
+                    TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False]},
+                   "Row",
+                   DisplayFunction->(PaneBox[
+                    RowBox[{
+                    TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+                   InterpretationFunction->(RowBox[{"Row", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )]}
+                },
+                AllowScriptLevelChange->False,
+                AutoDelete->False,
+                
+                GridBoxAlignment->{
+                 "Columns" -> {Right, Left}, 
+                  "Rows" -> {Center, Center, Center}},
+                
+                GridBoxDividers->{
+                 "Columns" -> {{False}}, 
+                  "RowsIndexed" -> {
+                   2 -> GrayLevel[0.85], 3 -> GrayLevel[0.85]}},
+                
+                GridBoxItemSize->{
+                 "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+                GridBoxSpacings->{"Columns" -> {{1}}, "Rows" -> {{2}}}],
+               "Grid"]}, Dynamic[Rubi`Private`open$$],
+              ImageSize->Automatic]}
+           },
+           AllowScriptLevelChange->False,
+           AutoDelete->False,
+           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Center}}},
+           
+           GridBoxItemSize->{
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+          "Grid"],
+         AllowScriptLevelChange -> False,
+         FrameMargins->10,
+         FrameStyle->{
+           AbsoluteThickness[1], 
+           GrayLevel[0.85]},
+         RoundingRadius->3,
+         StripOnInput->False],
+        Deploy,
+        DefaultBaseStyle->"Deploy"],
+       DynamicModuleValues:>{}],
+      Alignment->Right,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ItemBox[
+      TagBox[
+       TooltipBox[
+        ButtonBox[
+         TagBox[
+          FrameBox[
+           StyleBox[
+            TagBox[
+             FormBox[
+              TagBox[
+               RowBox[{
+                FractionBox[
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"b", " ", "c"}], "-", 
+                    RowBox[{"2", " ", "a", " ", "d"}]}], ")"}], " ", 
+                  RowBox[{"ArcTanh", "[", 
+                   FractionBox[
+                    RowBox[{"b", "+", 
+                    RowBox[{"2", " ", "c", " ", "x"}]}], 
+                    SqrtBox[
+                    RowBox[{
+                    SuperscriptBox["b", "2"], "-", 
+                    RowBox[{"4", " ", "a", " ", "c"}]}]]], "]"}]}], 
+                 RowBox[{"a", " ", 
+                  SqrtBox[
+                   RowBox[{
+                    SuperscriptBox["b", "2"], "-", 
+                    RowBox[{"4", " ", "a", " ", "c"}]}]]}]], "+", 
+                FractionBox[
+                 RowBox[{"c", " ", 
+                  RowBox[{"Log", "[", "x", "]"}]}], "a"], "-", 
+                FractionBox[
+                 RowBox[{"c", " ", 
+                  RowBox[{"Log", "[", 
+                   RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}], "]"}]}], 
+                 RowBox[{"2", " ", "a"}]]}],
+               HoldForm],
+              StandardForm],
+             StandardForm,
+             Editable->True],
+            StripOnInput->False,
+            LineColor->Hue[0.6, 0.8, 0.5],
+            FrontFaceColor->Hue[0.6, 0.8, 0.5],
+            BackFaceColor->Hue[0.6, 0.8, 0.5],
+            GraphicsColor->Hue[0.6, 0.8, 0.5],
+            FontColor->Hue[0.6, 0.8, 0.5]],
+           FrameMargins->10,
+           FrameStyle->{
+             AbsoluteThickness[1], 
+             GrayLevel[0.85]},
+           RoundingRadius->3,
+           StripOnInput->False],
+          Deploy,
+          DefaultBaseStyle->"Deploy"],
+         Appearance->None,
+         BaseStyle->{},
+         ButtonFunction:>CopyToClipboard[
+           
+           Defer[$CellContext`a^(-1) ($CellContext`b^2 - 
+               4 $CellContext`a $CellContext`c)^
+              Rational[-1, 2] ($CellContext`b $CellContext`c - 
+              2 $CellContext`a $CellContext`d) 
+             ArcTanh[($CellContext`b^2 - 4 $CellContext`a $CellContext`c)^
+                Rational[-1, 2] ($CellContext`b + 
+                2 $CellContext`c $CellContext`x)] + $CellContext`a^(-1) \
+$CellContext`c Log[$CellContext`x] + 
+            Rational[-1, 2] $CellContext`a^(-1) $CellContext`c 
+             Log[$CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2]]],
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        "\"Click to copy as input\"",
+        TooltipStyle->"TextStyling"],
+       Annotation[#, "Click to copy as input", "Tooltip"]& ],
+      Alignment->Left,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ButtonBox["\<\"Copy Steps\"\>",
+      Appearance->"Palette",
+      ButtonFunction:>CopyToClipboard[{
+         Rubi`RubiRule[
+         "If \!\(\*RowBox[{RowBox[{\"NeQ\", \"[\", \
+RowBox[{RowBox[{SuperscriptBox[\"b\", \"2\"], \"-\", RowBox[{\"4\", \" \", \
+\"a\", \" \", \"c\"}]}], \",\", \"0\"}], \"]\"}], \"&&\", RowBox[{\"NeQ\", \
+\"[\", RowBox[{RowBox[{RowBox[{\"c\", \" \", SuperscriptBox[\"d\", \"2\"]}], \
+\"-\", RowBox[{\"b\", \" \", \"d\", \" \", \"e\"}], \"+\", RowBox[{\"a\", \" \
+\", SuperscriptBox[\"e\", \"2\"]}]}], \",\", \"0\"}], \"]\"}], \"&&\", \
+RowBox[{\"IntegerQ\", \"[\", \"m\", \"]\"}]}]\)", 
+          HoldComplete[
+           
+           Integrate[(($CellContext`d + $CellContext`e \
+$CellContext`x)^$CellContext`m ($CellContext`f + $CellContext`g \
+$CellContext`x))/($CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2), $CellContext`x]], 
+          HoldComplete[
+           Integrate[
+            $CellContext`ExpandIntegrand[($CellContext`d + $CellContext`e \
+$CellContext`x)^$CellContext`m (($CellContext`f + $CellContext`g \
+$CellContext`x)/($CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2)), $CellContext`x], $CellContext`x]], 928], 
+         Rubi`RubiIntermediateResult[
+          HoldComplete[
+           
+           Rubi`Int[$CellContext`a^(-1) $CellContext`c/$CellContext`x + \
+$CellContext`a^(-1) (-$CellContext`b $CellContext`c + $CellContext`a \
+$CellContext`d - $CellContext`c^2 $CellContext`x)/($CellContext`a + \
+$CellContext`b $CellContext`x + $CellContext`c $CellContext`x^2), \
+$CellContext`x]]], 
+         Rubi`RubiRule["", 
+          HoldComplete[
+           
+           Rubi`Int[$CellContext`a $CellContext`u + $CellContext`b \
+$CellContext`v + $CellContext`\[CenterEllipsis], $CellContext`x]], 
+          
+          HoldComplete[$CellContext`a 
+            Integrate[$CellContext`u, $CellContext`x] + $CellContext`b 
+            Integrate[$CellContext`v, $CellContext`x] + $CellContext`\
+\[CenterEllipsis]]], 
+         Rubi`RubiIntermediateResult[
+          
+          HoldComplete[$CellContext`a^(-1) $CellContext`c Log[$CellContext`x] + 
+           Rubi`Dist[$CellContext`a^(-1), 
+             
+             Rubi`Int[(-$CellContext`b $CellContext`c + $CellContext`a \
+$CellContext`d - $CellContext`c^2 $CellContext`x)/($CellContext`a + \
+$CellContext`b $CellContext`x + $CellContext`c $CellContext`x^2), \
+$CellContext`x], $CellContext`x]]], 
+         Rubi`RubiRule[
+         "If \!\(\*RowBox[{RowBox[{\"NeQ\", \"[\", \
+RowBox[{RowBox[{RowBox[{\"2\", \" \", \"c\", \" \", \"d\"}], \"-\", \
+RowBox[{\"b\", \" \", \"e\"}]}], \",\", \"0\"}], \"]\"}], \"&&\", \
+RowBox[{\"NeQ\", \"[\", RowBox[{RowBox[{SuperscriptBox[\"b\", \"2\"], \"-\", \
+RowBox[{\"4\", \" \", \"a\", \" \", \"c\"}]}], \",\", \"0\"}], \"]\"}], \
+\"&&\", RowBox[{\"!\", RowBox[{\"NiceSqrtQ\", \"[\", \
+RowBox[{SuperscriptBox[\"b\", \"2\"], \"-\", RowBox[{\"4\", \" \", \"a\", \" \
+\", \"c\"}]}], \"]\"}]}]}]\)", 
+          HoldComplete[
+           
+           Integrate[($CellContext`d + $CellContext`e \
+$CellContext`x)/($CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2), $CellContext`x]], 
+          HoldComplete[
+          Rubi`Dist[(
+              2 $CellContext`c $CellContext`d - $CellContext`b \
+$CellContext`e)/(2 $CellContext`c), 
+             Integrate[
+             1/($CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2), $CellContext`x], $CellContext`x] + 
+           Rubi`Dist[$CellContext`e/(2 $CellContext`c), 
+             
+             Integrate[($CellContext`b + 
+               2 $CellContext`c $CellContext`x)/($CellContext`a + \
+$CellContext`b $CellContext`x + $CellContext`c $CellContext`x^2), \
+$CellContext`x], $CellContext`x]], 766], 
+         Rubi`RubiIntermediateResult[
+          
+          HoldComplete[$CellContext`a^(-1) $CellContext`c Log[$CellContext`x] - 
+           Rubi`Dist[Rational[1, 2] $CellContext`a^(-1) $CellContext`c, 
+            
+            Rubi`Int[($CellContext`b + 
+              2 $CellContext`c $CellContext`x)/($CellContext`a + \
+$CellContext`b $CellContext`x + $CellContext`c $CellContext`x^2), \
+$CellContext`x], $CellContext`x] + 
+           Rubi`Dist[
+            Rational[
+              1, 2] $CellContext`a^(-1) (-$CellContext`b $CellContext`c + 
+              2 $CellContext`a $CellContext`d), 
+             
+             Rubi`Int[($CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2)^(-1), $CellContext`x], $CellContext`x]]], 
+         Rubi`RubiRule[
+         "If \!\(\*RowBox[{RowBox[{\"PolyQ\", \"[\", RowBox[{\"Pp\", \",\", \
+\"x\"}], \"]\"}], \"&&\", RowBox[{\"PolyQ\", \"[\", RowBox[{\"Qq\", \",\", \
+\"x\"}], \"]\"}]}]\) let \!\(\*RowBox[{\"{\", RowBox[{RowBox[{\"p\", \"=\", \
+RowBox[{\"Expon\", \"[\", RowBox[{\"Pp\", \",\", \"x\"}], \"]\"}]}], \",\", \
+RowBox[{\"q\", \"=\", RowBox[{\"Expon\", \"[\", RowBox[{\"Qq\", \",\", \
+\"x\"}], \"]\"}]}]}], \"}\"}]\), then if \!\(\*RowBox[{RowBox[{\"EqQ\", \
+\"[\", RowBox[{\"p\", \",\", RowBox[{\"q\", \"-\", \"1\"}]}], \"]\"}], \
+\"&&\", RowBox[{\"EqQ\", \"[\", RowBox[{\"Pp\", \",\", RowBox[{\"Simplify\", \
+\"[\", FractionBox[RowBox[{RowBox[{\"Coeff\", \"[\", RowBox[{\"Pp\", \",\", \
+\"x\", \",\", \"p\"}], \"]\"}], \" \", RowBox[{SubscriptBox[\"\[PartialD]\", \
+RowBox[{\"x\"}]], \"Qq\"}]}], RowBox[{\"q\", \" \", RowBox[{\"Coeff\", \"[\", \
+RowBox[{\"Qq\", \",\", \"x\", \",\", \"q\"}], \"]\"}]}]], \"]\"}]}], \
+\"]\"}]}]\)", 
+          HoldComplete[
+           Integrate[$CellContext`Pp/$CellContext`Qq, $CellContext`x]], 
+          
+          HoldComplete[$CellContext`Coeff[$CellContext`Pp, $CellContext`x, \
+$CellContext`p] (Log[
+              $CellContext`RemoveContent[$CellContext`Qq, \
+$CellContext`x]]/($CellContext`q $CellContext`Coeff[$CellContext`Qq, \
+$CellContext`x, $CellContext`q]))], 31], 
+         Rubi`RubiRule[
+         "If \!\(\*RowBox[{\"NeQ\", \"[\", RowBox[{RowBox[{SuperscriptBox[\"b\
+\", \"2\"], \"-\", RowBox[{\"4\", \" \", \"a\", \" \", \"c\"}]}], \",\", \
+\"0\"}], \"]\"}]\)", 
+          HoldComplete[
+           
+           Integrate[($CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2)^(-1), $CellContext`x]], 
+          HoldComplete[
+           Rubi`Dist[-2, 
+            Rubi`Subst[
+             Integrate[
+             1/($CellContext`b^2 - 
+              4 $CellContext`a $CellContext`c - $CellContext`x^2), \
+$CellContext`x], $CellContext`x, $CellContext`b + 
+             2 $CellContext`c $CellContext`x], $CellContext`x]], 754], 
+         Rubi`RubiIntermediateResult[
+          
+          HoldComplete[$CellContext`a^(-1) $CellContext`c Log[$CellContext`x] + 
+           Rational[-1, 2] $CellContext`a^(-1) $CellContext`c 
+            Log[$CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2] - 
+           Rubi`Dist[$CellContext`a^(-1) (-$CellContext`b $CellContext`c + 
+             2 $CellContext`a $CellContext`d), 
+            Rubi`Subst[
+             
+             Rubi`Int[($CellContext`b^2 - 
+               4 $CellContext`a $CellContext`c - $CellContext`x^2)^(-1), \
+$CellContext`x], $CellContext`x, $CellContext`b + 
+             2 $CellContext`c $CellContext`x], $CellContext`x]]], 
+         Rubi`RubiRule[
+         "If \!\(\*RowBox[{RowBox[{\"NegQ\", \"[\", FractionBox[\"a\", \
+\"b\"], \"]\"}], \"&&\", RowBox[{\"(\", RowBox[{RowBox[{\"GtQ\", \"[\", \
+RowBox[{\"a\", \",\", \"0\"}], \"]\"}], \"||\", RowBox[{\"LtQ\", \"[\", \
+RowBox[{\"b\", \",\", \"0\"}], \"]\"}]}], \")\"}]}]\)", 
+          HoldComplete[
+           
+           Integrate[($CellContext`a + $CellContext`b $CellContext`x^2)^(-1), \
+$CellContext`x]], 
+          
+          HoldComplete[(1/(Sqrt[$CellContext`a] Sqrt[-$CellContext`b])) 
+           ArcTanh[Sqrt[-$CellContext`b] ($CellContext`x/
+              Sqrt[$CellContext`a])]], 263], 
+         Rubi`RubiIntermediateResult[
+          
+          HoldComplete[$CellContext`a^(-1) ($CellContext`b^2 - 
+              4 $CellContext`a $CellContext`c)^
+             Rational[-1, 2] ($CellContext`b $CellContext`c - 
+             2 $CellContext`a $CellContext`d) 
+            ArcTanh[($CellContext`b^2 - 4 $CellContext`a $CellContext`c)^
+               Rational[-1, 2] ($CellContext`b + 
+               2 $CellContext`c $CellContext`x)] + $CellContext`a^(-1) \
+$CellContext`c Log[$CellContext`x] + 
+           Rational[-1, 2] $CellContext`a^(-1) $CellContext`c 
+            Log[$CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2]]]}],
+      Evaluator->Automatic,
+      ImageSize->Automatic,
+      Method->"Preemptive",
+      Tooltip->"Copy list of steps as plain input"]}
+   },
+   AllowScriptLevelChange->False,
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxBackground->{"Columns" -> {{
+        GrayLevel[0.98]}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Print",
+ CellLabel->
+  "During evaluation of \
+In[156]:=",ExpressionUUID->"ac576083-1d9c-4eb1-af39-683c818b09e7"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"b", " ", "c"}], "-", 
+      RowBox[{"2", " ", "a", " ", "d"}]}], ")"}], " ", 
+    RowBox[{"ArcTanh", "[", 
+     FractionBox[
+      RowBox[{"b", "+", 
+       RowBox[{"2", " ", "c", " ", "x"}]}], 
+      SqrtBox[
+       RowBox[{
+        SuperscriptBox["b", "2"], "-", 
+        RowBox[{"4", " ", "a", " ", "c"}]}]]], "]"}]}], 
+   RowBox[{"a", " ", 
+    SqrtBox[
+     RowBox[{
+      SuperscriptBox["b", "2"], "-", 
+      RowBox[{"4", " ", "a", " ", "c"}]}]]}]], "+", 
+  FractionBox[
+   RowBox[{"c", " ", 
+    RowBox[{"Log", "[", "x", "]"}]}], "a"], "-", 
+  FractionBox[
+   RowBox[{"c", " ", 
+    RowBox[{"Log", "[", 
+     RowBox[{"a", "+", 
+      RowBox[{"b", " ", "x"}], "+", 
+      RowBox[{"c", " ", 
+       SuperscriptBox["x", "2"]}]}], "]"}]}], 
+   RowBox[{"2", " ", "a"}]]}]], "Output",
+ CellLabel->"Out[156]=",ExpressionUUID->"b72dd36a-29d6-4def-a0ec-db6bd919e041"]
+}, Open  ]],
+
+Cell["\<\
+If you are only interested in a single step of the integration process, you \
+can use\
+\>", "Text",ExpressionUUID->"1db4ee56-5016-4ede-bc20-2974dac4133b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Step", "[", 
+  RowBox[{"Int", "[", 
+   RowBox[{
+    FractionBox[
+     RowBox[{"c", "+", 
+      RowBox[{"d", " ", "x"}]}], 
+     RowBox[{"x", " ", 
+      RowBox[{"(", 
+       RowBox[{"a", "+", 
+        RowBox[{"b", " ", "x"}], "+", 
+        RowBox[{"c", " ", 
+         SuperscriptBox["x", "2"]}]}], ")"}]}]], ",", "x"}], "]"}], 
+  "]"}]], "Input",
+ CellLabel->
+  "In[170]:=",ExpressionUUID->"495cafdb-b269-4480-9622-ff70686f268f"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     ItemBox[
+      DynamicModuleBox[{Rubi`Private`open$$ = False}, 
+       TagBox[
+        FrameBox[
+         TagBox[GridBox[{
+            {
+             OpenerBox[Dynamic[Rubi`Private`open$$]], 
+             PaneSelectorBox[{False->
+              TemplateBox[{StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox[
+                    RowBox[{"(", 
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], ")"}], "m"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{"f", "+", 
+                    RowBox[{"g", " ", "x"}]}], ")"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                   TraditionalForm], TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                "\"\[LongRightArrow]\"", 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                 TagBox[
+                  FormBox[
+                   TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    RowBox[{"ExpandIntegrand", "(", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox[
+                    RowBox[{"(", 
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], ")"}], "m"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{"f", "+", 
+                    RowBox[{"g", " ", "x"}]}], ")"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], ",", "x"}], ")"}], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                   TraditionalForm], TraditionalForm, Editable -> True], 
+                 Hue[0, 0.8, 0.5], StripOnInput -> False]},
+               "Row",
+               DisplayFunction->(PaneBox[
+                 RowBox[{
+                   TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+               InterpretationFunction->(RowBox[{"Row", "[", 
+                  RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )], 
+              True->
+              TagBox[GridBox[{
+                 {
+                  StyleBox["\<\"Rubi Rule:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  StyleBox["928", "Label",
+                   StripOnInput->False]},
+                 {
+                  StyleBox["\<\"Condition:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  
+                  StyleBox["\<\"If \\!\\(\\*RowBox[{RowBox[{\\\"NeQ\\\", \
+\\\"[\\\", RowBox[{RowBox[{SuperscriptBox[\\\"b\\\", \\\"2\\\"], \\\"-\\\", \
+RowBox[{\\\"4\\\", \\\" \\\", \\\"a\\\", \\\" \\\", \\\"c\\\"}]}], \\\",\\\", \
+\\\"0\\\"}], \\\"]\\\"}], \\\"&&\\\", RowBox[{\\\"NeQ\\\", \\\"[\\\", \
+RowBox[{RowBox[{RowBox[{\\\"c\\\", \\\" \\\", SuperscriptBox[\\\"d\\\", \\\"2\
+\\\"]}], \\\"-\\\", RowBox[{\\\"b\\\", \\\" \\\", \\\"d\\\", \\\" \\\", \\\"e\
+\\\"}], \\\"+\\\", RowBox[{\\\"a\\\", \\\" \\\", SuperscriptBox[\\\"e\\\", \\\
+\"2\\\"]}]}], \\\",\\\", \\\"0\\\"}], \\\"]\\\"}], \\\"&&\\\", \
+RowBox[{\\\"IntegerQ\\\", \\\"[\\\", \\\"m\\\", \\\"]\\\"}]}]\\)\"\>",
+                   StripOnInput->False,
+                   LineColor->Hue[0.39, 0.8, 0.5],
+                   FrontFaceColor->Hue[0.39, 0.8, 0.5],
+                   BackFaceColor->Hue[0.39, 0.8, 0.5],
+                   GraphicsColor->Hue[0.39, 0.8, 0.5],
+                   FontColor->Hue[0.39, 0.8, 0.5]]},
+                 {
+                  StyleBox["\<\"Transformation:\"\>", "Label",
+                   StripOnInput->False,
+                   LineColor->GrayLevel[0.5],
+                   FrontFaceColor->GrayLevel[0.5],
+                   BackFaceColor->GrayLevel[0.5],
+                   GraphicsColor->GrayLevel[0.5],
+                   FontColor->GrayLevel[0.5]], 
+                  TemplateBox[{StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox[
+                    RowBox[{"(", 
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], ")"}], "m"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{"f", "+", 
+                    RowBox[{"g", " ", "x"}]}], ")"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    "\"\[LongRightArrow]\"", 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False],StyleBox[
+                    TagBox[
+                    FormBox[
+                    TagBox[
+                    RowBox[{"\[Integral]", 
+                    RowBox[{
+                    RowBox[{"ExpandIntegrand", "(", 
+                    RowBox[{
+                    FractionBox[
+                    RowBox[{
+                    SuperscriptBox[
+                    RowBox[{"(", 
+                    RowBox[{"d", "+", 
+                    RowBox[{"e", " ", "x"}]}], ")"}], "m"], " ", 
+                    RowBox[{"(", 
+                    RowBox[{"f", "+", 
+                    RowBox[{"g", " ", "x"}]}], ")"}]}], 
+                    RowBox[{"a", "+", 
+                    RowBox[{"b", " ", "x"}], "+", 
+                    RowBox[{"c", " ", 
+                    SuperscriptBox["x", "2"]}]}]], ",", "x"}], ")"}], 
+                    RowBox[{"\[DifferentialD]", "x"}]}]}], HoldForm], 
+                    TraditionalForm], TraditionalForm, Editable -> True], 
+                    Hue[0, 0.8, 0.5], StripOnInput -> False]},
+                   "Row",
+                   DisplayFunction->(PaneBox[
+                    RowBox[{
+                    TemplateSlotSequence[1, 
+                    TemplateBox[{10}, "Spacer1"]]}], Alignment -> Center]& ),
+                   InterpretationFunction->(RowBox[{"Row", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    TemplateSlotSequence[1, ","], "}"}], ",", 
+                    TemplateBox[{10}, "Spacer1"], ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]& )]}
+                },
+                AllowScriptLevelChange->False,
+                AutoDelete->False,
+                
+                GridBoxAlignment->{
+                 "Columns" -> {Right, Left}, 
+                  "Rows" -> {Center, Center, Center}},
+                
+                GridBoxDividers->{
+                 "Columns" -> {{False}}, 
+                  "RowsIndexed" -> {
+                   2 -> GrayLevel[0.85], 3 -> GrayLevel[0.85]}},
+                
+                GridBoxItemSize->{
+                 "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+                GridBoxSpacings->{"Columns" -> {{1}}, "Rows" -> {{2}}}],
+               "Grid"]}, Dynamic[Rubi`Private`open$$],
+              ImageSize->Automatic]}
+           },
+           AllowScriptLevelChange->False,
+           AutoDelete->False,
+           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Center}}},
+           
+           GridBoxItemSize->{
+            "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+          "Grid"],
+         AllowScriptLevelChange -> False,
+         FrameMargins->10,
+         FrameStyle->{
+           AbsoluteThickness[1], 
+           GrayLevel[0.85]},
+         RoundingRadius->3,
+         StripOnInput->False],
+        Deploy,
+        DefaultBaseStyle->"Deploy"],
+       DynamicModuleValues:>{}],
+      Alignment->Right,
+      AllowScriptLevelChange->False,
+      StripOnInput->False]},
+    {
+     ButtonBox["\<\"Copy Steps\"\>",
+      Appearance->"Palette",
+      ButtonFunction:>CopyToClipboard[{
+         Rubi`RubiRule[
+         "If \!\(\*RowBox[{RowBox[{\"NeQ\", \"[\", \
+RowBox[{RowBox[{SuperscriptBox[\"b\", \"2\"], \"-\", RowBox[{\"4\", \" \", \
+\"a\", \" \", \"c\"}]}], \",\", \"0\"}], \"]\"}], \"&&\", RowBox[{\"NeQ\", \
+\"[\", RowBox[{RowBox[{RowBox[{\"c\", \" \", SuperscriptBox[\"d\", \"2\"]}], \
+\"-\", RowBox[{\"b\", \" \", \"d\", \" \", \"e\"}], \"+\", RowBox[{\"a\", \" \
+\", SuperscriptBox[\"e\", \"2\"]}]}], \",\", \"0\"}], \"]\"}], \"&&\", \
+RowBox[{\"IntegerQ\", \"[\", \"m\", \"]\"}]}]\)", 
+          HoldComplete[
+           
+           Integrate[(($CellContext`d + $CellContext`e \
+$CellContext`x)^$CellContext`m ($CellContext`f + $CellContext`g \
+$CellContext`x))/($CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2), $CellContext`x]], 
+          HoldComplete[
+           Integrate[
+            $CellContext`ExpandIntegrand[($CellContext`d + $CellContext`e \
+$CellContext`x)^$CellContext`m (($CellContext`f + $CellContext`g \
+$CellContext`x)/($CellContext`a + $CellContext`b $CellContext`x + \
+$CellContext`c $CellContext`x^2)), $CellContext`x], $CellContext`x]], 928]}],
+      Evaluator->Automatic,
+      ImageSize->Automatic,
+      Method->"Preemptive",
+      Tooltip->"Copy list of steps as plain input"]}
+   },
+   AllowScriptLevelChange->False,
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxBackground->{"Columns" -> {{
+        GrayLevel[0.98]}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Print",
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"1f4363d1-dbac-4a14-baa4-a29787d7fe0d"],
+
+Cell[BoxData[
+ RowBox[{"Int", "[", 
+  RowBox[{
+   RowBox[{
+    FractionBox["c", 
+     RowBox[{"a", " ", "x"}]], "+", 
+    FractionBox[
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", "b"}], " ", "c"}], "+", 
+      RowBox[{"a", " ", "d"}], "-", 
+      RowBox[{
+       SuperscriptBox["c", "2"], " ", "x"}]}], 
+     RowBox[{"a", " ", 
+      RowBox[{"(", 
+       RowBox[{"a", "+", 
+        RowBox[{"b", " ", "x"}], "+", 
+        RowBox[{"c", " ", 
+         SuperscriptBox["x", "2"]}]}], ")"}]}]]}], ",", "x"}], 
+  "]"}]], "Output",
+ CellLabel->"Out[170]=",ExpressionUUID->"2ae36b29-d1c9-48d7-93fe-81a2b2c9b0a1"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Showing Integration Statistics", \
+"Section",ExpressionUUID->"051ae9a7-059a-466b-a87d-4df12c58b643"],
+
+Cell[TextData[{
+ "If ",
+ StyleBox["$LoadShowSteps",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " was ",
+ StyleBox["True",
+  FontFamily->"Courier New",
+  FontSize->14,
+  FontWeight->"Bold"],
+ " before Rubi was being loaded, you can display certain statistical \
+information about the integration process. The statistic contains for \
+instance number of rules that were used or sizes of input and output \
+expressions. The final ratio value is a good indicator how difficult it is to \
+obtain the antiderivative for an expression"
+}], "Text",ExpressionUUID->"d2a9f871-7310-4e63-898e-7c74f6e3ca3d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Stats", "[", 
+  RowBox[{"Int", "[", 
+   RowBox[{
+    FractionBox[
+     RowBox[{"c", "+", 
+      RowBox[{"d", " ", "x"}]}], 
+     RowBox[{"x", " ", 
+      RowBox[{"(", 
+       RowBox[{"a", "+", 
+        RowBox[{"b", " ", "x"}], "+", 
+        RowBox[{"c", " ", 
+         SuperscriptBox["x", "2"]}]}], ")"}]}]], ",", "x"}], "]"}], 
+  "]"}]], "Input",
+ CellLabel->"In[12]:=",ExpressionUUID->"67b477de-876f-4ebb-9f55-2cc4bf705f4f"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   TagBox["RubiStats",
+    "SummaryHead"], "[", 
+   DynamicModuleBox[{Typeset`open$$ = False, Typeset`embedState$$ = "Ready"}, 
+    
+    TemplateBox[{PaneSelectorBox[{False -> GridBox[{{
+            GridBox[{{
+               RowBox[{
+                 TagBox["\"Number of steps: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["6", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox[
+                 "\"Number of distinct rules: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["5", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Leaf-count of input: \"", "SummaryItemAnnotation"],
+                  "\[InvisibleSpace]", 
+                 TagBox["21", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox[
+                 "\"Leaf-count of antiderivative: \"", 
+                  "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+                 TagBox["71", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Rule-size-ratio: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["0.2380952380952380952`4.", "SummaryItem"]}]}}, 
+             GridBoxAlignment -> {
+              "Columns" -> {{Left}}, "Rows" -> {{Automatic}}}, AutoDelete -> 
+             False, GridBoxItemSize -> {
+              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+             GridBoxSpacings -> {"Columns" -> {{2}}, "Rows" -> {{Automatic}}},
+              BaseStyle -> {
+              ShowStringCharacters -> False, NumberMarks -> False, 
+               PrintPrecision -> 3, ShowSyntaxStyles -> False}]}}, 
+          GridBoxAlignment -> {"Rows" -> {{Top}}}, AutoDelete -> False, 
+          GridBoxItemSize -> {
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+          BaselinePosition -> {1, 1}], True -> GridBox[{{
+            GridBox[{{
+               RowBox[{
+                 TagBox["\"Number of steps: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["6", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox[
+                 "\"Number of distinct rules: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["5", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Leaf-count of input: \"", "SummaryItemAnnotation"],
+                  "\[InvisibleSpace]", 
+                 TagBox["21", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox[
+                 "\"Leaf-count of antiderivative: \"", 
+                  "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+                 TagBox["71", "SummaryItem"]}]}, {
+               RowBox[{
+                 TagBox["\"Rule-size-ratio: \"", "SummaryItemAnnotation"], 
+                 "\[InvisibleSpace]", 
+                 TagBox["0.2380952380952380952`4.", "SummaryItem"]}]}}, 
+             GridBoxAlignment -> {
+              "Columns" -> {{Left}}, "Rows" -> {{Automatic}}}, AutoDelete -> 
+             False, GridBoxItemSize -> {
+              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+             GridBoxSpacings -> {"Columns" -> {{2}}, "Rows" -> {{Automatic}}},
+              BaseStyle -> {
+              ShowStringCharacters -> False, NumberMarks -> False, 
+               PrintPrecision -> 3, ShowSyntaxStyles -> False}]}}, 
+          GridBoxAlignment -> {"Rows" -> {{Top}}}, AutoDelete -> False, 
+          GridBoxItemSize -> {
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+          BaselinePosition -> {1, 1}]}, 
+       Dynamic[Typeset`open$$], ImageSize -> Automatic]},
+     "SummaryPanel"],
+    DynamicModuleValues:>{}], "]"}],
+  {6, 5, 21, 71, 0.2380952380952380952`4.},
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Print",
+ CellLabel->
+  "During evaluation of \
+In[12]:=",ExpressionUUID->"f20088c7-ef5a-4a30-84cb-1638e426ea21"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"b", " ", "c"}], "-", 
+      RowBox[{"2", " ", "a", " ", "d"}]}], ")"}], " ", 
+    RowBox[{"ArcTanh", "[", 
+     FractionBox[
+      RowBox[{"b", "+", 
+       RowBox[{"2", " ", "c", " ", "x"}]}], 
+      SqrtBox[
+       RowBox[{
+        SuperscriptBox["b", "2"], "-", 
+        RowBox[{"4", " ", "a", " ", "c"}]}]]], "]"}]}], 
+   RowBox[{"a", " ", 
+    SqrtBox[
+     RowBox[{
+      SuperscriptBox["b", "2"], "-", 
+      RowBox[{"4", " ", "a", " ", "c"}]}]]}]], "+", 
+  FractionBox[
+   RowBox[{"c", " ", 
+    RowBox[{"Log", "[", "x", "]"}]}], "a"], "-", 
+  FractionBox[
+   RowBox[{"c", " ", 
+    RowBox[{"Log", "[", 
+     RowBox[{"a", "+", 
+      RowBox[{"b", " ", "x"}], "+", 
+      RowBox[{"c", " ", 
+       SuperscriptBox["x", "2"]}]}], "]"}]}], 
+   RowBox[{"2", " ", "a"}]]}]], "Output",
+ CellLabel->
+  "Out[12]=",ExpressionUUID->"cedc3481-6250-432f-afb9-7a6413b860ff"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->None,
+WindowSize->{1613, 1264},
+WindowMargins->{{281, Automatic}, {Automatic, 42}},
+WindowStatusArea->"",
+FrontEndVersion->"11.3 for Linux x86 (64-bit) (January 23, 2018)",
+StyleDefinitions->"Default.nb"
+]
+
