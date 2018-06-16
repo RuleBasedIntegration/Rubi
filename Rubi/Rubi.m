@@ -6,27 +6,10 @@
 
 BeginPackage["Rubi`"];
 
-
 Int::usage = "Int[expn, var] returns the antiderivative (indefinite integral) of <expn> with respect to <var>.\n" <>
     "Int[{expn1, expn2, ...},var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>." <>
     "Int[expn, {var, a, b}] returns the limit of the antiderivative of <expn> as <var> approaches <b> minus the limit as <var> approaches <a>. " <>
     "Note that this difference will NOT always equal the definite integral of <expn> from <a> to <b>.";
-(*"Int[expn, var, Step] displays the first step used to integrate <expn> with respect to <var>, and returns the intermediate result.*)
-(*Int[expn, var, Steps] displays all the steps used to integrate <expn> with respect to <var>, and returns the antiderivative.*)
-(*Int[expn, var, Stats], before returning the antiderivative of <expn> with respect to <var>, displays a list of statistics of the form {a, b, c, d, e} where *)
-(*<a> is the number of steps used to integrate <expn>, *)
-(*<b> is the number of distinct rules used to integrate <expn>, *)
-(*<c> is the leaf count size of <expn>, *)
-(*<d> is the leaf count size of the antiderivative, and*)
-(*<e> is the rule-to-size ratio of the integration (i.e. the quotient of <b> and <c>).*)
-(*Int[{expn1, expn2, ...}, var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>.*)
-(*Int[expn, {var, a, b}] returns the limit of the antiderivative of <expn> as <var> approaches <b> minus the limit as <var> approaches <a>.  Note that this difference will NOT always equal the definite integral of <expn> from <a> to <b>.",*)
-
-(*"Int[expn, var] returns the antiderivative (indefinite integral) of <expn> with respect to <var>.*)
-(*Int[{expn1, expn2, ...},var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>.*)
-(*Int[expn, {var, a, b}] returns the limit of the antiderivative of <expn> as <var> approaches <b> minus the limit as <var> approaches <a>.  Note that this difference will NOT always equal the definite integral of <expn> from <a> to <b>."];*)
-
-
 Dist::usage = "Dist[expn1,expn2,var] distributes <expn1> over <expn2>.";
 Subst::usage = "Subst[expn1,var,expn2] substitutes <expn2> for <var> in <expn1>.";
 Step::usage = "Int[expn, var, Step] displays the first step in the integration of <expn> with respect to <var> and returns the intermediate result.";
@@ -62,13 +45,11 @@ csc::usage = "Inert cosecant function";
 Begin["`Private`"];
 
 
-$LoadShowSteps = Global`$LoadShowSteps;
-
-
+$LoadShowSteps = TrueQ[Global`$LoadShowSteps];
 
 $rulePackages = FileNames["*.m", {FileNameJoin[{DirectoryName[System`Private`$InputFileName], "IntegrationRules"}]}];
-$utilityPackage = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "Integration utility functions.m"}];
-$stepRoutines = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "ShowStep routines.m"}];
+$utilityPackage = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "IntegrationUtilityFunctions.m"}];
+$stepRoutines = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "ShowStepRoutines.m"}];
 $ruleFormatting = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "ShowStepFormatting.m"}];
 
 LoadRules::inv = "Could not load file or section: ``";
@@ -105,7 +86,7 @@ LoadRules["1.1.4"];
 LoadRules["1.3"];
 
 
-If[Global`$LoadElementaryFunctionRules === True,
+If[TrueQ[Global`$LoadElementaryFunctionRules],
   LoadRules["9.3"];
   LoadRules["2"];
   LoadRules["3"];
