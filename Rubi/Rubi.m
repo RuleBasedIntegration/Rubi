@@ -7,22 +7,24 @@
 BeginPackage["Rubi`"];
 
 
-Int::usage = If[Global`$LoadShowSteps === True,
-  "Int[expn, var] returns the antiderivative (indefinite integral) of <expn> with respect to <var>.
-Int[expn, var, Step] displays the first step used to integrate <expn> with respect to <var>, and returns the intermediate result.
-Int[expn, var, Steps] displays all the steps used to integrate <expn> with respect to <var>, and returns the antiderivative.
-Int[expn, var, Stats], before returning the antiderivative of <expn> with respect to <var>, displays a list of statistics of the form {a, b, c, d, e} where 
-   <a> is the number of steps used to integrate <expn>, 
-   <b> is the number of distinct rules used to integrate <expn>, 
-   <c> is the leaf count size of <expn>, 
-   <d> is the leaf count size of the antiderivative, and
-   <e> is the rule-to-size ratio of the integration (i.e. the quotient of <b> and <c>).
-Int[{expn1, expn2, ...}, var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>.
-Int[expn, {var, a, b}] returns the limit of the antiderivative of <expn> as <var> approaches <b> minus the limit as <var> approaches <a>.  Note that this difference will NOT always equal the definite integral of <expn> from <a> to <b>.",
+Int::usage = "Int[expn, var] returns the antiderivative (indefinite integral) of <expn> with respect to <var>.\n" <>
+    "Int[{expn1, expn2, ...},var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>." <>
+    "Int[expn, {var, a, b}] returns the limit of the antiderivative of <expn> as <var> approaches <b> minus the limit as <var> approaches <a>. " <>
+    "Note that this difference will NOT always equal the definite integral of <expn> from <a> to <b>.";
+(*"Int[expn, var, Step] displays the first step used to integrate <expn> with respect to <var>, and returns the intermediate result.*)
+(*Int[expn, var, Steps] displays all the steps used to integrate <expn> with respect to <var>, and returns the antiderivative.*)
+(*Int[expn, var, Stats], before returning the antiderivative of <expn> with respect to <var>, displays a list of statistics of the form {a, b, c, d, e} where *)
+(*<a> is the number of steps used to integrate <expn>, *)
+(*<b> is the number of distinct rules used to integrate <expn>, *)
+(*<c> is the leaf count size of <expn>, *)
+(*<d> is the leaf count size of the antiderivative, and*)
+(*<e> is the rule-to-size ratio of the integration (i.e. the quotient of <b> and <c>).*)
+(*Int[{expn1, expn2, ...}, var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>.*)
+(*Int[expn, {var, a, b}] returns the limit of the antiderivative of <expn> as <var> approaches <b> minus the limit as <var> approaches <a>.  Note that this difference will NOT always equal the definite integral of <expn> from <a> to <b>.",*)
 
-  "Int[expn, var] returns the antiderivative (indefinite integral) of <expn> with respect to <var>.
-Int[{expn1, expn2, ...},var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>.
-Int[expn, {var, a, b}] returns the limit of the antiderivative of <expn> as <var> approaches <b> minus the limit as <var> approaches <a>.  Note that this difference will NOT always equal the definite integral of <expn> from <a> to <b>."];
+(*"Int[expn, var] returns the antiderivative (indefinite integral) of <expn> with respect to <var>.*)
+(*Int[{expn1, expn2, ...},var] returns a list of the antiderivatives of <expn1>, <expn2>, ... each with respect to <var>.*)
+(*Int[expn, {var, a, b}] returns the limit of the antiderivative of <expn> as <var> approaches <b> minus the limit as <var> approaches <a>.  Note that this difference will NOT always equal the definite integral of <expn> from <a> to <b>."];*)
 
 
 Dist::usage = "Dist[expn1,expn2,var] distributes <expn1> over <expn2>.";
@@ -31,6 +33,11 @@ Step::usage = "Int[expn, var, Step] displays the first step in the integration o
 Steps::usage = "Int[expn, var, Steps] displays all the steps in the integration of <expn> with respect to <var> and returns the antiderivative.";
 Stats::usage = "Int[expn, var, Stats] before returning the antiderivative <expn> with respect to <var>, displays a list {a, b, c, d, e} of statistics.";
 
+RubiRule::usage = "RubiRule is a symbolic wrapper that is used when displaying integration steps.";
+RubiIntermediateResult::usage = "RubiIntermediateResult is a symbolic wrapper that is used when displaying integration steps.";
+RubiStats::usage = "RubiStats is a symbolic wrapper that contains statistical information about an integration." <>
+    "It consists of (a) the number of steps used to integrate, (b) the number of distinct rules used, (c) is the leaf count size of the input," <>
+    "(d) the leaf count size of the antiderivative, and (e) the rule-to-size ratio of the integration (i.e. the quotient of (b) and (c)).";
 
 Unintegrable::usage = "Unintegrable[expn,var] indicates <expn> is not integrable with respect to <var> in closed-form.";
 CannotIntegrate::usage = "CannotIntegrate[expn,var] indicates Rubi is unable to integrate <expn> with respect to <var>.";
@@ -61,6 +68,8 @@ $LoadShowSteps = Global`$LoadShowSteps;
 
 $rulePackages = FileNames["*.m", {FileNameJoin[{DirectoryName[System`Private`$InputFileName], "IntegrationRules"}]}];
 $utilityPackage = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "Integration utility functions.m"}];
+$stepRoutines = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "ShowStep routines.m"}];
+$ruleFormatting = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "ShowStepFormatting.m"}];
 
 LoadRules::inv = "Could not load file or section: ``";
 LoadRules[filename_String /; FileExistsQ[filename]] := (
@@ -69,7 +78,7 @@ LoadRules[filename_String /; FileExistsQ[filename]] := (
   StatusBarPrint[""] );
 LoadRules[section_String] := With[
   {
-   files = Select[$rulePackages, StringMatchQ[FileBaseName[#], section ~~ " " ~~ __] &]
+    files = Select[$rulePackages, StringMatchQ[FileBaseName[#], section ~~ " " ~~ __] &]
   },
   LoadRules[First[files]] /; Length[files] === 1
 ];
@@ -107,24 +116,62 @@ If[Global`$LoadElementaryFunctionRules === True,
   LoadRules["8"];
   LoadRules["9.2"]
 ];
-
 LoadRules["9.4"];
 
-If[$LoadShowSteps === True, LoadRules["ShowStep routines"]];
-
-
+(* Calculate the rule-count directly after all integration rules, because below there are some more rules
+ added that are not integration rules*)
 $RuleCount = Length[DownValues[Int]];
 
+If[$LoadShowSteps === True,
+  LoadRules[$stepRoutines];
+  LoadRules[$ruleFormatting];
+];
 
 StatusBarPrint["Modifying " <> ToString[$RuleCount] <> " integration rules to distribute coefficients over sums..."];
 FixIntRules[];
-StatusBarPrint[""];
-
 
 If[$LoadShowSteps === True,
   StatusBarPrint["Modifying " <> ToString[$RuleCount] <> " integration rules to display steps..."];
   StepFunction[Int];
-  StatusBarPrint[""]];
+];
+
+Rubi::argFlag = "The `` routine can only be used with the form Int[expr, x] where x is a symbol.";
+SetAttributes[Steps, {HoldAllComplete}];
+Steps[Int[expr_, x_Symbol]] := Module[{result, steps},
+  {result, steps} = Reap@Block[{$ShowSteps = True},
+    FixedPoint[
+      Function[int,
+        With[{held = ReplaceAll[HoldComplete[int], {Defer[Int] -> Int, Defer[Dist] -> Dist, Defer[Subst] -> Subst}]},
+          Sow[RubiIntermediateResult[held]];
+          ReleaseHold[held]
+        ]
+      ], Int[expr, x]]
+  ];
+  PrintRubiSteps[steps];
+  result
+];
+Steps[___] := Null /; Message[Rubi::argFlag, "Steps"];
+
+SetAttributes[Step, {HoldAllComplete}];
+Step[Int[expr_, x_Symbol]] := Module[{result, step},
+  {result, step} = Reap@Block[{$ShowSteps = True}, Int[expr, x]];
+  PrintRubiSteps[step];
+  result
+];
+Step[___] := Null /; Message[Rubi::argFlag, "Step"];
+
+SetAttributes[Stats, {HoldAllComplete}];
+Stats[Int[expr_, x_Symbol]] := Block[{$ShowSteps = False, $StepCounter = 0, $RuleList = {}},
+  With[{result = Int[expr, x]},
+    Print[RubiStats@{$StepCounter, Length[$RuleList], LeafCount[expr], LeafCount[result], N[Length[$RuleList] / LeafCount[expr], 4]}];
+    result]
+];
+Stats[___] := Null /; Message[Rubi::argFlag, "Stats"];
+
+
+(* Print a warning when users use the old style routines for showing steps *)
+Int::oldFlag = "The usage Int[expr_, x_, `1`] is depreciated. Please use `1`[Int[expr_, x_]].";
+Int[_, _, flag : (Stats | Step | Steps)] := Null /; Message[Int::oldFlag, flag];
 
 
 Int[u_, {x_Symbol, a_, b_}] :=
@@ -148,7 +195,7 @@ Unintegrable[u_, x_] :=
       Defer[Int][u, x]];
 
 CannotIntegrate[u_, x_] := Defer[Int][u, x];
-
+ClearStatusBar[];
 
 End[];
 EndPackage[];

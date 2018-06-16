@@ -4198,8 +4198,7 @@ Distrib[u_,v_] :=
 (* Dist[u,v] returns the sum of u times each term of v, provided v is free of Int. *)
 DownValues[Dist]={};
 UpValues[Dist]={};
-
-Dist /: Dist[u_,v_,x_]+Dist[w_,v_,x_] := 
+Dist /: Dist[u_,v_,x_]+Dist[w_,v_,x_] :=
   If[EqQ[u+w,0],
     0,
   Dist[u+w,v,x]]
@@ -7897,7 +7896,7 @@ RuleName[name_] :=
 
 ClearAll[FixIntRules,FixIntRule,FixRhsIntRule]
 
-
+FixIntRules::usage = "FixIntRules[list] applies some changes to the DownValues of the integration rules.";
 FixIntRules[] :=
   (DownValues[Int]=FixIntRules[DownValues[Int]]; Null)
 
