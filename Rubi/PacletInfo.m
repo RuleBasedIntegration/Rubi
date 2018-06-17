@@ -6,12 +6,18 @@
 Paclet[
   Name -> "Rubi",
   Version -> "4.16",
-  MathematicaVersion -> "11.2+",
+  MathematicaVersion -> "11+",
   Description -> "Package for Rule-based Integration",
   Creator -> "Albert D. Rich",
   Extensions ->
       {
-        {"Kernel", Root -> "Kernel", Context -> "Rubi`"}
+        {"Kernel", Root -> ".", Context -> "Rubi`"},
+        {"PacletServer",
+          "Tags" -> {"integration", "rule", "antiderivative"},
+          "Categories" -> {"Mathematics"},
+          "Description" -> "Rubi is a package for symbolic, rule-based integration that outperforms Mathematica's Integrate in many cases and finds optimal antiderivatives.",
+          "License" -> "MIT"
+        }
       }
 ]
 
