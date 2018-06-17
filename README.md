@@ -10,7 +10,7 @@ In principle, Rubi is independent of the implementation, because the integration
 sufficiently advanced language that supports symbolic pattern-matching and replacement rules.
 
 Rubi out-performs Maple and Mathematica (the two major commercial computer algebra systems) on a grueling integration test suite,
-consisting of over 70 thousand integrands and their optimal antiderivatives.  Independently conducted test results are available at [Computer Algebra Independent Integration Tests] (https://www.12000.org/my_notes/CAS_integration_tests/index.htm).
+consisting of over 70 thousand integrands and their optimal antiderivatives.  Independently conducted test results are available at [Computer Algebra Independent Integration Tests](https://www.12000.org/my_notes/CAS_integration_tests/index.htm).
 
 Another major advantage of Rubi is that it provides the option to show each integration step the system uses to determine an antiderivative.
 Since Rubi uses a decision tree to select the appropriate rule to apply to a given integrand, the transformation formula and the required application conditions can be provided for each step of the integration.
