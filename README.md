@@ -1,16 +1,19 @@
 # Rubi - Rule-based Integration
 
-This is a Mathematica implementation of the rule-based integrator called Rubi developed by Albert D. Rich.
-Rubi is a large set of transformation rules that allows users to determine the antiderivative of an expression by 
-applying matching integration rules step by step until the final solution is found.
+Rubi is a rule-based symbolic integrator implemented in Mathematica.
+It was developed as an independent research project by Albert D. Rich to demonstrate the numerous advantages of using a rule-based decison tree to automate mathematics.
+In just a few short weeks, Patrick Scheibe transfromed Rubi into a GitHub project, significantly enhanced the user-interface, and made the system available as a Mathematica paclet.
+
+Rubi consists of a large number of transformation rules that allows users to determine the antiderivative of an expression by 
+applying matching integration rules step-by-step until the final solution is found.
 In principle, Rubi is independent of the implementation, because the integration rules could theoretically be used in any
 sufficiently advanced language that supports symbolic pattern-matching and replacement rules.
 
 Rubi out-performs Maple and Mathematica (the two major commercial computer algebra systems) on a grueling integration test suite,
-consisting of over 70 thousand integrands and optimal antiderivatives.
-One major advantage of Rubi is that it can provide the exact steps that are required to determine an antiderivative.
-Since Rubi rules follow a decision tree, the transformation and the required conditions can be provided for each
-integration step.
+consisting of over 70 thousand integrands and their optimal antiderivatives.  Independently conducted test results are available at [Computer Algebra Independent Integration Tests] (https://www.12000.org/my_notes/CAS_integration_tests/index.htm).
+
+Another major advantage of Rubi is that it provides the option to show each integration step the system uses to determine an antiderivative.
+Since Rubi uses a decision tree to select the appropriate rule to apply to a given integrand, the transformation formula and the required application conditions can be provided for each step of the integration.
 
 ## Documentation
 
