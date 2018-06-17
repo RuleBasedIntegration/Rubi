@@ -1,7 +1,7 @@
 # Rubi - Rule-based Integration
 
 This is a Mathematica implementation of the rule-based integrator called Rubi developed by Albert D. Rich.
-Rubi is a large set of transformation rules that allows to determine the antiderivative of an expression by 
+Rubi is a large set of transformation rules that allows users to determine the antiderivative of an expression by 
 applying matching integration rules step by step until the final solution is found.
 In principle, Rubi is independent of the implementation, because the integration rules could theoretically be used in any
 sufficiently advanced language that supports symbolic pattern-matching and replacement rules.
