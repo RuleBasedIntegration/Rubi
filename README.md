@@ -24,7 +24,12 @@ In future, all documentation, PDF files of the rules, and the test-suite will be
 
 ## Installation
 
-You can download the latest version of Rubi from the [releases section](https://github.com/RuleBasedIntegration/Rubi/releases) as
+In Mathematica 11.2 or later, you can install the package directly from the online repository
+
+```mma
+PacletInstall["https://github.com/RuleBasedIntegration/Rubi/releases/download/4.16/Rubi-4.16.paclet"]
+```
+In earlier version of Mathematica, you can download the latest version of Rubi from the [releases section](https://github.com/RuleBasedIntegration/Rubi/releases) as
 a *paclet* file. To install the paclet use
 
 ```mma
