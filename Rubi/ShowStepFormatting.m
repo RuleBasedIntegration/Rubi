@@ -71,7 +71,7 @@ PrintRubiSteps[{steps : {__}}] := Print[
 ];
 PrintRubiSteps[arg___] := Message[PrintRubiSteps::err, {arg}];
 
-RubiStats /: MakeBoxes[RubiStats[arg : {a_, b_, c_, d_, e_}], form : (StandardForm | TraditionalForm)] := Module[{above, below},
+RubiStats /: MakeBoxes[RubiStats[arg : {a_, b_, c_, d_, e_, f_}], form : (StandardForm | TraditionalForm)] := Module[{above, below},
   above = { (* example grid *)
     {BoxForm`SummaryItem[{"Number of steps: ", a}]},
     {BoxForm`SummaryItem[{"Number of distinct rules: ", b}]},
@@ -91,3 +91,10 @@ RubiStats /: MakeBoxes[RubiStats[arg : {a_, b_, c_, d_, e_}], form : (StandardFo
     "Interpretable" -> Automatic
   ]
 ];
+
+RubiStats[{a_, b_, c_, d_, e_, f_}]["Steps"] := a;
+RubiStats[{a_, b_, c_, d_, e_, f_}]["NumberOfRules"] := b;
+RubiStats[{a_, b_, c_, d_, e_, f_}]["InputLeafCount"] := c;
+RubiStats[{a_, b_, c_, d_, e_, f_}]["OutputLeafCount"] := d;
+RubiStats[{a_, b_, c_, d_, e_, f_}]["Ratio"] := e;
+RubiStats[{a_, b_, c_, d_, e_, f_}]["Rules"] := f;

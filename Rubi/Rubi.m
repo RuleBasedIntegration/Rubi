@@ -43,7 +43,6 @@ csc::usage = "Inert cosecant function";
 
 Begin["`Private`"];
 
-
 $LoadShowSteps = TrueQ[Global`$LoadShowSteps];
 
 $rulePackages = FileNames["*.m", {FileNameJoin[{DirectoryName[System`Private`$InputFileName], "IntegrationRules"}]}];
@@ -117,7 +116,7 @@ If[$LoadShowSteps === True,
 Int::argFlag = "The `` routine can only be used with the form Int[expr, x] where x is a symbol.";
 Int::noShowSteps = "To use this function, you need to define $LoadShowSteps=True before loading the Rubi package"
 SetAttributes[Steps, {HoldAllComplete}];
-Steps[Int[expr_, x_Symbol]] := Module[{result, steps},
+Steps[Int[expr_, x_], n_Integer : Infinity] := Module[{result, steps},
   {result, steps} = Reap@Block[{$ShowSteps = True},
     FixedPoint[
       Function[int,
@@ -125,29 +124,32 @@ Steps[Int[expr_, x_Symbol]] := Module[{result, steps},
           Sow[RubiIntermediateResult[held]];
           ReleaseHold[held]
         ]
-      ], Int[expr, x]]
+      ], Int[expr, x],
+      n
+    ]
   ];
   PrintRubiSteps[steps];
   result
-] /; TrueQ[$LoadShowSteps];
-Steps[int : Int[_, _Symbol]] := (Message[Int::noShowSteps]; int);
+] /; TrueQ[$LoadShowSteps] && Head[x] === Symbol && n > 0;
+Steps[int : Int[__]] := (Message[Int::noShowSteps]; int);
 Steps[___] := Null /; Message[Int::argFlag, "Steps"];
 
 SetAttributes[Step, {HoldAllComplete}];
-Step[Int[expr_, x_Symbol]] := Module[{result, step},
+Step[Int[expr_, x_]] := Module[{result, step},
   {result, step} = Reap@Block[{$ShowSteps = True}, Int[expr, x]];
   PrintRubiSteps[step];
   result
-] /; TrueQ[$LoadShowSteps];
-Step[int : Int[_, _Symbol]] := (Message[Int::noShowSteps]; int);
+] /; TrueQ[$LoadShowSteps && Head[x] === Symbol];
+Step[int : Int[__]] := (Message[Int::noShowSteps]; int);
 Step[___] := Null /; Message[Int::argFlag, "Step"];
 
 SetAttributes[Stats, {HoldAllComplete}];
-Stats[Int[expr_, x_Symbol]] := Block[{$ShowSteps = False, $StepCounter = 0, $RuleList = {}},
+Stats[Int[expr_, x_]] := Block[{$ShowSteps = False, $StepCounter = 0, $RuleList = {}},
   With[{result = Int[expr, x]},
-    Print[RubiStats@{$StepCounter, Length[$RuleList], LeafCount[expr], LeafCount[result], N[Length[$RuleList] / LeafCount[expr], 4]}];
-    result]
-] /; TrueQ[$LoadShowSteps];
+    {
+      RubiStats@{$StepCounter, Length[$RuleList], LeafCount[expr], LeafCount[result], N[Length[$RuleList] / LeafCount[expr], 4], $RuleList},
+      result
+    }]] /; TrueQ[$LoadShowSteps] && Head[x] === Symbol;
 Stats[int : Int[_, _Symbol]] := (Message[Int::noShowSteps]; int);
 Stats[___] := Null /; Message[Int::argFlag, "Stats"];
 
