@@ -410,7 +410,7 @@ GtQ[u_,v_] :=
 GtQ[u_,v_,w_] := GtQ[u,v] && GtQ[v,w]  
 
 
-LtQ::usage = "If u>v, LtQ[u,v] returns True; else it returns False.";
+LtQ::usage = "If u<v, LtQ[u,v] returns True; else it returns False.";
 LtQ[u_,v_] := 
   If[RealNumberQ[u],
     If[RealNumberQ[v],
@@ -429,7 +429,7 @@ LtQ[u_,v_] :=
 LtQ[u_,v_,w_] := LtQ[u,v] && LtQ[v,w]  
 
 
-GeQ::usage = "If u>v, GeQ[u,v] returns True; else it returns False.";
+GeQ::usage = "If u>=v, GeQ[u,v] returns True; else it returns False.";
 GeQ[u_,v_] := 
   If[RealNumberQ[u],
     If[RealNumberQ[v],
@@ -448,7 +448,7 @@ GeQ[u_,v_] :=
 GeQ[u_,v_,w_] := GeQ[u,v] && GeQ[v,w]  
 
 
-LeQ::usage = "If u>v, LeQ[u,v] returns True; else it returns False.";
+LeQ::usage = "If u<=v, LeQ[u,v] returns True; else it returns False.";
 LeQ[u_,v_] := 
   If[RealNumberQ[u],
     If[RealNumberQ[v],
