@@ -1,0 +1,54 @@
+
+(* ::Section:: *)
+(* 1.3.4 Normalizing algebraic functions *)
+
+(* ::Subsection::Closed:: *)
+(* 1.3.4 Normalizing algebraic functions *)
+Int[(x_)^(m_.)*((e_.)*((a_) + (b_.)*(x_)^(n_.))^(r_.))^(p_)*((f_.)*((c_) + (d_.)*(x_)^(n_.))^(s_))^(q_), x_Symbol] := (e*(a + b*x^n)^r)^p*((f*(c + d*x^n)^s)^q/((a + b*x^n)^(p*r)*(c + d*x^n)^(q*s)))*Int[x^m*(a + b*x^n)^(p*r)*(c + d*x^n)^(q*s), x] /; FreeQ[{a, b, c, d, e, f, m, n, p, q, r, s}, x]
+Int[(u_.)*((e_.)*(((a_.) + (b_.)*(x_)^(n_.))/((c_) + (d_.)*(x_)^(n_.))))^(p_), x_Symbol] := (b*(e/d))^p*Int[u, x] /; FreeQ[{a, b, c, d, e, n, p}, x] && EqQ[b*c - a*d, 0]
+Int[(u_.)*((e_.)*(((a_.) + (b_.)*(x_)^(n_.))/((c_) + (d_.)*(x_)^(n_.))))^(p_), x_Symbol] := Int[u*((e*(a + b*x^n))^p/(c + d*x^n)^p), x] /; FreeQ[{a, b, c, d, e, n, p}, x] && GtQ[b*d*e, 0] && GtQ[c - a*(d/b), 0]
+Int[((e_.)*(((a_.) + (b_.)*(x_)^(n_.))/((c_) + (d_.)*(x_)^(n_.))))^(p_), x_Symbol] := With[{q = Denominator[p]}, q*e*((b*c - a*d)/n)*Subst[Int[x^(q*(p + 1) - 1)*(((-a)*e + c*x^q)^(1/n - 1)/(b*e - d*x^q)^(1/n + 1)), x], x, (e*((a + b*x^n)/(c + d*x^n)))^(1/q)]] /; FreeQ[{a, b, c, d, e}, x] && FractionQ[p] && IntegerQ[1/n]
+Int[(x_)^(m_.)*((e_.)*(((a_.) + (b_.)*(x_)^(n_.))/((c_) + (d_.)*(x_)^(n_.))))^(p_), x_Symbol] := With[{q = Denominator[p]}, q*e*((b*c - a*d)/n)*Subst[Int[x^(q*(p + 1) - 1)*(((-a)*e + c*x^q)^(Simplify[(m + 1)/n] - 1)/(b*e - d*x^q)^(Simplify[(m + 1)/n] + 1)), x], x, (e*((a + b*x^n)/(c + d*x^n)))^(1/q)]] /; FreeQ[{a, b, c, d, e, m, n}, x] && FractionQ[p] && IntegerQ[Simplify[(m + 1)/n]]
+Int[(u_)^(r_.)*((e_.)*(((a_.) + (b_.)*(x_)^(n_.))/((c_) + (d_.)*(x_)^(n_.))))^(p_), x_Symbol] := With[{q = Denominator[p]}, q*e*((b*c - a*d)/n)*Subst[Int[SimplifyIntegrand[x^(q*(p + 1) - 1)*(((-a)*e + c*x^q)^(1/n - 1)/(b*e - d*x^q)^(1/n + 1))*(u /. x -> ((-a)*e + c*x^q)^(1/n)/(b*e - d*x^q)^(1/n))^r, x], x], x, (e*((a + b*x^n)/(c + d*x^n)))^(1/q)]] /; FreeQ[{a, b, c, d, e}, x] && PolynomialQ[u, x] && FractionQ[p] && IntegerQ[1/n] && IntegerQ[r]
+Int[(x_)^(m_.)*(u_)^(r_.)*((e_.)*(((a_.) + (b_.)*(x_)^(n_.))/((c_) + (d_.)*(x_)^(n_.))))^(p_), x_Symbol] := With[{q = Denominator[p]}, q*e*((b*c - a*d)/n)*Subst[Int[SimplifyIntegrand[x^(q*(p + 1) - 1)*(((-a)*e + c*x^q)^((m + 1)/n - 1)/(b*e - d*x^q)^((m + 1)/n + 1))*(u /. x -> ((-a)*e + c*x^q)^(1/n)/(b*e - d*x^q)^(1/n))^r, x], x], x, (e*((a + b*x^n)/(c + d*x^n)))^(1/q)]] /; FreeQ[{a, b, c, d, e}, x] && PolynomialQ[u, x] && FractionQ[p] && IntegerQ[1/n] && IntegersQ[m, r]
+Int[((a_.) + (b_.)*((c_.)/(x_))^(n_))^(p_), x_Symbol] := (-c)*Subst[Int[(a + b*x^n)^p/x^2, x], x, c/x] /; FreeQ[{a, b, c, n, p}, x]
+Int[(x_)^(m_.)*((a_.) + (b_.)*((c_.)/(x_))^(n_))^(p_.), x_Symbol] := (-c^(m + 1))*Subst[Int[(a + b*x^n)^p/x^(m + 2), x], x, c/x] /; FreeQ[{a, b, c, n, p}, x] && IntegerQ[m]
+Int[((d_.)*(x_))^(m_)*((a_.) + (b_.)*((c_.)/(x_))^(n_))^(p_.), x_Symbol] := (-c)*(d*x)^m*(c/x)^m*Subst[Int[(a + b*x^n)^p/x^(m + 2), x], x, c/x] /; FreeQ[{a, b, c, d, m, n, p}, x] &&  !IntegerQ[m]
+Int[((a_.) + (b_.)*((d_.)/(x_))^(n_) + (c_.)*((d_.)/(x_))^(n2_.))^(p_.), x_Symbol] := (-d)*Subst[Int[(a + b*x^n + c*x^(2*n))^p/x^2, x], x, d/x] /; FreeQ[{a, b, c, d, n, p}, x] && EqQ[n2, 2*n]
+Int[(x_)^(m_.)*((a_) + (b_.)*((d_.)/(x_))^(n_) + (c_.)*((d_.)/(x_))^(n2_.))^(p_.), x_Symbol] := (-d^(m + 1))*Subst[Int[(a + b*x^n + c*x^(2*n))^p/x^(m + 2), x], x, d/x] /; FreeQ[{a, b, c, d, n, p}, x] && EqQ[n2, 2*n] && IntegerQ[m]
+Int[((e_.)*(x_))^(m_)*((a_) + (b_.)*((d_.)/(x_))^(n_) + (c_.)*((d_.)/(x_))^(n2_.))^(p_.), x_Symbol] := (-d)*(e*x)^m*(d/x)^m*Subst[Int[(a + b*x^n + c*x^(2*n))^p/x^(m + 2), x], x, d/x] /; FreeQ[{a, b, c, d, e, m, n, p}, x] && EqQ[n2, 2*n] &&  !IntegerQ[m]
+Int[((a_.) + (b_.)*((d_.)/(x_))^(n_) + (c_.)*(x_)^(n2_.))^(p_.), x_Symbol] := (-d)*Subst[Int[(a + b*x^n + (c/d^(2*n))*x^(2*n))^p/x^2, x], x, d/x] /; FreeQ[{a, b, c, d, n, p}, x] && EqQ[n2, -2*n] && IntegerQ[2*n]
+Int[(x_)^(m_.)*((a_) + (b_.)*((d_.)/(x_))^(n_) + (c_.)*(x_)^(n2_.))^(p_.), x_Symbol] := (-d^(m + 1))*Subst[Int[(a + b*x^n + (c/d^(2*n))*x^(2*n))^p/x^(m + 2), x], x, d/x] /; FreeQ[{a, b, c, d, n, p}, x] && EqQ[n2, -2*n] && IntegerQ[2*n] && IntegerQ[m]
+Int[((e_.)*(x_))^(m_)*((a_) + (b_.)*((d_.)/(x_))^(n_) + (c_.)*(x_)^(n2_.))^(p_.), x_Symbol] := (-d)*(e*x)^m*(d/x)^m*Subst[Int[(a + b*x^n + (c/d^(2*n))*x^(2*n))^p/x^(m + 2), x], x, d/x] /; FreeQ[{a, b, c, d, e, n, p}, x] && EqQ[n2, -2*n] &&  !IntegerQ[m] && IntegerQ[2*n]
+Int[(u_)^(m_), x_Symbol] := Int[ExpandToSum[u, x]^m, x] /; FreeQ[m, x] && LinearQ[u, x] &&  !LinearMatchQ[u, x]
+Int[(u_)^(m_.)*(v_)^(n_.), x_Symbol] := Int[ExpandToSum[u, x]^m*ExpandToSum[v, x]^n, x] /; FreeQ[{m, n}, x] && LinearQ[{u, v}, x] &&  !LinearMatchQ[{u, v}, x]
+Int[(u_)^(m_.)*(v_)^(n_.)*(w_)^(p_.), x_Symbol] := Int[ExpandToSum[u, x]^m*ExpandToSum[v, x]^n*ExpandToSum[w, x]^p, x] /; FreeQ[{m, n, p}, x] && LinearQ[{u, v, w}, x] &&  !LinearMatchQ[{u, v, w}, x]
+Int[(u_)^(m_.)*(v_)^(n_.)*(w_)^(p_.)*(z_)^(q_.), x_Symbol] := Int[ExpandToSum[u, x]^m*ExpandToSum[v, x]^n*ExpandToSum[w, x]^p*ExpandToSum[z, x]^q, x] /; FreeQ[{m, n, p, q}, x] && LinearQ[{u, v, w, z}, x] &&  !LinearMatchQ[{u, v, w, z}, x]
+Int[(u_)^(p_), x_Symbol] := Int[ExpandToSum[u, x]^p, x] /; FreeQ[p, x] && BinomialQ[u, x] &&  !BinomialMatchQ[u, x]
+Int[((c_.)*(x_))^(m_.)*(u_)^(p_.), x_Symbol] := Int[(c*x)^m*ExpandToSum[u, x]^p, x] /; FreeQ[{c, m, p}, x] && BinomialQ[u, x] &&  !BinomialMatchQ[u, x]
+Int[(u_)^(p_.)*(v_)^(q_.), x_Symbol] := Int[ExpandToSum[u, x]^p*ExpandToSum[v, x]^q, x] /; FreeQ[{p, q}, x] && BinomialQ[{u, v}, x] && EqQ[BinomialDegree[u, x] - BinomialDegree[v, x], 0] &&  !BinomialMatchQ[{u, v}, x]
+Int[((e_.)*(x_))^(m_.)*(u_)^(p_.)*(v_)^(q_.), x_Symbol] := Int[(e*x)^m*ExpandToSum[u, x]^p*ExpandToSum[v, x]^q, x] /; FreeQ[{e, m, p, q}, x] && BinomialQ[{u, v}, x] && EqQ[BinomialDegree[u, x] - BinomialDegree[v, x], 0] &&  !BinomialMatchQ[{u, v}, x]
+Int[(u_)^(m_.)*(v_)^(p_.)*(w_)^(q_.), x_Symbol] := Int[ExpandToSum[u, x]^m*ExpandToSum[v, x]^p*ExpandToSum[w, x]^q, x] /; FreeQ[{m, p, q}, x] && BinomialQ[{u, v, w}, x] && EqQ[BinomialDegree[u, x] - BinomialDegree[v, x], 0] && EqQ[BinomialDegree[u, x] - BinomialDegree[w, x], 0] &&  !BinomialMatchQ[{u, v, w}, x]
+Int[((g_.)*(x_))^(m_.)*(u_)^(p_.)*(v_)^(q_.)*(z_)^(r_.), x_Symbol] := Int[(g*x)^m*ExpandToSum[u, x]^p*ExpandToSum[v, x]^q*ExpandToSum[z, x]^r, x] /; FreeQ[{g, m, p, q, r}, x] && BinomialQ[{u, v, z}, x] && EqQ[BinomialDegree[u, x] - BinomialDegree[v, x], 0] && EqQ[BinomialDegree[u, x] - BinomialDegree[z, x], 0] &&  !BinomialMatchQ[{u, v, z}, x]
+Int[((c_.)*(x_))^(m_.)*(Pq_)*(u_)^(p_.), x_Symbol] := Int[(c*x)^m*Pq*ExpandToSum[u, x]^p, x] /; FreeQ[{c, m, p}, x] && PolyQ[Pq, x] && BinomialQ[u, x] &&  !BinomialMatchQ[u, x]
+Int[(u_)^(p_), x_Symbol] := Int[ExpandToSum[u, x]^p, x] /; FreeQ[p, x] && GeneralizedBinomialQ[u, x] &&  !GeneralizedBinomialMatchQ[u, x]
+Int[((c_.)*(x_))^(m_.)*(u_)^(p_.), x_Symbol] := Int[(c*x)^m*ExpandToSum[u, x]^p, x] /; FreeQ[{c, m, p}, x] && GeneralizedBinomialQ[u, x] &&  !GeneralizedBinomialMatchQ[u, x]
+Int[(u_)^(p_), x_Symbol] := Int[ExpandToSum[u, x]^p, x] /; FreeQ[p, x] && QuadraticQ[u, x] &&  !QuadraticMatchQ[u, x]
+Int[(u_)^(m_.)*(v_)^(p_.), x_Symbol] := Int[ExpandToSum[u, x]^m*ExpandToSum[v, x]^p, x] /; FreeQ[{m, p}, x] && LinearQ[u, x] && QuadraticQ[v, x] &&  !(LinearMatchQ[u, x] && QuadraticMatchQ[v, x])
+Int[(u_)^(m_.)*(v_)^(n_.)*(w_)^(p_.), x_Symbol] := Int[ExpandToSum[u, x]^m*ExpandToSum[v, x]^n*ExpandToSum[w, x]^p, x] /; FreeQ[{m, n, p}, x] && LinearQ[{u, v}, x] && QuadraticQ[w, x] &&  !(LinearMatchQ[{u, v}, x] && QuadraticMatchQ[w, x])
+Int[(u_)^(p_.)*(v_)^(q_.), x_Symbol] := Int[ExpandToSum[u, x]^p*ExpandToSum[v, x]^q, x] /; FreeQ[{p, q}, x] && QuadraticQ[{u, v}, x] &&  !QuadraticMatchQ[{u, v}, x]
+Int[(z_)^(m_.)*(u_)^(p_.)*(v_)^(q_.), x_Symbol] := Int[ExpandToSum[z, x]^m*ExpandToSum[u, x]^p*ExpandToSum[v, x]^q, x] /; FreeQ[{m, p, q}, x] && LinearQ[z, x] && QuadraticQ[{u, v}, x] &&  !(LinearMatchQ[z, x] && QuadraticMatchQ[{u, v}, x])
+Int[(Pq_)*(u_)^(p_.), x_Symbol] := Int[Pq*ExpandToSum[u, x]^p, x] /; FreeQ[p, x] && PolyQ[Pq, x] && QuadraticQ[u, x] &&  !QuadraticMatchQ[u, x]
+Int[(u_)^(m_.)*(Pq_)*(v_)^(p_.), x_Symbol] := Int[ExpandToSum[u, x]^m*Pq*ExpandToSum[v, x]^p, x] /; FreeQ[{m, p}, x] && PolyQ[Pq, x] && LinearQ[u, x] && QuadraticQ[v, x] &&  !(LinearMatchQ[u, x] && QuadraticMatchQ[v, x])
+Int[(u_)^(p_), x_Symbol] := Int[ExpandToSum[u, x]^p, x] /; FreeQ[p, x] && TrinomialQ[u, x] &&  !TrinomialMatchQ[u, x]
+Int[((d_.)*(x_))^(m_.)*(u_)^(p_.), x_Symbol] := Int[(d*x)^m*ExpandToSum[u, x]^p, x] /; FreeQ[{d, m, p}, x] && TrinomialQ[u, x] &&  !TrinomialMatchQ[u, x]
+Int[(u_)^(q_.)*(v_)^(p_.), x_Symbol] := Int[ExpandToSum[u, x]^q*ExpandToSum[v, x]^p, x] /; FreeQ[{p, q}, x] && BinomialQ[u, x] && TrinomialQ[v, x] &&  !(BinomialMatchQ[u, x] && TrinomialMatchQ[v, x])
+Int[(u_)^(q_.)*(v_)^(p_.), x_Symbol] := Int[ExpandToSum[u, x]^q*ExpandToSum[v, x]^p, x] /; FreeQ[{p, q}, x] && BinomialQ[u, x] && BinomialQ[v, x] &&  !(BinomialMatchQ[u, x] && BinomialMatchQ[v, x])
+Int[((f_.)*(x_))^(m_.)*(z_)^(q_.)*(u_)^(p_.), x_Symbol] := Int[(f*x)^m*ExpandToSum[z, x]^q*ExpandToSum[u, x]^p, x] /; FreeQ[{f, m, p, q}, x] && BinomialQ[z, x] && TrinomialQ[u, x] &&  !(BinomialMatchQ[z, x] && TrinomialMatchQ[u, x])
+Int[((f_.)*(x_))^(m_.)*(z_)^(q_.)*(u_)^(p_.), x_Symbol] := Int[(f*x)^m*ExpandToSum[z, x]^q*ExpandToSum[u, x]^p, x] /; FreeQ[{f, m, p, q}, x] && BinomialQ[z, x] && BinomialQ[u, x] &&  !(BinomialMatchQ[z, x] && BinomialMatchQ[u, x])
+Int[(Pq_)*(u_)^(p_.), x_Symbol] := Int[Pq*ExpandToSum[u, x]^p, x] /; FreeQ[p, x] && PolyQ[Pq, x] && TrinomialQ[u, x] &&  !TrinomialMatchQ[u, x]
+Int[((d_.)*(x_))^(m_.)*(Pq_)*(u_)^(p_.), x_Symbol] := Int[(d*x)^m*Pq*ExpandToSum[u, x]^p, x] /; FreeQ[{d, m, p}, x] && PolyQ[Pq, x] && TrinomialQ[u, x] &&  !TrinomialMatchQ[u, x]
+Int[(u_)^(p_), x_Symbol] := Int[ExpandToSum[u, x]^p, x] /; FreeQ[p, x] && GeneralizedTrinomialQ[u, x] &&  !GeneralizedTrinomialMatchQ[u, x]
+Int[((d_.)*(x_))^(m_.)*(u_)^(p_.), x_Symbol] := Int[(d*x)^m*ExpandToSum[u, x]^p, x] /; FreeQ[{d, m, p}, x] && GeneralizedTrinomialQ[u, x] &&  !GeneralizedTrinomialMatchQ[u, x]
+Int[(z_)*(u_)^(p_.), x_Symbol] := Int[ExpandToSum[z, x]*ExpandToSum[u, x]^p, x] /; FreeQ[p, x] && BinomialQ[z, x] && GeneralizedTrinomialQ[u, x] && EqQ[BinomialDegree[z, x] - GeneralizedTrinomialDegree[u, x], 0] &&  !(BinomialMatchQ[z, x] && GeneralizedTrinomialMatchQ[u, x])
+Int[((f_.)*(x_))^(m_.)*(z_)*(u_)^(p_.), x_Symbol] := Int[(f*x)^m*ExpandToSum[z, x]*ExpandToSum[u, x]^p, x] /; FreeQ[{f, m, p}, x] && BinomialQ[z, x] && GeneralizedTrinomialQ[u, x] && EqQ[BinomialDegree[z, x] - GeneralizedTrinomialDegree[u, x], 0] &&  !(BinomialMatchQ[z, x] && GeneralizedTrinomialMatchQ[u, x])

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[    352917,       6320]
-NotebookOptionsPosition[    347224,       6171]
-NotebookOutlinePosition[    348939,       6224]
-CellTagsIndexPosition[    348896,       6221]
+NotebookDataLength[    352990,       6321]
+NotebookOptionsPosition[    347290,       6172]
+NotebookOutlinePosition[    349005,       6225]
+CellTagsIndexPosition[    348962,       6222]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -491,11 +491,10 @@ Cell[BoxData[
      FontFamily->"Arial",
      FontWeight->"Plain"], " ", Cell[TextData[Cell[BoxData[
      RowBox[{
-      RowBox[{"PolynomialRemainder", "[", 
-       RowBox[{
-        RowBox[{
-         SubscriptBox["P", "q"], "[", "x", "]"}], ",", "x", ",", "x"}], "]"}],
-       "\[Equal]", "0"}]]]], "None"]}]}]}]], "Subsubtitle",
+      RowBox[{
+       SubscriptBox["P", "q"], "[", 
+       RowBox[{"x", ",", "0"}], "]"}], "\[Equal]", "0"}]]]], 
+     "None"]}]}]}]], "Subsubtitle",
  CellDingbat->None,
  CellChangeTimes->{
   3.477935275784027*^9, {3.477935350060832*^9, 3.477935352384173*^9}, {
@@ -585,7 +584,8 @@ Cell[BoxData[
    3.699124169047628*^9, 3.6991241693086433`*^9}, 3.699331208362878*^9, {
    3.6993806736209917`*^9, 3.699380674572593*^9}, {3.700427569936813*^9, 
    3.700427570701214*^9}, {3.710439588664774*^9, 3.710439588883786*^9}, {
-   3.710439755887338*^9, 3.710439755887338*^9}, 3.710967714750551*^9},
+   3.710439755887338*^9, 3.710439755887338*^9}, 3.710967714750551*^9, {
+   3.7418183816863112`*^9, 3.7418183898357773`*^9}},
  FontSize->12,
  FontWeight->"Bold"],
 
@@ -606,11 +606,9 @@ Cell[TextData[{
  "Rule 1.2.2.5.2: If  ",
  Cell[BoxData[
   RowBox[{
-   RowBox[{"PolynomialRemainder", "[", 
-    RowBox[{
-     RowBox[{
-      SubscriptBox["P", "q"], "[", "x", "]"}], ",", "x", ",", "x"}], "]"}], 
-   "\[Equal]", "0"}]]],
+   RowBox[{
+    SubscriptBox["P", "q"], "[", 
+    RowBox[{"x", ",", "0"}], "]"}], "\[Equal]", "0"}]]],
  ", then"
 }], "Subsubsection",
  CellDingbat->"\[FilledSmallSquare]",
@@ -666,7 +664,9 @@ Cell[TextData[{
    3.699124189765813*^9, 3.699124194982112*^9}, 3.6993313208078756`*^9, 
    3.699380649061548*^9, {3.700427595179058*^9, 3.700427595475458*^9}, {
    3.71043964385793*^9, 3.710439655339587*^9}, {3.7104397621216946`*^9, 
-   3.7104397621216946`*^9}, {3.7109680431299105`*^9, 3.7109680493546405`*^9}}],
+   3.7104397621216946`*^9}, {3.7109680431299105`*^9, 
+   3.7109680493546405`*^9}, {3.741818410619966*^9, 3.741818410619966*^9}, {
+   3.741818442520791*^9, 3.7418184477130876`*^9}}],
 
 Cell[BoxData[
  RowBox[{"\[Integral]", 
@@ -811,8 +811,8 @@ Cell[BoxData[
      RowBox[{"Pq", ",", "x"}], "]"}], " ", "&&", " ", 
     RowBox[{"EqQ", "[", 
      RowBox[{
-      RowBox[{"PolynomialRemainder", "[", 
-       RowBox[{"Pq", ",", "x", ",", "x"}], "]"}], ",", "0"}], "]"}], " ", "&&",
+      RowBox[{"Coeff", "[", 
+       RowBox[{"Pq", ",", "x", ",", "0"}], "]"}], ",", "0"}], "]"}], " ", "&&",
      " ", 
     RowBox[{"Not", "[", 
      RowBox[{"MatchQ", "[", 
@@ -917,7 +917,8 @@ Cell[BoxData[
    3.7007630697620926`*^9, 3.7061366605793457`*^9, {3.7104378415308433`*^9, 
    3.710437843435952*^9}, {3.710439785193014*^9, 3.7104397950615788`*^9}, {
    3.7109674468714495`*^9, 3.7109675077039566`*^9}, 3.710967603134324*^9, {
-   3.710968096629724*^9, 3.710968102339334*^9}},
+   3.710968096629724*^9, 3.710968102339334*^9}, {3.7418184619409018`*^9, 
+   3.7418184755076776`*^9}},
  Background->GrayLevel[0.85]],
 
 Cell["", "Subsubsection",
@@ -6226,101 +6227,101 @@ Notebook[{
 Cell[545, 20, 2453, 45, 45, "Subsubtitle"],
 Cell[CellGroupData[{
 Cell[3023, 69, 6545, 102, 53, "Subsubtitle"],
-Cell[9571, 173, 703, 10, 48, "Subsubsection"],
-Cell[10277, 185, 3558, 54, 36, "Subsubsection"],
-Cell[13838, 241, 4598, 82, 74, "Subsubtitle"],
-Cell[18439, 325, 817, 11, 48, "Subsubsection"],
-Cell[19259, 338, 7712, 126, 145, "Code"],
-Cell[26974, 466, 89, 2, 48, "Subsubsection"]
+Cell[9571, 173, 703, 10, 67, "Subsubsection"],
+Cell[10277, 185, 3558, 54, 50, "Subsubsection"],
+Cell[13838, 241, 4598, 82, 103, "Subsubtitle"],
+Cell[18439, 325, 817, 11, 67, "Subsubsection"],
+Cell[19259, 338, 7712, 126, 202, "Code"],
+Cell[26974, 466, 89, 2, 67, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[27100, 473, 7409, 116, 53, "Subsubtitle"],
-Cell[34512, 591, 828, 11, 48, "Subsubsection"],
-Cell[35343, 604, 4157, 64, 36, "Subsubsection"],
-Cell[39503, 670, 5264, 91, 74, "Subsubtitle"],
-Cell[44770, 763, 817, 11, 48, "Subsubsection"],
-Cell[45590, 776, 8691, 144, 145, "Code"],
-Cell[54284, 922, 89, 2, 48, "Subsubsection"]
+Cell[27100, 473, 7398, 116, 53, "Subsubtitle"],
+Cell[34501, 591, 828, 11, 35, "Subsubsection"],
+Cell[35332, 604, 4194, 64, 26, "Subsubsection"],
+Cell[39529, 670, 5264, 91, 53, "Subsubtitle"],
+Cell[44796, 763, 817, 11, 35, "Subsubsection"],
+Cell[45616, 776, 8731, 145, 104, "Code"],
+Cell[54350, 923, 89, 2, 35, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[54410, 929, 7312, 113, 53, "Subsubtitle"],
-Cell[61725, 1044, 703, 10, 48, "Subsubsection"],
-Cell[62431, 1056, 4161, 78, 40, "Subsubsection"],
-Cell[66595, 1136, 10974, 165, 40, "Subsubsection"],
-Cell[77572, 1303, 3966, 61, 40, "Subsubsection"],
-Cell[81541, 1366, 6045, 120, 124, "Subsubtitle"],
-Cell[87589, 1488, 817, 11, 48, "Subsubsection"],
-Cell[88409, 1501, 9493, 176, 215, "Code"],
-Cell[97905, 1679, 89, 2, 48, "Subsubsection"]
+Cell[54476, 930, 7312, 113, 53, "Subsubtitle"],
+Cell[61791, 1045, 703, 10, 67, "Subsubsection"],
+Cell[62497, 1057, 4161, 78, 55, "Subsubsection"],
+Cell[66661, 1137, 10974, 165, 55, "Subsubsection"],
+Cell[77638, 1304, 3966, 61, 55, "Subsubsection"],
+Cell[81607, 1367, 6045, 120, 173, "Subsubtitle"],
+Cell[87655, 1489, 817, 11, 67, "Subsubsection"],
+Cell[88475, 1502, 9493, 176, 300, "Code"],
+Cell[97971, 1680, 89, 2, 67, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[98031, 1686, 7827, 130, 53, "Subsubtitle"],
-Cell[105861, 1818, 4491, 77, 50, "Subsubsection"],
-Cell[110355, 1897, 4738, 84, 92, "Subsubtitle"],
-Cell[115096, 1983, 817, 11, 48, "Subsubsection"],
-Cell[115916, 1996, 9787, 174, 215, "Code"],
-Cell[125706, 2172, 89, 2, 48, "Subsubsection"]
+Cell[98097, 1687, 7827, 130, 53, "Subsubtitle"],
+Cell[105927, 1819, 4491, 77, 69, "Subsubsection"],
+Cell[110421, 1898, 4738, 84, 128, "Subsubtitle"],
+Cell[115162, 1984, 817, 11, 67, "Subsubsection"],
+Cell[115982, 1997, 9787, 174, 300, "Code"],
+Cell[125772, 2173, 89, 2, 67, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[125832, 2179, 10804, 182, 53, "Subsubtitle"],
-Cell[136639, 2363, 6102, 110, 92, "Subsubsection"],
-Cell[142744, 2475, 6372, 114, 95, "Subsubtitle"],
-Cell[149119, 2591, 817, 11, 48, "Subsubsection"],
-Cell[149939, 2604, 11244, 212, 215, "Code"],
-Cell[161186, 2818, 89, 2, 48, "Subsubsection"]
+Cell[125898, 2180, 10804, 182, 53, "Subsubtitle"],
+Cell[136705, 2364, 6102, 110, 128, "Subsubsection"],
+Cell[142810, 2476, 6372, 114, 132, "Subsubtitle"],
+Cell[149185, 2592, 817, 11, 67, "Subsubsection"],
+Cell[150005, 2605, 11244, 212, 300, "Code"],
+Cell[161252, 2819, 89, 2, 67, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[161312, 2825, 6896, 106, 67, "Subsubtitle"],
-Cell[168211, 2933, 703, 10, 48, "Subsubsection"],
-Cell[168917, 2945, 9966, 142, 36, "Subsubsection"],
-Cell[178886, 3089, 4760, 84, 93, "Subsubtitle"],
-Cell[183649, 3175, 817, 11, 48, "Subsubsection"],
-Cell[184469, 3188, 8022, 131, 145, "Code"],
-Cell[192494, 3321, 89, 2, 48, "Subsubsection"]
+Cell[161378, 2826, 6896, 106, 67, "Subsubtitle"],
+Cell[168277, 2934, 703, 10, 67, "Subsubsection"],
+Cell[168983, 2946, 9966, 142, 50, "Subsubsection"],
+Cell[178952, 3090, 4760, 84, 130, "Subsubtitle"],
+Cell[183715, 3176, 817, 11, 67, "Subsubsection"],
+Cell[184535, 3189, 8022, 131, 202, "Code"],
+Cell[192560, 3322, 89, 2, 67, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[192620, 3328, 5305, 89, 53, "Subsubtitle"],
-Cell[197928, 3419, 358, 5, 48, "Subsubsection"],
-Cell[198289, 3426, 1412, 36, 69, "Subsubsection"],
-Cell[199704, 3464, 2531, 41, 48, "Subsubsection"],
-Cell[202238, 3507, 3259, 74, 104, "Subsubtitle"],
-Cell[205500, 3583, 771, 11, 48, "Subsubsection"],
-Cell[206274, 3596, 5470, 114, 145, "Code"],
-Cell[211747, 3712, 89, 2, 48, "Subsubsection"]
+Cell[192686, 3329, 5305, 89, 53, "Subsubtitle"],
+Cell[197994, 3420, 358, 5, 67, "Subsubsection"],
+Cell[198355, 3427, 1412, 36, 96, "Subsubsection"],
+Cell[199770, 3465, 2531, 41, 67, "Subsubsection"],
+Cell[202304, 3508, 3259, 74, 145, "Subsubtitle"],
+Cell[205566, 3584, 771, 11, 67, "Subsubsection"],
+Cell[206340, 3597, 5470, 114, 202, "Code"],
+Cell[211813, 3713, 89, 2, 67, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[211873, 3719, 3875, 69, 53, "Subsubtitle"],
+Cell[211939, 3720, 3875, 69, 53, "Subsubtitle"],
 Cell[CellGroupData[{
-Cell[215773, 3792, 10380, 159, 74, "Subsubtitle"],
-Cell[226156, 3953, 753, 11, 48, "Subsubsection"],
-Cell[226912, 3966, 19195, 291, 48, "Subsubsection"],
-Cell[246110, 4259, 17794, 316, 404, "Subsubtitle"],
-Cell[263907, 4577, 771, 11, 48, "Subsubsection"],
-Cell[264681, 4590, 16776, 308, 320, "Code"],
-Cell[281460, 4900, 89, 2, 48, "Subsubsection"]
+Cell[215839, 3793, 10380, 159, 103, "Subsubtitle"],
+Cell[226222, 3954, 753, 11, 67, "Subsubsection"],
+Cell[226978, 3967, 19195, 291, 67, "Subsubsection"],
+Cell[246176, 4260, 17794, 316, 565, "Subsubtitle"],
+Cell[263973, 4578, 771, 11, 67, "Subsubsection"],
+Cell[264747, 4591, 16776, 308, 447, "Code"],
+Cell[281526, 4901, 89, 2, 67, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[281586, 4907, 10592, 162, 74, "Subsubtitle"],
-Cell[292181, 5071, 413, 6, 48, "Subsubsection"],
-Cell[292597, 5079, 806, 20, 36, "Subsubsection"],
-Cell[293406, 5101, 392, 6, 34, "Subsubsection"],
-Cell[293801, 5109, 902, 22, 36, "Subsubsection"],
-Cell[294706, 5133, 10864, 163, 48, "Subsubsection"],
-Cell[305573, 5298, 7247, 168, 351, "Subsubtitle"],
-Cell[312823, 5468, 821, 11, 48, "Subsubsection"],
-Cell[313647, 5481, 10750, 215, 250, "Code"],
-Cell[324400, 5698, 89, 2, 48, "Subsubsection"]
+Cell[281652, 4908, 10592, 162, 103, "Subsubtitle"],
+Cell[292247, 5072, 413, 6, 67, "Subsubsection"],
+Cell[292663, 5080, 806, 20, 50, "Subsubsection"],
+Cell[293472, 5102, 392, 6, 47, "Subsubsection"],
+Cell[293867, 5110, 902, 22, 50, "Subsubsection"],
+Cell[294772, 5134, 10864, 163, 67, "Subsubsection"],
+Cell[305639, 5299, 7247, 168, 491, "Subsubtitle"],
+Cell[312889, 5469, 821, 11, 67, "Subsubsection"],
+Cell[313713, 5482, 10750, 215, 349, "Code"],
+Cell[324466, 5699, 89, 2, 67, "Subsubsection"]
 }, Closed]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[324538, 5706, 6304, 107, 53, "Subsubtitle"],
-Cell[330845, 5815, 132, 1, 35, "Subsubsection"],
-Cell[330980, 5818, 2521, 67, 43, "Subsubsection"],
-Cell[333504, 5887, 2699, 45, 35, "Subsubsection"],
-Cell[336206, 5934, 3619, 79, 67, "Subsubtitle"],
-Cell[339828, 6015, 771, 11, 35, "Subsubsection"],
-Cell[340602, 6028, 6514, 136, 154, "Code"],
-Cell[347119, 6166, 89, 2, 35, "Subsubsection"]
+Cell[324604, 5707, 6304, 107, 53, "Subsubtitle"],
+Cell[330911, 5816, 132, 1, 48, "Subsubsection"],
+Cell[331046, 5819, 2521, 67, 60, "Subsubsection"],
+Cell[333570, 5888, 2699, 45, 48, "Subsubsection"],
+Cell[336272, 5935, 3619, 79, 93, "Subsubtitle"],
+Cell[339894, 6016, 771, 11, 48, "Subsubsection"],
+Cell[340668, 6029, 6514, 136, 215, "Code"],
+Cell[347185, 6167, 89, 2, 48, "Subsubsection"]
 }, Closed]]
 }
 ]

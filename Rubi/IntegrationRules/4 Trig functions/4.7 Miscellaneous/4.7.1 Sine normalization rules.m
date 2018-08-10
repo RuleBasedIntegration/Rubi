@@ -1,0 +1,32 @@
+
+(* ::Section:: *)
+(* 4.7.1 Sine normalization rules *)
+
+(* ::Subsection::Closed:: *)
+(* 4.7.1 Sine normalization rules *)
+Int[(u_)*((c_.)*tan[(a_.) + (b_.)*(x_)])^(m_.)*((d_.)*sin[(a_.) + (b_.)*(x_)])^(n_.), x_Symbol] := (c*Tan[a + b*x])^m*((d*Cos[a + b*x])^m/(d*Sin[a + b*x])^m)*Int[ActivateTrig[u]*((d*Sin[a + b*x])^(m + n)/(d*Cos[a + b*x])^m), x] /; FreeQ[{a, b, c, d, m, n}, x] && KnownSineIntegrandQ[u, x] &&  !IntegerQ[m]
+Int[(u_)*((c_.)*tan[(a_.) + (b_.)*(x_)])^(m_.)*((d_.)*cos[(a_.) + (b_.)*(x_)])^(n_.), x_Symbol] := (c*Tan[a + b*x])^m*((d*Cos[a + b*x])^m/(d*Sin[a + b*x])^m)*Int[ActivateTrig[u]*((d*Sin[a + b*x])^m/(d*Cos[a + b*x])^(m - n)), x] /; FreeQ[{a, b, c, d, m, n}, x] && KnownSineIntegrandQ[u, x] &&  !IntegerQ[m]
+Int[(u_)*((c_.)*cot[(a_.) + (b_.)*(x_)])^(m_.)*((d_.)*sin[(a_.) + (b_.)*(x_)])^(n_.), x_Symbol] := (c*Cot[a + b*x])^m*((d*Sin[a + b*x])^m/(d*Cos[a + b*x])^m)*Int[ActivateTrig[u]*((d*Cos[a + b*x])^m/(d*Sin[a + b*x])^(m - n)), x] /; FreeQ[{a, b, c, d, m, n}, x] && KnownSineIntegrandQ[u, x] &&  !IntegerQ[m]
+Int[(u_)*((c_.)*cot[(a_.) + (b_.)*(x_)])^(m_.)*((d_.)*cos[(a_.) + (b_.)*(x_)])^(n_.), x_Symbol] := (c*Cot[a + b*x])^m*((d*Sin[a + b*x])^m/(d*Cos[a + b*x])^m)*Int[ActivateTrig[u]*((d*Cos[a + b*x])^(m + n)/(d*Sin[a + b*x])^m), x] /; FreeQ[{a, b, c, d, m, n}, x] && KnownSineIntegrandQ[u, x] &&  !IntegerQ[m]
+Int[(u_)*((c_.)*sec[(a_.) + (b_.)*(x_)])^(m_.)*((d_.)*cos[(a_.) + (b_.)*(x_)])^(n_.), x_Symbol] := (c*Sec[a + b*x])^m*(d*Cos[a + b*x])^m*Int[ActivateTrig[u]*(d*Cos[a + b*x])^(n - m), x] /; FreeQ[{a, b, c, d, m, n}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((c_.)*sec[(a_.) + (b_.)*(x_)])^(m_.)*((d_.)*cos[(a_.) + (b_.)*(x_)])^(n_.), x_Symbol] := (c*Csc[a + b*x])^m*(d*Sin[a + b*x])^m*Int[ActivateTrig[u]*(d*Sin[a + b*x])^(n - m), x] /; FreeQ[{a, b, c, d, m, n}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((c_.)*tan[(a_.) + (b_.)*(x_)])^(m_.), x_Symbol] := (c*Tan[a + b*x])^m*((c*Cos[a + b*x])^m/(c*Sin[a + b*x])^m)*Int[ActivateTrig[u]*((c*Sin[a + b*x])^m/(c*Cos[a + b*x])^m), x] /; FreeQ[{a, b, c, m}, x] &&  !IntegerQ[m] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((c_.)*cot[(a_.) + (b_.)*(x_)])^(m_.), x_Symbol] := (c*Cot[a + b*x])^m*((c*Sin[a + b*x])^m/(c*Cos[a + b*x])^m)*Int[ActivateTrig[u]*((c*Cos[a + b*x])^m/(c*Sin[a + b*x])^m), x] /; FreeQ[{a, b, c, m}, x] &&  !IntegerQ[m] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((c_.)*sec[(a_.) + (b_.)*(x_)])^(m_.), x_Symbol] := (c*Sec[a + b*x])^m*(c*Cos[a + b*x])^m*Int[ActivateTrig[u]/(c*Cos[a + b*x])^m, x] /; FreeQ[{a, b, c, m}, x] &&  !IntegerQ[m] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((c_.)*csc[(a_.) + (b_.)*(x_)])^(m_.), x_Symbol] := (c*Csc[a + b*x])^m*(c*Sin[a + b*x])^m*Int[ActivateTrig[u]/(c*Sin[a + b*x])^m, x] /; FreeQ[{a, b, c, m}, x] &&  !IntegerQ[m] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((c_.)*sin[(a_.) + (b_.)*(x_)])^(n_.)*((A_) + (B_.)*csc[(a_.) + (b_.)*(x_)]), x_Symbol] := c*Int[ActivateTrig[u]*(c*Sin[a + b*x])^(n - 1)*(B + A*Sin[a + b*x]), x] /; FreeQ[{a, b, c, A, B, n}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((c_.)*cos[(a_.) + (b_.)*(x_)])^(n_.)*((A_) + (B_.)*sec[(a_.) + (b_.)*(x_)]), x_Symbol] := c*Int[ActivateTrig[u]*(c*Cos[a + b*x])^(n - 1)*(B + A*Cos[a + b*x]), x] /; FreeQ[{a, b, c, A, B, n}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((A_) + (B_.)*csc[(a_.) + (b_.)*(x_)]), x_Symbol] := Int[ActivateTrig[u]*((B + A*Sin[a + b*x])/Sin[a + b*x]), x] /; FreeQ[{a, b, A, B}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((A_) + (B_.)*sec[(a_.) + (b_.)*(x_)]), x_Symbol] := Int[ActivateTrig[u]*((B + A*Cos[a + b*x])/Cos[a + b*x]), x] /; FreeQ[{a, b, A, B}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_.)*((c_.)*sin[(a_.) + (b_.)*(x_)])^(n_.)*((A_.) + (B_.)*csc[(a_.) + (b_.)*(x_)] + (C_.)*csc[(a_.) + (b_.)*(x_)]^2), x_Symbol] := c^2*Int[ActivateTrig[u]*(c*Sin[a + b*x])^(n - 2)*(C + B*Sin[a + b*x] + A*Sin[a + b*x]^2), x] /; FreeQ[{a, b, c, A, B, C, n}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_.)*((c_.)*cos[(a_.) + (b_.)*(x_)])^(n_.)*((A_.) + (B_.)*sec[(a_.) + (b_.)*(x_)] + (C_.)*sec[(a_.) + (b_.)*(x_)]^2), x_Symbol] := c^2*Int[ActivateTrig[u]*(c*Cos[a + b*x])^(n - 2)*(C + B*Cos[a + b*x] + A*Cos[a + b*x]^2), x] /; FreeQ[{a, b, c, A, B, C, n}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_.)*((c_.)*sin[(a_.) + (b_.)*(x_)])^(n_.)*((A_) + (C_.)*csc[(a_.) + (b_.)*(x_)]^2), x_Symbol] := c^2*Int[ActivateTrig[u]*(c*Sin[a + b*x])^(n - 2)*(C + A*Sin[a + b*x]^2), x] /; FreeQ[{a, b, c, A, C, n}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_.)*((c_.)*cos[(a_.) + (b_.)*(x_)])^(n_.)*((A_) + (C_.)*sec[(a_.) + (b_.)*(x_)]^2), x_Symbol] := c^2*Int[ActivateTrig[u]*(c*Cos[a + b*x])^(n - 2)*(C + A*Cos[a + b*x]^2), x] /; FreeQ[{a, b, c, A, C, n}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((A_.) + (B_.)*csc[(a_.) + (b_.)*(x_)] + (C_.)*csc[(a_.) + (b_.)*(x_)]^2), x_Symbol] := Int[ActivateTrig[u]*((C + B*Sin[a + b*x] + A*Sin[a + b*x]^2)/Sin[a + b*x]^2), x] /; FreeQ[{a, b, A, B, C}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((A_.) + (B_.)*sec[(a_.) + (b_.)*(x_)] + (C_.)*sec[(a_.) + (b_.)*(x_)]^2), x_Symbol] := Int[ActivateTrig[u]*((C + B*Cos[a + b*x] + A*Cos[a + b*x]^2)/Cos[a + b*x]^2), x] /; FreeQ[{a, b, A, B, C}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((A_) + (C_.)*csc[(a_.) + (b_.)*(x_)]^2), x_Symbol] := Int[ActivateTrig[u]*((C + A*Sin[a + b*x]^2)/Sin[a + b*x]^2), x] /; FreeQ[{a, b, A, C}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((A_) + (C_.)*sec[(a_.) + (b_.)*(x_)]^2), x_Symbol] := Int[ActivateTrig[u]*((C + A*Cos[a + b*x]^2)/Cos[a + b*x]^2), x] /; FreeQ[{a, b, A, C}, x] && KnownSineIntegrandQ[u, x]
+Int[(u_)*((A_.) + (B_.)*sin[(a_.) + (b_.)*(x_)] + (C_.)*csc[(a_.) + (b_.)*(x_)]), x_Symbol] := Int[ActivateTrig[u]*((C + A*Sin[a + b*x] + B*Sin[a + b*x]^2)/Sin[a + b*x]), x] /; FreeQ[{a, b, A, B, C}, x]
+Int[(u_)*((A_.) + (B_.)*cos[(a_.) + (b_.)*(x_)] + (C_.)*sec[(a_.) + (b_.)*(x_)]), x_Symbol] := Int[ActivateTrig[u]*((C + A*Cos[a + b*x] + B*Cos[a + b*x]^2)/Cos[a + b*x]), x] /; FreeQ[{a, b, A, B, C}, x]
+Int[(u_)*((A_.)*sin[(a_.) + (b_.)*(x_)]^(n_.) + (B_.)*sin[(a_.) + (b_.)*(x_)]^(n1_) + (C_.)*sin[(a_.) + (b_.)*(x_)]^(n2_)), x_Symbol] := Int[ActivateTrig[u]*Sin[a + b*x]^n*(A + B*Sin[a + b*x] + C*Sin[a + b*x]^2), x] /; FreeQ[{a, b, A, B, C, n}, x] && EqQ[n1, n + 1] && EqQ[n2, n + 2]
+Int[(u_)*((A_.)*cos[(a_.) + (b_.)*(x_)]^(n_.) + (B_.)*cos[(a_.) + (b_.)*(x_)]^(n1_) + (C_.)*cos[(a_.) + (b_.)*(x_)]^(n2_)), x_Symbol] := Int[ActivateTrig[u]*Cos[a + b*x]^n*(A + B*Cos[a + b*x] + C*Cos[a + b*x]^2), x] /; FreeQ[{a, b, A, B, C, n}, x] && EqQ[n1, n + 1] && EqQ[n2, n + 2]

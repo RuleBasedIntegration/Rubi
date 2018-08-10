@@ -21,38 +21,26 @@ Begin["`Private`"];
 $dir = DirectoryName@System`Private`$InputFileName;
 $ruleDir = FileNameJoin[{$dir, "..", "IntegrationRuleNotebooks"}];
 
-$rulePackages = Flatten@{
-  FileNames["*", {FileNameJoin[{$ruleDir, "1 Algebraic functions/1.1 Binomial products"}]}],
-  FileNames["*", {FileNameJoin[{$ruleDir, "1 Algebraic functions/1.2 Trinomial products"}]}],
-  FileNameJoin[{$ruleDir, "1 Algebraic functions/1.3 Miscellaneous"}],
-
-  FileNameJoin[{$ruleDir, "2 Exponentials"}],
-  FileNameJoin[{$ruleDir, "3 Logarithms"}],
-  FileNameJoin[{$ruleDir, "4 Trig functions"}],
-  FileNameJoin[{$ruleDir, "5 Inverse trig functions"}],
-  FileNameJoin[{$ruleDir, "6 Hyperbolic functions"}],
-  FileNameJoin[{$ruleDir, "7 Inverse hyperbolic functions"}],
-  FileNameJoin[{$ruleDir, "8 Special functions"}],
-
-  FileNames["*.nb", FileNameJoin[{$ruleDir, "9 Miscellaneous"}]]
-};
-
-BuildIntegrationRules[] := BuildIntegrationRules[#, FileNameJoin[{$dir, "IntegrationRules"}]]& /@ $rulePackages;
-BuildIntegrationRules[section_String /; DirectoryQ[section] || FileExistsQ[section], outDir_String /; DirectoryQ[outDir]] := Module[
+BuildIntegrationRules[] := BuildIntegrationRules[#, FileNameJoin[{$dir, "IntegrationRules"}]]& /@ FileNames["*.nb", {$ruleDir}, Infinity];
+BuildIntegrationRules[file_String /; FileExistsQ[file], outDir_String /; DirectoryQ[outDir]] := Module[
   {
     files,
     sectionName,
-    sourceAsList
+    sourceAsList,
+    outDir2 = StringReplace[DirectoryName[file], $ruleDir -> outDir]
   },
-  files = If[DirectoryQ[section], FileNames["*.nb", {section}, Infinity], {section}];
-  sectionName = If[DirectoryQ[section], FileNameSplit[section][[-1]], FileBaseName[section]];
+  sectionName = FileBaseName[file];
   PrintTemporary["Exporting all notebooks from " <> sectionName];
-  sourceAsList = Flatten@Table[
-    Prepend[
-      exprToSource /@ DeleteCases[NotebookImport[f, "Code" -> "HeldExpression"], HoldComplete[Null]],
-      subSectionComment[FileBaseName[f]]
-    ], {f, files}];
-  Export[FileNameJoin[{outDir, sectionName <> ".m"}], Prepend[sourceAsList, sectionComment[sectionName]], "Table"]
+
+
+  sourceAsList = Prepend[
+    exprToSource /@ DeleteCases[NotebookImport[file, "Code" -> "HeldExpression"], HoldComplete[Null]],
+    subSectionComment[FileBaseName[file]]
+  ];
+  If[Not@DirectoryQ[outDir2],
+    CreateDirectory[outDir2]
+  ];
+  Export[FileNameJoin[{outDir2, sectionName <> ".m"}], Prepend[sourceAsList, sectionComment[sectionName]], "Table"]
 ];
 
 exprToSource[HoldComplete[expr_]] := ToString[Unevaluated[expr], InputForm];
