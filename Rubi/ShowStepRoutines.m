@@ -233,7 +233,7 @@ ShowStep[num_, condStrg_, lhsStrg_, rhsStrg_, rhs_] := (
   If[Head[$RuleList] === List && Not[MemberQ[$RuleList, num]],
     $RuleList = Append[$RuleList, num]];
   If[$ShowSteps === True,
-    Sow[RubiRule[condStrg, MakeExpression[lhsStrg], MakeExpression[rhsStrg], num + 1 ]];
+    Sow[RubiRule[condStrg, MakeExpression[lhsStrg], MakeExpression[rhsStrg], num ]];
     Block[{SimplifyFlag = False},
       ReplaceAll[ReleaseHold[rhs], {Unintegrable -> Defer[Int], CannotIntegrate -> Defer[Int]}]],
     ReleaseHold[rhs]] )

@@ -5,7 +5,7 @@
 
 Paclet[
   Name -> "Rubi",
-  Version -> "4.15.2.1",
+  Version -> "4.16.0.2",
   MathematicaVersion -> "11+",
   Description -> "Package for Rule-based Integration",
   Creator -> "Albert D. Rich",

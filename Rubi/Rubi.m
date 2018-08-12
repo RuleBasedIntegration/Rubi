@@ -23,7 +23,7 @@ RubiIntermediateResult::usage = "RubiIntermediateResult is a symbolic wrapper th
 RubiStats::usage = "RubiStats is a symbolic wrapper that contains statistical information about an integration." <>
     "It consists of (a) the number of steps used to integrate, (b) the number of distinct rules used, (c) is the leaf count size of the input," <>
     "(d) the leaf count size of the antiderivative, and (e) the rule-to-size ratio of the integration (i.e. the quotient of (b) and (c)).";
-
+RubiPrintInformation::usage = "RubiPrintInformation is an option to Steps and Stats that prints information if set to True and returns as a list otherwise.";
 Unintegrable::usage = "Unintegrable[expn,var] indicates <expn> is not integrable with respect to <var> in closed-form.";
 CannotIntegrate::usage = "CannotIntegrate[expn,var] indicates Rubi is unable to integrate <expn> with respect to <var>.";
 
@@ -287,9 +287,12 @@ If[$LoadShowSteps === True,
 ];
 
 Int::argFlag = "The `` routine can only be used with the form Int[expr, x] where x is a symbol.";
-Int::noShowSteps = "To use this function, you need to define $LoadShowSteps=True before loading the Rubi package"
+Int::noShowSteps = "To use this function, you need to define $LoadShowSteps=True before loading the Rubi package";
 SetAttributes[Steps, {HoldAllComplete}];
-Steps[Int[expr_, x_], n_Integer : Infinity] := Module[{result, steps},
+Options[Steps] = {
+  RubiPrintInformation -> True
+};
+Steps[Int[expr_, x_], n_Integer : Infinity, OptionsPattern[]] /; n > 0 := Module[{result, steps},
   {result, steps} = Reap@Block[{$ShowSteps = True},
     FixedPoint[
       Function[int,
@@ -298,31 +301,48 @@ Steps[Int[expr_, x_], n_Integer : Infinity] := Module[{result, steps},
           ReleaseHold[held]
         ]
       ], Int[expr, x],
-      n
+      n - 1
     ]
   ];
-  PrintRubiSteps[steps];
-  result
+  If[OptionValue[RubiPrintInformation] === True,
+    PrintRubiSteps[steps];
+    result,
+    {steps, result}
+  ]
 ] /; TrueQ[$LoadShowSteps] && Head[x] === Symbol && n > 0;
 Steps[int : Int[__]] := (Message[Int::noShowSteps]; int);
 Steps[___] := Null /; Message[Int::argFlag, "Steps"];
 
 SetAttributes[Step, {HoldAllComplete}];
-Step[Int[expr_, x_]] := Module[{result, step},
+Options[Step] = {
+  RubiPrintInformation -> True
+};
+Step[Int[expr_, x_], OptionsPattern[]] := Module[{result, step},
   {result, step} = Reap@Block[{$ShowSteps = True}, Int[expr, x]];
-  PrintRubiSteps[step];
-  result
+  If[OptionValue[RubiPrintInformation] === True,
+    PrintRubiSteps[step];
+    result,
+    {step, result}
+  ]
 ] /; TrueQ[$LoadShowSteps && Head[x] === Symbol];
 Step[int : Int[__]] := (Message[Int::noShowSteps]; int);
 Step[___] := Null /; Message[Int::argFlag, "Step"];
 
 SetAttributes[Stats, {HoldAllComplete}];
-Stats[Int[expr_, x_]] := Block[{$ShowSteps = False, $StepCounter = 0, $RuleList = {}},
+Options[Stats] = {
+  RubiPrintInformation -> True
+};
+Stats[Int[expr_, x_], OptionsPattern[]] := Block[{$ShowSteps = False, $StepCounter = 0, $RuleList = {}},
   With[{result = Int[expr, x]},
-    {
-      RubiStats@{$StepCounter, Length[$RuleList], LeafCount[expr], LeafCount[result], N[Length[$RuleList] / LeafCount[expr], 4], $RuleList},
-      result
-    }]] /; TrueQ[$LoadShowSteps] && Head[x] === Symbol;
+    If[OptionValue[RubiPrintInformation] === True,
+      Print@RubiStats@{$StepCounter, Length[$RuleList], LeafCount[expr], LeafCount[result], N[Length[$RuleList] / LeafCount[expr], 4], $RuleList};
+      result,
+      {
+        RubiStats@{$StepCounter, Length[$RuleList], LeafCount[expr], LeafCount[result], N[Length[$RuleList] / LeafCount[expr], 4], $RuleList},
+        result
+      }
+    ]
+]] /; TrueQ[$LoadShowSteps] && Head[x] === Symbol;
 Stats[int : Int[_, _Symbol]] := (Message[Int::noShowSteps]; int);
 Stats[___] := Null /; Message[Int::argFlag, "Stats"];
 
@@ -332,25 +352,17 @@ Int::oldFlag = "The usage Int[expr_, x_, `1`] is depreciated. Please use `1`[Int
 Int[_, _, flag : (Stats | Step | Steps)] := Null /; Message[Int::oldFlag, flag];
 
 
-Int[u_, {x_Symbol, a_, b_}] :=
-    With[{result = Int[u, x]},
-      Limit[result, x -> b] - Limit[result, x -> a]]
-
-
-Int[{u__}, x_Symbol] :=
-    Map[Function[Int[#, x]], {u}]
-
+Int[u_, {x_Symbol, a_, b_}] := With[{result = Int[u, x]}, Limit[result, x -> b] - Limit[result, x -> a]];
+Int[{u__}, x_Symbol] := Map[Function[Int[#, x]], {u}];
 
 Protect[Int];
 
-
 $Unintegrable = False;
-
-
 Unintegrable[u_, x_] :=
     If[$Unintegrable === True,
       Defer[Unintegrable][u, x],
-      Defer[Int][u, x]];
+      Defer[Int][u, x]
+    ];
 
 CannotIntegrate[u_, x_] := Defer[Int][u, x];
 LoadRules[$ruleFormatting];
