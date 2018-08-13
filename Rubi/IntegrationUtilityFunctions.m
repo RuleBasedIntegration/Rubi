@@ -3555,6 +3555,15 @@ ExpandIntegrand[x_^m_.*(a_+b_.*x_^n_)^p_.,x_Symbol] :=
 IntegerQ[p] && ILtQ[n,0]
 
 
+ExpandIntegrand[Px_.*x_^m_*(b_.*x_^n_.+c_.*x_^n1_)^p_.,x_Symbol] :=
+  ExpandIntegrand[Px*x^(m+n*p)*(b+c*x)^p,x] /;
+FreeQ[{b,c,m},x] && PolyQ[Px,x] && IGtQ[n,0] && EqQ[n1,n+1] && IntegerQ[p]
+
+ExpandIntegrand[Px_.*(b_.*x_^n_.+c_.*x_^n1_)^p_.,x_Symbol] :=
+  ExpandIntegrand[Px*x^(n*p)*(b+c*x)^p,x] /;
+FreeQ[{b,c},x] && PolyQ[Px,x] && IGtQ[n,0] && EqQ[n1,n+1] && IntegerQ[p]
+
+
 ExpandIntegrand[(a_.+b_.*F_^u_)^p_.*(c_.+d_.*F_^v_)^q_.,x_Symbol] :=
   With[{k=Simplify[u/v]},
   ReplaceAll[ExpandIntegrand[(a+b*x^Numerator[k])^p*(c+d*x^Denominator[k])^q,x],x->F^(v/Denominator[k])] /;
@@ -3683,7 +3692,7 @@ ExpandIntegrand[u_*(a_+b_.*x_)^m_.,x_Symbol] :=
   With[{sum2=ExpandExpression[u*(a+b*x)^m,x]},
   If[SumQ[sum2],
     If[m>0,
-      If[Length[sum2]<=Exponent[u,x]+2,
+      If[Length[sum2]<=Exponent[u,x]+2 || LeafCount[sum2]<=2/3*LeafCount[sum1],
         sum2,
       sum1],
     If[LeafCount[sum2]<=LeafCount[sum1]+2,
@@ -4198,7 +4207,8 @@ Distrib[u_,v_] :=
 (* Dist[u,v] returns the sum of u times each term of v, provided v is free of Int. *)
 DownValues[Dist]={};
 UpValues[Dist]={};
-Dist /: Dist[u_,v_,x_]+Dist[w_,v_,x_] :=
+
+Dist /: Dist[u_,v_,x_]+Dist[w_,v_,x_] := 
   If[EqQ[u+w,0],
     0,
   Dist[u+w,v,x]]
@@ -7896,27 +7906,30 @@ RuleName[name_] :=
 
 ClearAll[FixIntRules,FixIntRule,FixRhsIntRule]
 
-FixIntRules::usage = "FixIntRules[list] applies some changes to the DownValues of the integration rules.";
+
 FixIntRules[] :=
   (DownValues[Int]=FixIntRules[DownValues[Int]]; Null)
 
 
-FixIntRules[rulelist_] :=
-  Module[{IntDownValues=DownValues[Int],SubstDownValues=DownValues[Subst],
-	SimpDownValues=DownValues[Simp],DistDownValues=DownValues[Dist],lst},
-  Clear[Int,Subst,Simp,Dist];
+FixIntRules[rulelist_] := Block[{Int, Subst, Simp, Dist},
   SetAttributes[{Simp,Dist,Int,Subst},HoldAll];
-  lst=Map[Function[FixIntRule[#,#[[1,1,2,1]]]],rulelist];
-  DownValues[Int]=IntDownValues;
-  DownValues[Subst]=SubstDownValues;
-  DownValues[Simp]=SimpDownValues;
-  DownValues[Dist]=DistDownValues;
-  ClearAttributes[{Simp,Dist,Int,Subst},HoldAll];
-  lst]
+  Map[Function[FixIntRule[#,#[[1,1,2,1]]]], rulelist]]
 
 
 (* ::Subsection::Closed:: *)
 (*FixIntRule[rule]*)
+
+
+FixIntRule[rule_] :=
+  If[AtomQ[rule[[1,1,-1]]],
+    FixIntRule[rule,rule[[1,1,-1]]],
+  If[Head[rule[[1,1,-1]]]===Pattern && AtomQ[rule[[1,1,-1,1]]],
+    FixIntRule[rule,rule[[1,1,-1,1]]],
+  Print["Invalid integration rule: ",rule[[1,1,-1]]]]]
+
+
+(* ::Subsection::Closed:: *)
+(*FixIntRule[rule,x]*)
 
 
 FixIntRule[RuleDelayed[lhs_,F_[G_[list_,F_[u_+v_,test2_]],test1_]],x_] :=

@@ -25,6 +25,7 @@ BuildIntegrationRules[] := BuildIntegrationRules[#, FileNameJoin[{$dir, "Integra
 BuildIntegrationRules[file_String /; FileExistsQ[file], outDir_String /; DirectoryQ[outDir]] := Module[
   {
     files,
+    outputFile,
     sectionName,
     sourceAsList,
     outDir2 = StringReplace[DirectoryName[file], $ruleDir -> outDir]
@@ -33,17 +34,24 @@ BuildIntegrationRules[file_String /; FileExistsQ[file], outDir_String /; Directo
   PrintTemporary["Exporting all notebooks from " <> sectionName];
 
 
+
   sourceAsList = Prepend[
-    exprToSource /@ DeleteCases[NotebookImport[file, "Code" -> "HeldExpression"], HoldComplete[Null]],
+    MapIndexed[inputTextToString, NotebookImport[file, "Code" -> "InputText"]],
     subSectionComment[FileBaseName[file]]
   ];
   If[Not@DirectoryQ[outDir2],
     CreateDirectory[outDir2]
   ];
-  Export[FileNameJoin[{outDir2, sectionName <> ".m"}], Prepend[sourceAsList, sectionComment[sectionName]], "Table"]
+  outputFile = FileNameJoin[{outDir2, sectionName <> ".m"}];
+  OpenWrite[outputFile];
+  WriteLine[outputFile, #] & /@ sourceAsList;
+  Close[outputFile];
+  (*Export[FileNameJoin[{outDir2, sectionName <> ".m"}], Prepend[sourceAsList, sectionComment[sectionName]], "Table"]*)
 ];
 
-exprToSource[HoldComplete[expr_]] := ToString[Unevaluated[expr], InputForm];
+inputTextToString[str_String /; SyntaxQ[str], index_] := StringReplace[str, {"\\\n" -> " ", Whitespace.. -> " "}];
+inputTextToString[args___] := Throw[{args}];
+
 sectionComment[message_String] := TemplateApply["\n(* ::Section:: *)\n(* `` *)", message];
 subSectionComment[message_String] := TemplateApply["\n(* ::Subsection::Closed:: *)\n(* `` *)", message];
 

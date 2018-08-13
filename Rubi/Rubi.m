@@ -18,6 +18,7 @@ Stats::usage = "Stats[Int[expn, var]] prints statistical information of the inte
     "It consists of (a) the number of steps used to integrate, (b) the number of distinct rules used, (c) is the leaf count size of the input," <>
     "(d) the leaf count size of the antiderivative, and (e) the rule-to-size ratio of the integration (i.e. the quotient of (b) and (c)).";
 
+$RubiVersion::usage = "$RubiVersion shows the currently loaded version of Rubi.";
 RubiRule::usage = "RubiRule is a symbolic wrapper that is used when displaying integration steps.";
 RubiIntermediateResult::usage = "RubiIntermediateResult is a symbolic wrapper that is used when displaying integration steps.";
 RubiStats::usage = "RubiStats is a symbolic wrapper that contains statistical information about an integration." <>
@@ -26,7 +27,6 @@ RubiStats::usage = "RubiStats is a symbolic wrapper that contains statistical in
 RubiPrintInformation::usage = "RubiPrintInformation is an option to Steps and Stats that prints information if set to True and returns as a list otherwise.";
 Unintegrable::usage = "Unintegrable[expn,var] indicates <expn> is not integrable with respect to <var> in closed-form.";
 CannotIntegrate::usage = "CannotIntegrate[expn,var] indicates Rubi is unable to integrate <expn> with respect to <var>.";
-
 
 $Unintegrable::usage = "If $Unintegrable is True and <expn> is not integrable with respect to <var> in terms of the functions Rubi uses to express antiderivatives, Int[expn,var] returns Unintegrable[expn,var].";
 
@@ -43,7 +43,22 @@ csc::usage = "Inert cosecant function";
 
 Begin["`Private`"];
 
-$LoadShowSteps = TrueQ[Global`$LoadShowSteps];
+$RubiVersion = StringJoin[
+  "Rubi ",
+  Version /. List@@Get[FileNameJoin[{DirectoryName[System`Private`$InputFileName], "PacletInfo.m"}]]
+];
+PrintTemporary["Loading " <> $RubiVersion];
+
+If[Not@ValueQ[Global`$LoadShowSteps],
+  $LoadShowSteps = True,
+  $LoadShowSteps = TrueQ[Global`$LoadShowSteps]
+];
+
+If[Not@ValueQ[Global`$LoadElementaryFunctionRules],
+  $LoadElementaryFunctionRules = True,
+  $LoadElementaryFunctionRules = TrueQ[Global`$LoadElementaryFunctionRules]
+]
+
 
 $ruleDir = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "IntegrationRules"}];
 $rulePackages = FileNames["*.m", {FileNameJoin[{DirectoryName[System`Private`$InputFileName], "IntegrationRules"}]}];
@@ -134,7 +149,7 @@ LoadRules["1 Algebraic functions/1.3 Miscellaneous/1.3.2 P(x) Q(x)^p"];
 LoadRules["1 Algebraic functions/1.3 Miscellaneous/1.3.3 Miscellaneous algebraic functions"];
 LoadRules["9 Miscellaneous/9.3 Piecewise linear functions"];
 
-If[Global`$LoadElementaryFunctionRules===True,
+If[$LoadElementaryFunctionRules === True,
   LoadRules["2 Exponentials/2.1 (c+d x)^m (a+b (F^(g (e+f x)))^n)^p"];
   LoadRules["2 Exponentials/2.2 (c+d x)^m (F^(g (e+f x)))^n (a+b (F^(g (e+f x)))^n)^p"];
   LoadRules["2 Exponentials/2.3 Miscellaneous exponentials"];
@@ -342,7 +357,7 @@ Stats[Int[expr_, x_], OptionsPattern[]] := Block[{$ShowSteps = False, $StepCount
         result
       }
     ]
-]] /; TrueQ[$LoadShowSteps] && Head[x] === Symbol;
+  ]] /; TrueQ[$LoadShowSteps] && Head[x] === Symbol;
 Stats[int : Int[_, _Symbol]] := (Message[Int::noShowSteps]; int);
 Stats[___] := Null /; Message[Int::argFlag, "Stats"];
 
