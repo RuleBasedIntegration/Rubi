@@ -3,7 +3,6 @@
 (* ::Title:: *)
 (*Rubi (Rule-Based Integrator) Package*)
 
-
 BeginPackage["Rubi`"];
 
 Int::usage = "Int[expn, var] returns the antiderivative (indefinite integral) of <expn> with respect to <var>.\n" <>
@@ -61,7 +60,6 @@ If[Not@ValueQ[Global`$LoadElementaryFunctionRules],
 
 
 $ruleDir = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "IntegrationRules"}];
-$rulePackages = FileNames["*.m", {FileNameJoin[{DirectoryName[System`Private`$InputFileName], "IntegrationRules"}]}];
 $utilityPackage = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "IntegrationUtilityFunctions.m"}];
 $stepRoutines = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "ShowStepRoutines.m"}];
 $ruleFormatting = FileNameJoin[{DirectoryName[System`Private`$InputFileName], "ShowStepFormatting.m"}];
@@ -80,7 +78,7 @@ ClearStatusBar[] := If[$Notebooks, CurrentValue[EvaluationNotebook[], WindowStat
 
 Unprotect[Int];  Clear[Int];  Clear[Unintegrable];  Clear[CannotIntegrate];
 
-
+(* The order of loading the rule-files below is crucial to ensure a functional Rubi integrator! *)
 LoadRules[$utilityPackage];
 LoadRules["9 Miscellaneous/9.1 Integrand simplification rules"];
 
@@ -281,9 +279,6 @@ If[$LoadElementaryFunctionRules === True,
   LoadRules["9 Miscellaneous/9.2 Derivative integration rules"]
 ];
 LoadRules["9 Miscellaneous/9.4 Miscellaneous integration rules"];
-
-
-$RuleCount = Length[DownValues[Int]];
 
 (* Calculate the rule-count directly after all integration rules, because below there are some more rules
  added that are not integration rules*)

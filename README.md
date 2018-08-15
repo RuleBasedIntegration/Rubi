@@ -41,9 +41,9 @@ way from within Mathematica
 BuildIntegrationRules[]
 ```
 
-This will extract all rules from the notebooks, zip appropriate sections together in one `.m` file and place it to the
+This will extract all rules from the notebooks into `.m` files and place them into the
 correct location under `Rubi/IntegrationRules`. The created package files are loaded from within `Rubi.m` with the
-`LoadRules[]` functions. Again, the order in which the rules are loaded in `Rubi.m` is vitally important to get a 
+`LoadRules[]` functions. Again, the order in which the rules are loaded in `Rubi.m` is **vitally important** to get a 
 working Rubi package.
 
 ### How showing integration steps works
