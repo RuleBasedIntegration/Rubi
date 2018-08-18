@@ -36,20 +36,17 @@ BuildIntegrationRules[file_String /; FileExistsQ[file], outDir_String /; Directo
 
 
   sourceAsList = Prepend[
-    MapIndexed[inputTextToString, NotebookImport[file, "Code" -> "InputText"]],
+    Map[inputTextToString, NotebookImport[file, "Code" -> "InputText"]],
     subSectionComment[FileBaseName[file]]
   ];
   If[Not@DirectoryQ[outDir2],
     CreateDirectory[outDir2]
   ];
   outputFile = FileNameJoin[{outDir2, sectionName <> ".m"}];
-  OpenWrite[outputFile];
-  WriteLine[outputFile, #] & /@ sourceAsList;
-  Close[outputFile];
-  (*Export[FileNameJoin[{outDir2, sectionName <> ".m"}], Prepend[sourceAsList, sectionComment[sectionName]], "Table"]*)
+  Export[outputFile, StringRiffle[sourceAsList, {"", "\n", "\n"}], "Text", CharacterEncoding -> "ASCII"]
 ];
 
-inputTextToString[str_String /; SyntaxQ[str], index_] := StringReplace[str, {"\\\n" -> " ", Whitespace.. -> " "}];
+inputTextToString[str_String /; SyntaxQ[str]] := StringReplace[str, {"\\\n" -> " ", Whitespace.. -> " "}];
 inputTextToString[args___] := Throw[{args}];
 
 sectionComment[message_String] := TemplateApply["\n(* ::Section:: *)\n(* `` *)", message];

@@ -218,14 +218,18 @@ SpliceConditionString[cond1_, lets_, cond2_] :=
   If $ShowSteps is True, ShowStep[num,condStrg,lhsStrg,rhsStrg,rhs] displays the rule being applied,
   sets SimplifyFlag to False to turn off further simplification, and release the hold on the rhs
   of the rule. *)
-ShowStep[condStrg_, lhsStrg_, rhsStrg_, rhs_] := (
+ShowStep[condStrg_, lhsStrg_, rhsStrg_, rhs_] := With[
+  {
+    replaceEllipsis = Function[in, StringReplace[in, "..." -> "\[Ellipsis]"]]
+  },
   If[IntegerQ[$StepCounter],
     $StepCounter = $StepCounter + 1];
   If[$ShowSteps === True,
-    Sow[RubiRule[condStrg, MakeExpression[lhsStrg], MakeExpression[rhsStrg]]];
+    Sow[RubiRule[condStrg, MakeExpression[replaceEllipsis@lhsStrg], MakeExpression[replaceEllipsis@rhsStrg]]];
     Block[{SimplifyFlag = False},
       ReplaceAll[ReleaseHold[rhs], {Unintegrable -> Defer[Int], CannotIntegrate -> Defer[Int]}]],
-    ReleaseHold[rhs]] )
+    ReleaseHold[rhs]]
+]
 
 ShowStep[num_, condStrg_, lhsStrg_, rhsStrg_, rhs_] := (
   If[IntegerQ[$StepCounter],

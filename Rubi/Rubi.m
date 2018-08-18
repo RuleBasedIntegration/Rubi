@@ -302,7 +302,7 @@ SetAttributes[Steps, {HoldAllComplete}];
 Options[Steps] = {
   RubiPrintInformation -> True
 };
-Steps[Int[expr_, x_], n_Integer : Infinity, OptionsPattern[]] /; n > 0 := Module[{result, steps},
+Steps[Int[expr_, x_], n_Integer : $IterationLimit, OptionsPattern[]] /; n > 0 := Module[{result, steps},
   {result, steps} = Reap@Block[{$ShowSteps = True},
     FixedPoint[
       Function[int,
