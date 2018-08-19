@@ -298,11 +298,17 @@ If[$LoadShowSteps === True,
 
 Int::argFlag = "The `` routine can only be used with the form Int[expr, x] where x is a symbol.";
 Int::noShowSteps = "To use this function, you need to define $LoadShowSteps=True before loading the Rubi package";
-SetAttributes[Steps, {HoldAllComplete}];
+Steps::negSteps = "Number of steps must be a positive integer.";
+SetAttributes[Steps, {HoldFirst}];
 Options[Steps] = {
   RubiPrintInformation -> True
 };
-Steps[Int[expr_, x_], n_Integer : $IterationLimit, OptionsPattern[]] /; n > 0 := Module[{result, steps},
+Steps[expr_Int, opts : OptionsPattern[]] := Steps[expr, $IterationLimit, opts];
+Steps[Int[expr_, x_], n_Integer, OptionsPattern[]] := Module[{result, steps},
+  If[$LoadShowSteps =!= True,
+    Message[Int::noShowSteps];
+    Return[Int[expr, x]]
+  ];
   {result, steps} = Reap@Block[{$ShowSteps = True},
     FixedPoint[
       Function[int,
@@ -319,31 +325,39 @@ Steps[Int[expr_, x_], n_Integer : $IterationLimit, OptionsPattern[]] /; n > 0 :=
     result,
     {steps, result}
   ]
-] /; TrueQ[$LoadShowSteps] && Head[x] === Symbol && n > 0;
-Steps[int : Int[__]] := (Message[Int::noShowSteps]; int);
-Steps[___] := Null /; Message[Int::argFlag, "Steps"];
+] /; Head[x] === Symbol && If[TrueQ[n > 0], True, Message[Steps::negSteps]; False];
 
-SetAttributes[Step, {HoldAllComplete}];
+SetAttributes[Step, {HoldFirst}];
 Options[Step] = {
   RubiPrintInformation -> True
 };
-Step[Int[expr_, x_], OptionsPattern[]] := Module[{result, step},
+Step[Int[expr_, x_], OptionsPattern[]] := Module[
+  {
+    result,
+    step
+  },
+  If[$LoadShowSteps =!= True,
+    Message[Int::noShowSteps];
+    Return[Int[expr, x]]
+  ];
   {result, step} = Reap@Block[{$ShowSteps = True}, Int[expr, x]];
   If[OptionValue[RubiPrintInformation] === True,
     PrintRubiSteps[step];
     result,
     {step, result}
   ]
-] /; TrueQ[$LoadShowSteps && Head[x] === Symbol];
-Step[int : Int[__]] := (Message[Int::noShowSteps]; int);
-Step[___] := Null /; Message[Int::argFlag, "Step"];
+] /; Head[x] === Symbol;
 
-SetAttributes[Stats, {HoldAllComplete}];
+SetAttributes[Stats, {HoldFirst}];
 Options[Stats] = {
   RubiPrintInformation -> True
 };
 Stats[Int[expr_, x_], OptionsPattern[]] := Block[{$ShowSteps = False, $StepCounter = 0, $RuleList = {}},
   With[{result = Int[expr, x]},
+    If[$LoadShowSteps =!= True,
+      Message[Int::noShowSteps];
+      Return[result]
+    ];
     If[OptionValue[RubiPrintInformation] === True,
       Print@RubiStats@{$StepCounter, Length[$RuleList], LeafCount[expr], LeafCount[result], N[Length[$RuleList] / LeafCount[expr], 4], $RuleList};
       result,
@@ -352,14 +366,13 @@ Stats[Int[expr_, x_], OptionsPattern[]] := Block[{$ShowSteps = False, $StepCount
         result
       }
     ]
-  ]] /; TrueQ[$LoadShowSteps] && Head[x] === Symbol;
-Stats[int : Int[_, _Symbol]] := (Message[Int::noShowSteps]; int);
-Stats[___] := Null /; Message[Int::argFlag, "Stats"];
+  ]] /; Head[x] === Symbol;
+
 
 
 (* Print a warning when users use the old style routines for showing steps *)
 Int::oldFlag = "The usage Int[expr_, x_, `1`] is depreciated. Please use `1`[Int[expr_, x_]].";
-Int[_, _, flag : (Stats | Step | Steps)] := Null /; Message[Int::oldFlag, flag];
+Int[e_, x_, flag : (Stats | Step | Steps)] := flag[Int[e, x]] /; (Message[Int::oldFlag, flag]; True);
 
 
 Int[u_, {x_Symbol, a_, b_}] := With[{result = Int[u, x]}, Limit[result, x -> b] - Limit[result, x -> a]];
