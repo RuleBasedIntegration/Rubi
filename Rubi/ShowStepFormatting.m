@@ -18,33 +18,51 @@ FormatRubiStep::usage = "FormatRubiStep[step] displays an integration step as fo
 FormatRubiStep[RubiRule[cond_, HoldComplete[lhs_], HoldComplete[rhs_], rule_ : "General"]] := Module[
   {
     fullRule,
-    transformation
+    transformation,
+    grid
   },
+  grid[expr_, True, opts__] := Grid[expr, opts, AllowScriptLevelChange -> False];
+  grid[expr_, False, opts__] := Grid[expr, opts];
   transformation =
       Row[{Style[TraditionalForm@HoldForm[lhs], $RuleColor],
         Style["\[LongRightArrow]", $RuleColor],
         Style[TraditionalForm@HoldForm[rhs], $RuleColor]},
         Spacer[10], Alignment -> Center];
   fullRule =
-      Grid[{
+      grid[{
         {Style["Rubi Rule:", "Label", Gray], Style[rule, "Label"]},
         {Style["Condition:", "Label", Gray], Style[cond, $ConditionColor]},
         {Style["Transformation:", "Label", Gray], transformation}},
+        $VersionNumber > 8,
         Alignment -> {{Right, Left}, {Center, Center, Center}},
         Spacings -> {1, 2},
+        Dividers -> {False, {2 -> LightGray, 3 -> LightGray}}
+      ];
+  If[$VersionNumber > 8,
+    (* newer versions need the AllowScriptLevelChange option to look nice *)
+    Item[DynamicModule[{open = False},
+      Deploy@Framed[
+        Grid[{{Opener@Dynamic@open,
+          PaneSelector[{False -> transformation, True -> fullRule},
+            Dynamic@open, ImageSize -> Automatic]}},
+          Alignment -> {Left, Center}, AllowScriptLevelChange -> False],
         AllowScriptLevelChange -> False,
-        Dividers -> {False, {2 -> LightGray, 3 -> LightGray}}];
-  Item[DynamicModule[{open = False},
-    Deploy@Framed[
-      Grid[{{Opener@Dynamic@open,
-        PaneSelector[{False -> transformation, True -> fullRule},
-          Dynamic@open, ImageSize -> Automatic]}},
-        Alignment -> {Left, Center}, AllowScriptLevelChange -> False],
-      AllowScriptLevelChange -> False,
-      FrameMargins -> 10, FrameStyle -> {AbsoluteThickness[1], LightGray}, RoundingRadius -> 3
-    ]],
-    Alignment -> Right,
-    AllowScriptLevelChange -> False
+        FrameMargins -> 10, FrameStyle -> {AbsoluteThickness[1], LightGray}, RoundingRadius -> 3
+      ]],
+      Alignment -> Right,
+      AllowScriptLevelChange -> False
+    ],
+    (* For old versions of Mathematica without AllowScriptLevelChange option*)
+    Item[DynamicModule[{open = False},
+      Deploy@Framed[
+        Grid[{{Opener@Dynamic@open,
+          PaneSelector[{False -> transformation, True -> fullRule},
+            Dynamic@open, ImageSize -> Automatic]}},
+          Alignment -> {Left, Center}],
+        FrameMargins -> 10, FrameStyle -> {AbsoluteThickness[1], LightGray}, RoundingRadius -> 3
+      ]],
+      Alignment -> Right
+    ]
   ]
 ];
 
@@ -61,7 +79,7 @@ FormatRubiStep[RubiIntermediateResult[HoldComplete[expr_]]] := (Item[
 
 PrintRubiSteps::usage = "PrintRubiSteps[{steps..}] formats and prints a list of steps and rules from the integration process.";
 PrintRubiSteps::err = "Could not print Rubi steps: ``";
-PrintRubiSteps[{steps : {__}}] := Print[
+PrintRubiSteps[{steps : {__}}] /; $VersionNumber > 8 := Print[
   Column[
     Append[
       FormatRubiStep /@ steps,
@@ -69,6 +87,14 @@ PrintRubiSteps[{steps : {__}}] := Print[
     ], Background -> GrayLevel@.98, AllowScriptLevelChange -> False
   ]
 ];
+(* Simplified definition for older Mathematica versions *)
+PrintRubiSteps[{steps : {__}}] := Print[
+  Column[
+    FormatRubiStep /@ steps,
+    Background -> GrayLevel@.98
+  ]
+];
+
 PrintRubiSteps[arg___] := Message[PrintRubiSteps::err, {arg}];
 
 RubiStats /: MakeBoxes[RubiStats[arg : {a_, b_, c_, d_, e_, f_}], form : (StandardForm | TraditionalForm)] := Module[{above, below},
@@ -89,7 +115,7 @@ RubiStats /: MakeBoxes[RubiStats[arg : {a_, b_, c_, d_, e_, f_}], form : (Standa
     below, (* expandable content *)
     form,
     "Interpretable" -> Automatic
-  ]
+  ] /; $VersionNumber > 8
 ];
 
 RubiStats[{a_, b_, c_, d_, e_, f_}]["Steps"] := a;
