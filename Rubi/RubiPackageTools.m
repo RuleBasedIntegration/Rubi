@@ -13,9 +13,10 @@
   * are then exported into the .m package file.
   * *)
 
-BeginPackage["Rubi`RubiPackageTools`"];
+BeginPackage["Rubi`RubiPackageTools`", "PacletManager`"];
 
 BuildIntegrationRules::usage = "BuildIntegrationRules[] creates the .m package files for the rules from the notebooks";
+DeployRubi::usage = "DeployRubi[] creates a paclet and zip of the current release and puts it in the parent folder of the Rubi sources.";
 
 Begin["`Private`"];
 $dir = DirectoryName@System`Private`$InputFileName;
@@ -51,6 +52,15 @@ inputTextToString[args___] := Throw[{args}];
 
 sectionComment[message_String] := TemplateApply["\n(* ::Section:: *)\n(* `` *)", message];
 subSectionComment[message_String] := TemplateApply["\n(* ::Subsection::Closed:: *)\n(* `` *)", message];
+
+DeployRubi[] := Module[{file},
+  file = PackPaclet[$dir];
+  file = StringReplace[file, ".paclet" -> ".zip"];
+  If[FileExistsQ[file],
+    DeleteFile[file]
+  ];
+  CreateArchive[$dir, file];
+];
 
 End[]; (* `Private` *)
 
