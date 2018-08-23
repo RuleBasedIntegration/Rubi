@@ -296,7 +296,6 @@ If[$LoadShowSteps === True,
   StepFunction[Int];
 ];
 
-Int::argFlag = "The `` routine can only be used with the form Int[expr, x] where x is a symbol.";
 Int::noShowSteps = "To use this function, you need to define $LoadShowSteps=True before loading the Rubi package";
 Steps::negSteps = "Number of steps must be a positive integer.";
 SetAttributes[Steps, {HoldFirst}];
