@@ -14,7 +14,6 @@
 * *)
 Rubi`Private`$kernelDir = DirectoryName[System`Private`$InputFileName];
 Rubi`Private`$RubiVersionNumber = Version /. List @@ Get[FileNameJoin[{Rubi`Private`$kernelDir, "..", "PacletInfo.m"}]];
-
 Rubi`Private`$MXFile = FileNameJoin[{
   Rubi`Private`$kernelDir,
   StringJoin[
@@ -27,13 +26,13 @@ Rubi`Private`$MXFile = FileNameJoin[{
   ]
 }];
 
-If[ValueQ[Int],
-  Unprotect[Int];
-  Remove[Int];
+Quiet[
+  Unprotect["Int"];
+  Remove["Int"];
 ];
 
 If[FileExistsQ[Rubi`Private`$MXFile],
-  ClearAll["Rubi`*"];
+  Quiet@ClearAll["Rubi`*"];
   Get[Rubi`Private`$MXFile],
   Get["Rubi`Rubi`"];
   DumpSave[Rubi`Private`$MXFile, "Rubi`"];
