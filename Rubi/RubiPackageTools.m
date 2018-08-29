@@ -53,8 +53,18 @@ inputTextToString[args___] := Throw[{args}];
 sectionComment[message_String] := TemplateApply["\n(* ::Section:: *)\n(* `` *)", message];
 subSectionComment[message_String] := TemplateApply["\n(* ::Subsection::Closed:: *)\n(* `` *)", message];
 
-DeployRubi[] := Module[{file},
-  file = PackPaclet[$dir];
+deleteMXFiles[] := Module[{files = FileNames["*.mx", {FileNameJoin[{$dir, "Kernel"}]}]},
+  DeleteFile /@ files;
+];
+
+DeployRubi[] := Module[{file, paclet},
+  deleteMXFiles[];
+  paclet = PackPaclet[$dir];
+  file = FileNameJoin[{DirectoryName[paclet], "Rubi.paclet"}];
+  If[FileExistsQ[file],
+    DeleteFile[file]
+  ];
+  RenameFile[paclet, file];
   file = StringReplace[file, ".paclet" -> ".zip"];
   If[FileExistsQ[file],
     DeleteFile[file]
