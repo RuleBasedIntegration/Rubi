@@ -60,12 +60,7 @@ deleteMXFiles[] := Module[{files = FileNames["*.mx", {FileNameJoin[{$dir, "Kerne
 DeployRubi[] := Module[{file, paclet},
   deleteMXFiles[];
   paclet = PackPaclet[$dir];
-  file = FileNameJoin[{DirectoryName[paclet], "Rubi.paclet"}];
-  If[FileExistsQ[file],
-    DeleteFile[file]
-  ];
-  RenameFile[paclet, file];
-  file = StringReplace[file, ".paclet" -> ".zip"];
+  file = StringReplace[paclet, ".paclet" -> ".zip"];
   If[FileExistsQ[file],
     DeleteFile[file]
   ];

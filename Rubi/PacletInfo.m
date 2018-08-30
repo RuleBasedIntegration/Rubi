@@ -8,7 +8,7 @@ Paclet[
   Version -> "4.16.0.4",
   MathematicaVersion -> "9+",
   Description -> "Package for Rule-based Integration",
-  Creator -> "Albert D. Rich",
+  Creator -> "Albert D. Rich, Patrick Scheibe",
   Thumbnail -> "logo.png",
   URL -> "https://rulebasedintegration.org",
   Extensions ->

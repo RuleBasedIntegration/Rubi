@@ -59,7 +59,7 @@ $RubiVersion = StringJoin[
   "Rubi ",
   Version /. List@@Get[FileNameJoin[{$rubiDir, "PacletInfo.m"}]]
 ];
-PrintTemporary["Initializing " <> $RubiVersion <> ". This needs to be done only once per configuration."];
+PrintTemporary["Loading " <> $RubiVersion <> " will take a minute or two. In the future this will take less than a second."];
 
 If[Not@ValueQ[Global`$LoadShowSteps],
   $LoadShowSteps = True,
