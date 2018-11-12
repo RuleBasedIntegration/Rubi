@@ -54,7 +54,7 @@ It works by changing all Rubi rules for `Int` so that they
 1. Stop at each step
 2. Provide important information about the current step
 
-In it's core, it works by injecting code that employs `Hold` to stop evaluation.
+In its core, it works by injecting code that employs `Hold` to stop evaluation.
 Here is a simple example how this can be done
 
 ```mma
