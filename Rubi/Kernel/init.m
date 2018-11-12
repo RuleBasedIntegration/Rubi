@@ -26,10 +26,10 @@ Rubi`Private`$MXFile = FileNameJoin[{
   ]
 }];
 
-Quiet[
-  Unprotect["Int"];
-  Remove["Int"];
-];
+(*Quiet[*)
+  (*Unprotect["Int"];*)
+  (*Remove["Int"];*)
+(*];*)
 
 If[FileExistsQ[Rubi`Private`$MXFile],
   Quiet@ClearAll["Rubi`*"];
