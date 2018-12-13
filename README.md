@@ -14,11 +14,13 @@ integration step.
 
 ## Documentation
 
-The main documentation of the Rubi project can be found under [rulebasedintegration.org](https://rulebasedintegration.org).
-Certain development specific information about this Mathematica package will be made available in the [Rubi GitHub Wiki](https://github.com/RuleBasedIntegration/Rubi/wiki).
-Since the Wiki is at the moment not complete, please visit the [current Rubi website](http://www.apmaths.uwo.ca/~arich/).
-
+The user documentation of the Rubi project can be found under [rulebasedintegration.org](https://rulebasedintegration.org).
 For an installation- and usage-guide, please see the [Mathematica Package](https://rulebasedintegration.org/mathematicaPackage.html) section on [rulebasedintegration.org](https://rulebasedintegration.org).
+
+
+Certain development specific information about this Mathematica package can be found in the [Rubi GitHub Wiki](https://github.com/RuleBasedIntegration/Rubi/wiki).
+There, you will also find how you can contribute to the project.
+Since the Wiki is at the moment not complete, please also visit the [current Rubi website](http://www.apmaths.uwo.ca/~arich/).
 
 ## Repository structure and development
 

@@ -318,7 +318,8 @@ SetAttributes[Steps, {HoldFirst}];
 Options[Steps] = {
   RubiPrintInformation -> True
 };
-Steps[expr_Int, opts : OptionsPattern[]] := Steps[expr, $IterationLimit, opts];
+Int::wrngUsage = "Wrong usage of the `1` function. Please use `1`[Int[expr, x]].";
+Steps[Int[expr_, x_], opts : OptionsPattern[]] := Steps[Int[expr, x], $IterationLimit, opts];
 Steps[Int[expr_, x_], n_Integer, OptionsPattern[]] := Module[{result, steps},
   If[$LoadShowSteps =!= True,
     Message[Int::noShowSteps];
@@ -341,6 +342,7 @@ Steps[Int[expr_, x_], n_Integer, OptionsPattern[]] := Module[{result, steps},
     {steps, result}
   ]
 ] /; Head[x] === Symbol && If[TrueQ[n > 0], True, Message[Steps::negSteps]; False];
+Steps[___] := (Message[Int::wrngUsage, Steps]; $Failed);
 
 SetAttributes[Step, {HoldFirst}];
 Options[Step] = {
@@ -362,6 +364,8 @@ Step[Int[expr_, x_], OptionsPattern[]] := Module[
     {step, result}
   ]
 ] /; Head[x] === Symbol;
+Step[___] := (Message[Int::wrngUsage, Step]; $Failed);
+
 
 SetAttributes[Stats, {HoldFirst}];
 Options[Stats] = {
@@ -382,6 +386,7 @@ Stats[Int[expr_, x_], OptionsPattern[]] := Block[{$ShowSteps = False, $StepCount
       }
     ]
   ]] /; Head[x] === Symbol;
+Stats[___] := (Message[Int::wrngUsage, Stats]; $Failed);
 
 
 
