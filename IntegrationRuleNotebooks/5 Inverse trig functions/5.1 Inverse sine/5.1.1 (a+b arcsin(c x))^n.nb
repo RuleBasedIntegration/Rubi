@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     62845,       1355]
-NotebookOptionsPosition[     59878,       1270]
-NotebookOutlinePosition[     61529,       1323]
-CellTagsIndexPosition[     61486,       1320]
+NotebookDataLength[     63137,       1363]
+NotebookOptionsPosition[     60168,       1278]
+NotebookOutlinePosition[     61819,       1331]
+CellTagsIndexPosition[     61776,       1328]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1049,7 +1049,8 @@ Cell[TextData[{
         RowBox[{"F", "[", "x", "]"}], " ", 
         RowBox[{"Cos", "[", 
          RowBox[{
-          FractionBox["a", "b"], "-", 
+          RowBox[{"-", 
+           FractionBox["a", "b"]}], "+", 
           FractionBox["x", "b"]}], "]"}]}], ",", "x", ",", 
        RowBox[{"a", "+", 
         RowBox[{"b", " ", 
@@ -1080,7 +1081,8 @@ Cell[TextData[{
    3.554764072388755*^9, 3.5547640843851757`*^9}, {3.5853498574610405`*^9, 
    3.5853498574710407`*^9}, {3.5861901475530434`*^9, 
    3.5861901475630436`*^9}, {3.586190522363569*^9, 3.586190522363569*^9}, {
-   3.7349817097329493`*^9, 3.7349817097329493`*^9}}],
+   3.7349817097329493`*^9, 3.7349817097329493`*^9}, {3.7534614816760893`*^9, 
+   3.7534614816760893`*^9}}],
 
 Cell["Rule:", "Subsubsection",
  CellDingbat->"\[FilledSmallSquare]",
@@ -1119,7 +1121,8 @@ Cell[BoxData[
        SuperscriptBox["x", "n"], " ", 
        RowBox[{"Cos", "[", 
         RowBox[{
-         FractionBox["a", "b"], "-", 
+         RowBox[{"-", 
+          FractionBox["a", "b"]}], "+", 
          FractionBox["x", "b"]}], "]"}], 
        RowBox[{"\[DifferentialD]", "x"}]}]}], ",", "x", ",", 
      RowBox[{"a", "+", 
@@ -1145,7 +1148,7 @@ Cell[BoxData[
    3.4941893689764175`*^9}, {3.554763918603685*^9, 3.5547639416137257`*^9}, 
    3.5547639774625883`*^9, {3.554764123572445*^9, 3.5547641239624453`*^9}, {
    3.585349857481041*^9, 3.5853498574910407`*^9}, {3.586190147573044*^9, 
-   3.5861901475830436`*^9}, 3.586190528693578*^9},
+   3.5861901475830436`*^9}, 3.586190528693578*^9, 3.7534614786259146`*^9},
  TextAlignment->Center,
  FontSize->12,
  FontWeight->"Bold"],
@@ -1187,7 +1190,8 @@ Cell[BoxData[
          RowBox[{"x", "^", "n"}], "*", 
          RowBox[{"Cos", "[", 
           RowBox[{
-           RowBox[{"a", "/", "b"}], "-", 
+           RowBox[{
+            RowBox[{"-", "a"}], "/", "b"}], "+", 
            RowBox[{"x", "/", "b"}]}], "]"}]}], ",", "x"}], "]"}], ",", "x", 
       ",", 
       RowBox[{"a", "+", 
@@ -1209,7 +1213,8 @@ Cell[BoxData[
    3.554764166784521*^9}, 3.5547656124114604`*^9, {3.5548539020250893`*^9, 
    3.554853906055095*^9}, 3.554870820899109*^9, 3.5853498815310745`*^9, 
    3.5853501076213913`*^9, 3.5853501513914523`*^9, 3.586190224943152*^9, 
-   3.586190276453224*^9, {3.5861905334935846`*^9, 3.5861905349235864`*^9}},
+   3.586190276453224*^9, {3.5861905334935846`*^9, 3.5861905349235864`*^9}, 
+   3.7534615146549754`*^9},
  Background->GrayLevel[0.85]],
 
 Cell[BoxData[
@@ -1225,7 +1230,8 @@ Cell[BoxData[
     "x_Symbol"}], "]"}], " ", ":=", "\n", "  ", 
   RowBox[{
    RowBox[{
-    RowBox[{"1", "/", 
+    RowBox[{
+     RowBox[{"-", "1"}], "/", 
      RowBox[{"(", 
       RowBox[{"b", "*", "c"}], ")"}]}], "*", 
     RowBox[{"Subst", "[", 
@@ -1236,7 +1242,8 @@ Cell[BoxData[
          RowBox[{"x", "^", "n"}], "*", 
          RowBox[{"Sin", "[", 
           RowBox[{
-           RowBox[{"a", "/", "b"}], "-", 
+           RowBox[{
+            RowBox[{"-", "a"}], "/", "b"}], "+", 
            RowBox[{"x", "/", "b"}]}], "]"}]}], ",", "x"}], "]"}], ",", "x", 
       ",", 
       RowBox[{"a", "+", 
@@ -1260,7 +1267,8 @@ Cell[BoxData[
    3.5548539093150997`*^9, 3.5548539121451035`*^9}, {3.554858570538128*^9, 
    3.5548585723681307`*^9}, 3.554870821899166*^9, 3.5853498815410748`*^9, 
    3.5853501076313915`*^9, 3.585350151401452*^9, 3.586190227383155*^9, 
-   3.586190276453224*^9, {3.5861905372735896`*^9, 3.586190538423591*^9}},
+   3.586190276453224*^9, {3.5861905372735896`*^9, 3.586190538423591*^9}, {
+   3.7534616988315096`*^9, 3.7534617022787066`*^9}},
  Background->GrayLevel[0.85]],
 
 Cell["", "Subsubsection",
@@ -1325,37 +1333,37 @@ Notebook[{
 Cell[545, 20, 5786, 90, 42, "Subsubtitle"],
 Cell[CellGroupData[{
 Cell[6356, 114, 6238, 98, 53, "Subsubtitle"],
-Cell[12597, 214, 176, 2, 35, "Subsubsection"],
-Cell[12776, 218, 1015, 31, 52, "Subsubsection"],
-Cell[13794, 251, 1385, 23, 26, "Subsubsection"],
-Cell[15182, 276, 2507, 57, 80, "Subsubtitle"],
-Cell[17692, 335, 771, 11, 35, "Subsubsection"],
-Cell[18466, 348, 2640, 64, 129, "Code"],
-Cell[21109, 414, 2573, 63, 139, "Code"],
-Cell[23685, 479, 89, 2, 35, "Subsubsection"]
+Cell[12597, 214, 176, 2, 48, "Subsubsection"],
+Cell[12776, 218, 1015, 31, 72, "Subsubsection"],
+Cell[13794, 251, 1385, 23, 36, "Subsubsection"],
+Cell[15182, 276, 2507, 57, 111, "Subsubtitle"],
+Cell[17692, 335, 771, 11, 48, "Subsubsection"],
+Cell[18466, 348, 2640, 64, 180, "Code"],
+Cell[21109, 414, 2573, 63, 194, "Code"],
+Cell[23685, 479, 89, 2, 48, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
 Cell[23811, 486, 6262, 99, 53, "Subsubtitle"],
-Cell[30076, 587, 225, 3, 35, "Subsubsection"],
-Cell[30304, 592, 1162, 35, 52, "Subsubsection"],
-Cell[31469, 629, 913, 26, 58, "Subsubsection"],
-Cell[32385, 657, 1462, 25, 26, "Subsubsection"],
-Cell[33850, 684, 3145, 75, 89, "Subsubtitle"],
-Cell[36998, 761, 771, 11, 35, "Subsubsection"],
-Cell[37772, 774, 2969, 80, 129, "Code"],
-Cell[40744, 856, 3023, 81, 139, "Code"],
-Cell[43770, 939, 89, 2, 35, "Subsubsection"]
+Cell[30076, 587, 225, 3, 48, "Subsubsection"],
+Cell[30304, 592, 1162, 35, 72, "Subsubsection"],
+Cell[31469, 629, 913, 26, 81, "Subsubsection"],
+Cell[32385, 657, 1462, 25, 36, "Subsubsection"],
+Cell[33850, 684, 3145, 75, 124, "Subsubtitle"],
+Cell[36998, 761, 771, 11, 48, "Subsubsection"],
+Cell[37772, 774, 2969, 80, 180, "Code"],
+Cell[40744, 856, 3023, 81, 194, "Code"],
+Cell[43770, 939, 89, 2, 48, "Subsubsection"]
 }, Closed]],
 Cell[CellGroupData[{
 Cell[43896, 946, 5442, 82, 53, "Subsubtitle"],
 Cell[49341, 1030, 130, 1, 35, "Subsubsection"],
-Cell[49474, 1033, 2120, 49, 42, "Subsubsection"],
-Cell[51597, 1084, 1092, 15, 25, "Subsubsection"],
-Cell[52692, 1101, 2322, 49, 60, "Subsubtitle"],
-Cell[55017, 1152, 795, 11, 35, "Subsubsection"],
-Cell[55815, 1165, 1885, 47, 104, "Code"],
-Cell[57703, 1214, 2043, 49, 114, "Code"],
-Cell[59749, 1265, 113, 2, 35, "Subsubsection"]
+Cell[49474, 1033, 2201, 51, 42, "Subsubsection"],
+Cell[51678, 1086, 1092, 15, 25, "Subsubsection"],
+Cell[52773, 1103, 2372, 50, 60, "Subsubtitle"],
+Cell[55148, 1155, 795, 11, 35, "Subsubsection"],
+Cell[55946, 1168, 1941, 49, 104, "Code"],
+Cell[57890, 1219, 2146, 52, 114, "Code"],
+Cell[60039, 1273, 113, 2, 35, "Subsubsection"]
 }, Closed]]
 }
 ]
