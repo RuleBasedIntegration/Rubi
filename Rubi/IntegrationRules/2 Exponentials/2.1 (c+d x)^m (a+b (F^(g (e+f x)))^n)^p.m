@@ -2,11 +2,11 @@
 (* ::Subsection::Closed:: *)
 (* 2.1 (c+d x)^m (a+b (F^(g (e+f x)))^n)^p *)
 $UseGamma = False;
-Int[(c_. + d_.*x_)^m_.*(b_.*F_^(g_.*(e_. + f_.*x_)))^n_., x_Symbol] := (c + d*x)^m*(b*F^(g*(e + f*x)))^n/(f*g*n*Log[F]) - d*m/(f*g*n*Log[F])* Int[(c + d*x)^(m - 1)*(b*F^(g*(e + f*x)))^n, x] /; FreeQ[{F, b, c, d, e, f, g, n}, x] && GtQ[m, 0] && IntegerQ[2*m] && Not[$UseGamma === True]
-Int[(c_. + d_.*x_)^m_*(b_.*F_^(g_.*(e_. + f_.*x_)))^n_., x_Symbol] := (c + d*x)^(m + 1)*(b*F^(g*(e + f*x)))^ n/(d*(m + 1)) - f*g*n*Log[F]/(d*(m + 1))* Int[(c + d*x)^(m + 1)*(b*F^(g*(e + f*x)))^n, x] /; FreeQ[{F, b, c, d, e, f, g, n}, x] && LtQ[m, -1] && IntegerQ[2*m] && Not[$UseGamma === True]
-Int[F_^(g_.*(e_. + f_.*x_))/(c_. + d_.*x_), x_Symbol] := F^(g*(e - c*f/d))/d*ExpIntegralEi[f*g*(c + d*x)*Log[F]/d] /; FreeQ[{F, c, d, e, f, g}, x] && Not[$UseGamma === True]
+Int[(c_. + d_.*x_)^m_.*(b_.*F_^(g_.*(e_. + f_.*x_)))^n_., x_Symbol] := (c + d*x)^m*(b*F^(g*(e + f*x)))^n/(f*g*n*Log[F]) - d*m/(f*g*n*Log[F])* Int[(c + d*x)^(m - 1)*(b*F^(g*(e + f*x)))^n, x] /; FreeQ[{F, b, c, d, e, f, g, n}, x] && GtQ[m, 0] && IntegerQ[2*m] && Not[TrueQ[$UseGamma]]
+Int[(c_. + d_.*x_)^m_*(b_.*F_^(g_.*(e_. + f_.*x_)))^n_., x_Symbol] := (c + d*x)^(m + 1)*(b*F^(g*(e + f*x)))^ n/(d*(m + 1)) - f*g*n*Log[F]/(d*(m + 1))* Int[(c + d*x)^(m + 1)*(b*F^(g*(e + f*x)))^n, x] /; FreeQ[{F, b, c, d, e, f, g, n}, x] && LtQ[m, -1] && IntegerQ[2*m] && Not[TrueQ[$UseGamma]]
+Int[F_^(g_.*(e_. + f_.*x_))/(c_. + d_.*x_), x_Symbol] := F^(g*(e - c*f/d))/d*ExpIntegralEi[f*g*(c + d*x)*Log[F]/d] /; FreeQ[{F, c, d, e, f, g}, x] && Not[TrueQ[$UseGamma]]
 Int[(c_. + d_.*x_)^m_.*F_^(g_.*(e_. + f_.*x_)), x_Symbol] := (-d)^m* F^(g*(e - c*f/d))/(f^(m + 1)*g^(m + 1)*Log[F]^(m + 1))* Gamma[m + 1, -f*g*Log[F]/d*(c + d*x)] /; FreeQ[{F, c, d, e, f, g}, x] && IntegerQ[m]
-Int[F_^(g_.*(e_. + f_.*x_))/Sqrt[c_. + d_.*x_], x_Symbol] := 2/d*Subst[Int[F^(g*(e - c*f/d) + f*g*x^2/d), x], x, Sqrt[c + d*x]] /; FreeQ[{F, c, d, e, f, g}, x] && Not[$UseGamma === True]
+Int[F_^(g_.*(e_. + f_.*x_))/Sqrt[c_. + d_.*x_], x_Symbol] := 2/d*Subst[Int[F^(g*(e - c*f/d) + f*g*x^2/d), x], x, Sqrt[c + d*x]] /; FreeQ[{F, c, d, e, f, g}, x] && Not[TrueQ[$UseGamma]]
 Int[(c_. + d_.*x_)^m_*F_^(g_.*(e_. + f_.*x_)), x_Symbol] := -F^(g*(e - c*f/d))*(c + d*x)^ FracPart[ m]/(d*(-f*g*Log[F]/d)^(IntPart[m] + 1)*(-f*g* Log[F]*(c + d*x)/d)^FracPart[m])* Gamma[m + 1, (-f*g*Log[F]/d)*(c + d*x)] /; FreeQ[{F, c, d, e, f, g, m}, x] && Not[IntegerQ[m]]
 Int[(c_. + d_.*x_)^m_.*(b_.*F_^(g_.*(e_. + f_.*x_)))^n_, x_Symbol] := (b*F^(g*(e + f*x)))^n/F^(g*n*(e + f*x))* Int[(c + d*x)^m*F^(g*n*(e + f*x)), x] /; FreeQ[{F, b, c, d, e, f, g, m, n}, x]
 Int[(c_. + d_.*x_)^m_.*(a_ + b_.*(F_^(g_.*(e_. + f_.*x_)))^n_.)^p_., x_Symbol] := Int[ExpandIntegrand[(c + d*x)^m, (a + b*(F^(g*(e + f*x)))^n)^p, x], x] /; FreeQ[{F, a, b, c, d, e, f, g, m, n}, x] && IGtQ[p, 0]

@@ -75,7 +75,7 @@ IntegersQ[__] = False;
 (*HalfIntegerQ[u]*)
 
 
-HalfIntegerQ::usage = "If m, n, ... are explicit half-integers, FractionQ[m,n,...] returns True; else it returns False.";
+HalfIntegerQ::usage = "If m, n, ... are explicit half-integers, HalfIntegerQ[m,n,...] returns True; else it returns False.";
 HalfIntegerQ[u__] := Scan[Function[If[Head[#]===Rational && Denominator[#]==2,Null,Return[False]]],{u}]===Null
 
 
@@ -92,7 +92,7 @@ FractionQ[__] = False;
 (*RationalQ[u]*)
 
 
-RationalQ::usage = "If m, n, ... are explicit integers or fractions, FractionQ[m,n,...] returns True; else it returns False.";
+RationalQ::usage = "If m, n, ... are explicit integers or fractions, RationalQ[m,n,...] returns True; else it returns False.";
 RationalQ[u__] := Scan[Function[If[IntegerQ[#] || Head[#]===Rational,Null,Return[False]]],{u}]===Null
 
 
@@ -410,7 +410,7 @@ GtQ[u_,v_] :=
 GtQ[u_,v_,w_] := GtQ[u,v] && GtQ[v,w]  
 
 
-LtQ::usage = "If u<v, LtQ[u,v] returns True; else it returns False.";
+LtQ::usage = "If u>v, LtQ[u,v] returns True; else it returns False.";
 LtQ[u_,v_] := 
   If[RealNumberQ[u],
     If[RealNumberQ[v],
@@ -429,7 +429,7 @@ LtQ[u_,v_] :=
 LtQ[u_,v_,w_] := LtQ[u,v] && LtQ[v,w]  
 
 
-GeQ::usage = "If u>=v, GeQ[u,v] returns True; else it returns False.";
+GeQ::usage = "If u>v, GeQ[u,v] returns True; else it returns False.";
 GeQ[u_,v_] := 
   If[RealNumberQ[u],
     If[RealNumberQ[v],
@@ -448,7 +448,7 @@ GeQ[u_,v_] :=
 GeQ[u_,v_,w_] := GeQ[u,v] && GeQ[v,w]  
 
 
-LeQ::usage = "If u<=v, LeQ[u,v] returns True; else it returns False.";
+LeQ::usage = "If u>v, LeQ[u,v] returns True; else it returns False.";
 LeQ[u_,v_] := 
   If[RealNumberQ[u],
     If[RealNumberQ[v],
@@ -487,19 +487,23 @@ RealNumberQ[u_] := NumberQ[u] && Head[u]=!=Complex
 (* Despite what the online help says, PolynomialQ[u,x^v] returns an error message if v is a sum. *)
 
 
-(* PolyQ[u,x^v,n] returns True iff u is a polynomial of degree n. *)
+PolyQ::usage = 
+"If u is a polynomial in x, PolyQ[u,x] returns True; else it returns False.
+If u is a polynomial in x of degree n, PolyQ[u,x,n] returns True; else it returns False.
+If v is free of x and u is a polynomial in x^v, PolyQ[u,x^v] returns True; else it returns False.
+If v is free of x and u is a polynomial in x^v of degree n, PolyQ[u,x^v,n] returns True; else it returns False.";
+
+
+PolyQ[u_,x_Symbol] :=
+  PolynomialQ[u,x] || PolynomialQ[Together[u],x]
+
+
 PolyQ[u_,x_Symbol,n_] :=
   If[PolynomialQ[u,x],
     EqQ[Exponent[u,x],n] && NeQ[Coefficient[u,x,n],0],
-  With[{v=Together[u]}, PolynomialQ[v,x] && EqQ[Exponent[v,x],n] && NeQ[Coefficient[v,x,n],0]]]
+  With[{v=Together[u]},
+  PolynomialQ[v,x] && EqQ[Exponent[v,x],n] && NeQ[Coefficient[v,x,n],0]]]
 
-PolyQ[u_,x_Symbol^v_,n_] :=
-  PolyQ[u,x^v] && EqQ[Expon[u,x^v],n] && NeQ[Coeff[u,x^v,n],0]
-
-
-(* If v is free of x and u is a polynomial in x^v, PolyQ[u,x^v] returns True; else it returns False. *)
-PolyQ[u_,x_Symbol] :=
-  PolynomialQ[u,x] || PolynomialQ[Together[u],x]
 
 PolyQ[u_,x_Symbol^n_Integer] :=
   If[PolynomialQ[u,x],
@@ -519,6 +523,10 @@ NonsumQ[v] && FreeQ[v,x]
 
 PolyQ[u_,v_] :=
   False
+
+
+PolyQ[u_,x_Symbol^v_,n_] :=
+  PolyQ[u,x^v] && EqQ[Expon[u,x^v],n] && NeQ[Coeff[u,x^v,n],0]
 
 
 (* ::Subsection::Closed:: *)
@@ -1097,40 +1105,6 @@ GeneralizedTrinomialParts[u_,x_Symbol] :=
 
 (* ::Section::Closed:: *)
 (*Selection functions*)
-
-
-(* ::Subsection::Closed:: *)
-(*IntPart[u]*)
-
-
-(* IntPart[u] returns the sum of the integer terms of u. *) 
-IntPart[m_*u_,n_:1] :=
-  IntPart[u,m*n] /;
-RationalQ[m]
-
-IntPart[u_,n_:1] :=
-  If[RationalQ[u],
-    IntegerPart[n*u],
-  If[SumQ[u],
-    Map[Function[IntPart[#,n]],u],
-  0]]
-
-
-(* ::Subsection::Closed:: *)
-(*FracPart[u]*)
-
-
-(* IntPart[u] returns the sum of the non-integer terms of u. *) 
-FracPart[m_*u_,n_:1] :=
-  FracPart[u,m*n] /;
-RationalQ[m]
-
-FracPart[u_,n_:1] :=
-  If[RationalQ[u],
-    FractionalPart[n*u],
-  If[SumQ[u],
-    Map[Function[FracPart[#,n]],u],
-  n*u]]
 
 
 (* ::Subsection::Closed:: *)
@@ -2433,7 +2407,62 @@ SubstForExpn[u_,v_,w_] :=
 
 
 (* ::Subsection::Closed:: *)
-(*Simp*)
+(*Simp[expn]*)
+
+
+Simp::usage = "Simp[u] and Simp[u,x] simplifies and returns u.";
+
+
+Simp[(e_.*(a_+b_)^r_.)^p_.*(c_+d_)^q_.] :=
+  With[{u=Simplify[(a+b)/(c+d)]},
+  If[IntegerQ[p] || GtQ[e,0] && GtQ[u,0] && GtQ[r,0],
+    e^p*u^(p*r),
+  e^IntPart[p]*u^(r*IntPart[p])*(e*(a+b)^r)^FracPart[p]/(c+d)^(r*FracPart[p])]] /;
+IntegerQ[r] && EqQ[p*r+q,0]
+
+
+Simp[(g_.*(a_+b_)^s_.)^p_.*(c_+d_)^q_.*(e_+f_)^r_.] :=
+  With[{u=Simplify[(a+b)/((c+d)*(e+f))]},
+  If[IntegerQ[p],
+    g^p*u^(p*s),
+  If[GtQ[g,0] && GtQ[u,0] && (NeQ[g,1] || NeQ[u,1]),
+    g^p*u^(p*s)*Simp[((c+d)^s*(e+f)^s)^p/((c+d)^(p*s)*(e+f)^(p*s))],
+  If[GtQ[g,0] && EqQ[a,c^2] && EqQ[b,-d^2] && GtQ[c,0],
+    g^p*Simp[(c-d)^(p*s)/(e+f)^(p*s)],
+  If[GtQ[g,0] && EqQ[a,e^2] && EqQ[b,-f^2] && GtQ[e,0],
+    g^p*Simp[(e-f)^(p*s)/(c+d)^(p*s)],
+  g^IntPart[p]*u^(s*IntPart[p])*(g*(a+b)^s)^FracPart[p]/((c+d)^(s*FracPart[p])*(e+f)^(s*FracPart[p]))]]]]] /;
+IntegerQ[s] && EqQ[p*s+q,0] && EqQ[p*s+r,0]
+
+
+Simp[(u_^q_.*v_^r_.)^p_.*u_^pq_.*v_^pr_.] :=
+  If[IntegerQ[p],
+    1,
+  (u^q*v^r)^FracPart[p]/(u^(q*FracPart[p])*v^(r*FracPart[p]))] /;
+IntegersQ[q,r] && EqQ[pq+p*q,0] && EqQ[pr+p*r,0]
+
+
+Simp[(u_*v_)^p_.] :=
+  If[IntegerQ[p] || GtQ[u,0] || GtQ[v,0],
+    Simp[u^p]*Simp[v^p],
+  (u*v)^p]
+
+
+Simp[(a_+b_)^p_.*(c_+d_)^q_*(e_+f_)^q_] :=
+  (a/c^2)^p*(c+d)^(p+q)*(e+f)^(p+q) /;
+IntegerQ[p] && EqQ[e,c] && EqQ[f,-d] && EqQ[b*c^2+a*d^2,0]
+
+
+Simp[(a_+b_)^p_*(c_+d_)^p_] :=
+  (a^2-b^2)^p /;
+ EqQ[a,c] && EqQ[b,-d] && GtQ[a,0]
+
+
+Simp[u_] := Simplify[u]
+
+
+(* ::Subsection::Closed:: *)
+(*Simp[expn,var]*)
 
 
 Simp[u_,x_] :=
@@ -2789,21 +2818,21 @@ IntegerQ[p]
 
 
 SimpFixFactor[(a_.*c_^r_ + b_.*x_^n_.)^p_.,x_] :=
-  c^(r*p)*SimpFixFactor[(a+b/c^r*x^n)^p,x] /;
+  c^(p*r)*SimpFixFactor[(a+b/c^r*x^n)^p,x] /;
 FreeQ[{a,b,c},x] && IntegersQ[n,p] && AtomQ[c] && RationalQ[r] && r<0
 
 SimpFixFactor[(a_. + b_.*c_^r_*x_^n_.)^p_.,x_] :=
-  c^(r*p)*SimpFixFactor[(a/c^r+b*x^n)^p,x] /;
+  c^(p*r)*SimpFixFactor[(a/c^r+b*x^n)^p,x] /;
 FreeQ[{a,b,c},x] && IntegersQ[n,p] && AtomQ[c] && RationalQ[r] && r<0
 
 
 SimpFixFactor[(a_.*c_^s_. + b_.*c_^r_.*x_^n_.)^p_.,x_] :=
-  c^(s*p)*SimpFixFactor[(a+b*c^(r-s)*x^n)^p,x] /;
-FreeQ[{a,b,c},x] && IntegersQ[n,p] && RationalQ[s,r] && 0<s<=r && c^(s*p)=!=-1
+  c^(p*s)*SimpFixFactor[(a+b*c^(r-s)*x^n)^p,x] /;
+FreeQ[{a,b,c},x] && IntegersQ[n,p] && RationalQ[s,r] && 0<s<=r && c^(p*s)=!=-1
 
 SimpFixFactor[(a_.*c_^s_. + b_.*c_^r_.*x_^n_.)^p_.,x_] :=
-  c^(r*p)*SimpFixFactor[(a*c^(s-r)+b*x^n)^p,x] /;
-FreeQ[{a,b,c},x] && IntegersQ[n,p] && RationalQ[s,r] && 0<r<s && c^(r*p)=!=-1
+  c^(p*r)*SimpFixFactor[(a*c^(s-r)+b*x^n)^p,x] /;
+FreeQ[{a,b,c},x] && IntegersQ[n,p] && RationalQ[s,r] && 0<r<s && c^(p*r)=!=-1
 
 SimpFixFactor[u_,x_] := u
 
@@ -3120,6 +3149,40 @@ TrigSimplifyAux[u_] := u
 TrigSimplifyAux[u_.*(c_.*tan[v_]^n_.*tan[w_]^n_.)^p_.] :=
   u*((-c+c*sec[w])^n)^p /;
 IntegerQ[n] && EqQ[w,2*v]
+
+
+(* ::Subsection::Closed:: *)
+(*IntPart[u]*)
+
+
+(* IntPart[u] returns the sum of the integer terms of u. *) 
+IntPart[m_*u_,n_:1] :=
+  IntPart[u,m*n] /;
+RationalQ[m]
+
+IntPart[u_,n_:1] :=
+  If[RationalQ[u],
+    IntegerPart[n*u],
+  If[SumQ[u],
+    Map[Function[IntPart[#,n]],u],
+  0]]
+
+
+(* ::Subsection::Closed:: *)
+(*FracPart[u]*)
+
+
+(* IntPart[u] returns the sum of the non-integer terms of u. *) 
+FracPart[m_*u_,n_:1] :=
+  FracPart[u,m*n] /;
+RationalQ[m]
+
+FracPart[u_,n_:1] :=
+  If[RationalQ[u],
+    FractionalPart[n*u],
+  If[SumQ[u],
+    Map[Function[FracPart[#,n]],u],
+  n*u]]
 
 
 (* ::Section::Closed:: *)
@@ -3439,10 +3502,8 @@ PolynomialInSubstAux[u_,v_,x_] :=
 (*PolynomialDivide*)
 
 
-(* ::Item:: *)
-(*u and v are polynomials in x.  PolynomialDivide[u,v,x] returns the polynomial quotient of u and v plus the polynomial remainder divided by v.*)
-
-
+PolynomialDivide::usage = "If u and v are polynomials in x, PolynomialDivide[u,v,x] returns the polynomial quotient of u and v plus the polynomial remainder divided by v.
+If u[w] and v[w] are polynomials in w, PolynomialDivide[u,v,w,x] returns the polynomial quotient of u[x] and v[x] plus the polynomial remainder divided by v[x] with x replaced by w.";
 PolynomialDivide[u_,v_,x_Symbol] :=
   Module[{quo=PolynomialQuotient[u,v,x],rem=PolynomialRemainder[u,v,x],free,monomial},
   quo=Apply[Plus,Map[Function[Simp[Together[Coefficient[quo,x,#]*x^#],x]],Exponent[quo,x,List]]];
@@ -3456,10 +3517,6 @@ PolynomialDivide[u_,v_,x_Symbol] :=
   If[BinomialQ[v,x],
     quo+free*monomial*rem/ExpandToSum[v,x],
   quo+free*monomial*rem/v]]
-
-
-(* ::Item:: *)
-(*u[w] and v[w] are polynomials in w.  PolynomialDivide[u,v,w,x] returns the polynomial quotient of u[x] and v[x] plus the polynomial remainder divided by v[x] with x replaced by w.*)
 
 
 PolynomialDivide[u_,v_,w_,x_Symbol] :=
@@ -3520,17 +3577,37 @@ ExpandTrig[u_,v_,x_Symbol] :=
 
 
 (* ::Subsection::Closed:: *)
-(*ExpandIntegrand[u,x]*)
+(*ExpandIntegrand[u,v,x]*)
 
 
 Clear[ExpandIntegrand];
 
+
+ExpandIntegrand[(a_.+b_.*Log[c_.*x_^n_.])^p_.,x_^m_.*(d_+e_.*x_^r_.)^q_.,x_Symbol] :=
+  DistributeOverTerms[(a+b*Log[c*x^n])^p,CollectRecipTerms[ExpandIntegrand[x^m*(d+e*x^r)^q,x],x],x] /;
+FreeQ[{a,b,c,d,e,n},x] && IGtQ[p,0] && IGtQ[r,0] && ILtQ[m,0] && ILtQ[q,0]   && EqQ[r,1]
+
+
 ExpandIntegrand[u_,v_,x_Symbol] :=
-  Module[{w=ExpandIntegrand[v,x],r},
-  r=NonfreeTerms[w,x];
-  If[SumQ[r],
-    u*FreeTerms[w,x]+Map[Function[MergeMonomials[u*#,x]],r],
-  u*FreeTerms[w,x]+MergeMonomials[u*r,x]]]
+  DistributeOverTerms[u,ExpandIntegrand[v,x],x]
+
+
+DistributeOverTerms[u_,v_,x_Symbol] :=
+  With[{w=NonfreeTerms[v,x]},
+  u*FreeTerms[v,x] + If[SumQ[w], 
+    Map[Function[MergeMonomials[u*#,x]],w], 
+    MergeMonomials[u*w,x]]]
+
+
+CollectRecipTerms[u_.+A_./x_+B_./(d_+e_.*x_),x_Symbol] :=
+  u+A*d/(x*(d+e*x)) /;
+FreeQ[{A,B,d,e},x] && EqQ[B+A*e,0]
+
+CollectRecipTerms[u_,x_Symbol] := u
+
+
+(* ::Subsection::Closed:: *)
+(*ExpandIntegrand[u,x]*)
 
 
 (* ExpandIntegrand[u_,x_Symbol] :=
@@ -5306,7 +5383,7 @@ SquareRootOfQuadraticSubst[u_,vv_,xx_,x_Symbol] :=
 (*Subst[u,v,w]*)
 
 
-(* Subst[u,x,v] returns u with all nondummy occurences of x replaced by v and resulting constant terms replaced by 0. *) 
+Subst::usage = "Subst[u,x,v] returns u with all nondummy occurences of x replaced by v and resulting constant terms replaced by 0.";
 Subst[u_,x_Symbol,v_] :=
   If[PowerQ[v] && Not[IntegerQ[v[[2]]]] && 
       MatchQ[v[[1]],a_+b_.*x+c_.*x^2 /; FreeQ[{a,b,c},x] && Not[AtomQ[b]]] && 
@@ -5385,7 +5462,11 @@ SubstAux[F_[a_.*x_^m_.],x_,b_.*x_^n_,flag_] :=
 FreeQ[{a,b},x] && IGtQ[m,0] && ILtQ[n,0] && MemberQ[{ArcSin,ArcCos,ArcTan,ArcCot,ArcSec,ArcCsc,ArcSinh,ArcCosh,ArcTanh,ArcCoth,ArcSech,ArcCsch},F]
 
 
-(* ::Code::Bold:: *)
+SubstAux[e_+f_.*x_,x_,(a_.+b_.*x_)/(c_.+d_.*x_),flag_] :=
+  Together[c*e+a*f]/(c+d*x) /;
+FreeQ[{a,b,c,d,e,f},x] && EqQ[d*e+b*f,0]
+
+
 (* x is a variable symbol. flag is True if v is a binomial in x; else it is False. *)
 (* SubstAux[u,x,v,flag] returns u with all nondummy occurences of x replaced by v *)
 SubstAux[u_,x_,v_,flag_] :=
@@ -5437,15 +5518,13 @@ SubstAux[u_,x_,v_,flag_] :=
 (*SimplifyAntiderivative[u,x]*)
 
 
-(* ::Item::Closed:: *)
-(*SimplifyAntiderivative[u,x] returns the simplest, continuous expression whose derivative wrt x equals the derivative of u wrt x.*)
+SimplifyAntiderivative::usage = "SimplifyAntiderivative[u,x] returns the simplest, continuous expression whose derivative wrt x equals the derivative of u wrt x.";
+Clear[SimplifyAntiderivative];
 
 
 (* ::Item:: *)
 (*Basis: D[c*F[x], x] == c*D[F[x], x]*)
 
-
-Clear[SimplifyAntiderivative];
 
 SimplifyAntiderivative[c_*u_,x_Symbol] :=
   With[{v=SimplifyAntiderivative[u,x]},
@@ -5793,7 +5872,10 @@ SimplifyAntiderivative[u_,x_Symbol] :=
   If[FreeQ[u,x],
     0,
   If[LogQ[u],
-    Log[RemoveContent[u[[1]],x]],
+    With[{v=RemoveContent[u[[1]],x]},
+    If[v===u[[1]],
+      u,
+    SimplifyAntiderivative[Log[v],x]]],
   If[SumQ[u],
     SimplifyAntiderivativeSum[Map[Function[SimplifyAntiderivative[#,x]],u],x],
   u]]]
@@ -5872,7 +5954,7 @@ SimplifyAntiderivativeSum[u_,x_Symbol] := u
 (*Basis: D[ArcTan[a*Tan[f[x]]], x] == D[f[x] + ArcTan[(Cos[f[x]]*Sin[f[x]])/(1/(a - 1) + Sin[f[x]]^2)], x] == D[f[x] - ArcTan[(Cos[f[x]]*Sin[f[x]])/(a/(1 - a) + Cos[f[x]]^2)], x]*)
 
 
-(* ::Item::Bold:: *)
+(* ::Item:: *)
 (*Note: If  a>0 and f[x] is real, then 1/(1-a)-Sin[f[x]]^2 is nonzero and f[x]-ArcTan[(Cos[f[x]] Sin[f[x]])/(1/(1-a)-Sin[f[x]]^2)] is continuous, unlike ArcTan[a Tan[f[x]]].*)
 
 

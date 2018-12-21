@@ -1,10 +1,6 @@
 
 (* ::Subsection::Closed:: *)
 (* 9.4 Miscellaneous integration rules *)
-(* Int[u_.*(c_.*x_^n_)^p_,x_Symbol] :=  c^FracPart[p]*(c*x^n)^FracPart[p]/x^(n*FracPart[p])*Int[u*x^(n*p),x] /;  FreeQ[{c,n,p},x] && Not[IntegerQ[p]] *)
-Int[u_*(c_.*(a_. + b_.* x_)^n_)^p_, x_Symbol] := c^IntPart[p]*(c*(a + b*x)^n)^FracPart[p]/(a + b*x)^(n*FracPart[p])* Int[u*(a + b*x)^(n*p), x] /; FreeQ[{a, b, c, n, p}, x] && Not[IntegerQ[p]] && Not[MatchQ[u, x^n1_.*v_. /; EqQ[n, n1 + 1]]]
-Int[u_.*(c_.*(d_*(a_. + b_.* x_))^p_)^q_, x_Symbol] := (c*(d*(a + b*x))^p)^q/(a + b*x)^(p*q)* Int[u*(a + b*x)^(p*q), x] /; FreeQ[{a, b, c, d, p, q}, x] && Not[IntegerQ[p]] && Not[IntegerQ[q]]
-Int[u_.*(c_.*(d_.*(a_. + b_.* x_)^n_)^p_)^q_, x_Symbol] := (c*(d*(a + b*x)^n)^p)^q/(a + b*x)^(n*p*q)* Int[u*(a + b*x)^(n*p*q), x] /; FreeQ[{a, b, c, d, n, p, q}, x] && Not[IntegerQ[p]] && Not[IntegerQ[q]]
 Int[(a_. + b_.*F_[c_.*Sqrt[d_. + e_.*x_]/Sqrt[f_. + g_.*x_]])^ n_./(A_. + B_.*x_ + C_.*x_^2), x_Symbol] := 2*e*g/(C*(e*f - d*g))* Subst[Int[(a + b*F[c*x])^n/x, x], x, Sqrt[d + e*x]/Sqrt[f + g*x]] /; FreeQ[{a, b, c, d, e, f, g, A, B, C, F}, x] && EqQ[C*d*f - A*e*g, 0] && EqQ[B*e*g - C*(e*f + d*g), 0] && IGtQ[n, 0]
 Int[(a_. + b_.*F_[c_.*Sqrt[d_. + e_.*x_]/Sqrt[f_. + g_.*x_]])^ n_./(A_. + C_.*x_^2), x_Symbol] := 2*e*g/(C*(e*f - d*g))* Subst[Int[(a + b*F[c*x])^n/x, x], x, Sqrt[d + e*x]/Sqrt[f + g*x]] /; FreeQ[{a, b, c, d, e, f, g, A, C, F}, x] && EqQ[C*d*f - A*e*g, 0] && EqQ[e*f + d*g, 0] && IGtQ[n, 0]
 Int[(a_. + b_.*F_[c_.*Sqrt[d_. + e_.*x_]/Sqrt[f_. + g_.*x_]])^ n_/(A_. + B_.*x_ + C_.*x_^2), x_Symbol] := Unintegrable[(a + b*F[c*Sqrt[d + e*x]/Sqrt[f + g*x]])^ n/(A + B*x + C*x^2), x] /; FreeQ[{a, b, c, d, e, f, g, A, B, C, F, n}, x] && EqQ[C*d*f - A*e*g, 0] && EqQ[B*e*g - C*(e*f + d*g), 0] && Not[IGtQ[n, 0]]
