@@ -37,6 +37,8 @@ RubiPrintInformation::usage = "RubiPrintInformation is an option to Steps and St
 RubiClearMemoryImages::usage = "RubiClearMemoryImages[] deletes the memory files that are created for each system to speed-up the loading time of the package. " <>
     "The memory files are recreated during the next loading of the Rubi package.";
 
+RubiNotebookReference::usage = "RubiNotebookReference[hash][\"Open\"] tries to open the Rubi notebook of a particular integration rule.";
+
 Unintegrable::usage = "Unintegrable[expn,var] indicates <expn> is not integrable with respect to <var> in closed-form.";
 CannotIntegrate::usage = "CannotIntegrate[expn,var] indicates Rubi is unable to integrate <expn> with respect to <var>.";
 $Unintegrable::usage = "If $Unintegrable is True and <expn> is not integrable with respect to <var> in terms of the functions Rubi uses to express antiderivatives, Int[expn,var] returns Unintegrable[expn,var].";
@@ -57,7 +59,7 @@ Begin["`Private`"];
 $rubiDir = DirectoryName[System`Private`$InputFileName];
 $RubiVersion = StringJoin[
   "Rubi ",
-  Version /. List@@Get[FileNameJoin[{$rubiDir, "PacletInfo.m"}]]
+  Version /. List @@ Get[FileNameJoin[{$rubiDir, "PacletInfo.m"}]]
 ];
 PrintTemporary["Loading " <> $RubiVersion <> " will take a minute or two. In the future this will take less than a second."];
 
@@ -309,7 +311,7 @@ If[$LoadElementaryFunctionRules === True,
   LoadRules["8 Special functions/8.7 Zeta function"];
   LoadRules["8 Special functions/8.8 Polylogarithm function"];
   LoadRules["8 Special functions/8.9 Product logarithm function"];
-(*LoadRules["8 Special functions/8.10 Bessel functions"]; *)
+  (*LoadRules["8 Special functions/8.10 Bessel functions"]; *)
 
   LoadRules["9 Miscellaneous/9.2 Derivative integration rules"]
 ];
@@ -325,6 +327,10 @@ If[$LoadShowSteps === True,
 
 StatusBarPrint["Modifying " <> ToString[$RuleCount] <> " integration rules to distribute coefficients over sums..."];
 FixIntRules[];
+
+
+Get[FileNameJoin[{$ruleDir, "IntegrationRuleReferences.m"}]];
+Get[FileNameJoin[{$rubiDir, "RubiNotebookReferences.m"}]];
 
 If[$LoadShowSteps === True,
   StatusBarPrint["Modifying " <> ToString[$RuleCount] <> " integration rules to display steps..."];

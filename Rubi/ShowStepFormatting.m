@@ -14,6 +14,19 @@ $IntermediateResultColor = Hue[.6, .8, .5];
 Format[HoldPattern[Dist[u_, v_, _]], TraditionalForm] := HoldForm[u * v];
 Unprotect[Int]; Format[HoldPattern[Int[expr_, x_]], TraditionalForm] := HoldForm[Integrate[expr, x]];
 
+ruleNumberDisplay[num_Integer] := DynamicModule[
+  {
+    dv = DownValues[Int][[num]],
+    ref
+  },
+  ref = Cases[dv, _RubiNotebookReference, Infinity];
+  If[Length[ref] > 0,
+    Button[Style[num, "Label"], ref[[1]]["Open"], ImageSize -> Automatic, Tooltip -> "Navigate to Rubi Integration Notebook", Appearance -> "Palette"],
+    Style[num, "Label"]
+  ]
+];
+ruleNumberDisplay[arg_] := Style[arg, "Label"];
+
 FormatRubiStep::usage = "FormatRubiStep[step] displays an integration step as formatted box in TraditionalForm";
 FormatRubiStep[RubiRule[cond_, HoldComplete[lhs_], HoldComplete[rhs_], rule_ : "General"]] := Module[
   {
@@ -30,7 +43,7 @@ FormatRubiStep[RubiRule[cond_, HoldComplete[lhs_], HoldComplete[rhs_], rule_ : "
         Spacer[10], Alignment -> Center];
   fullRule =
       grid[{
-        {Style["Rubi Rule:", "Label", Gray], Style[rule, "Label"]},
+        {Style["Rubi Rule:", "Label", Gray], ruleNumberDisplay[rule]},
         {Style["Condition:", "Label", Gray], Style[cond, $ConditionColor]},
         {Style["Transformation:", "Label", Gray], transformation}},
         $VersionNumber > 8,

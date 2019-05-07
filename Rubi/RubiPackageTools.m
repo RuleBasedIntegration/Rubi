@@ -21,11 +21,20 @@ DeployRubi::usage = "DeployRubi[] creates a paclet and zip of the current releas
 Begin["`Private`"];
 $dir = DirectoryName@System`Private`$InputFileName;
 $ruleDir = FileNameJoin[{$dir, "..", "IntegrationRuleNotebooks"}];
+$rubiNotebookReferenceFile = "IntegrationRuleReferences.m";
 
-BuildIntegrationRules[] := BuildIntegrationRules[#, FileNameJoin[{$dir, "IntegrationRules"}]]& /@ FileNames["*.nb", {$ruleDir}, Infinity];
+BuildIntegrationRules[] := With[
+  {
+    outDir = FileNameJoin[{$dir, "IntegrationRules"}]
+  },
+  BuildIntegrationRules[#, outDir]& /@ FileNames["*.nb", {$ruleDir}, Infinity];
+  exportNotebookReferences[outDir];
+];
+
 BuildIntegrationRules[file_String /; FileExistsQ[file], outDir_String /; DirectoryQ[outDir]] := Module[
   {
     files,
+    inputBaseName = FileBaseName[file],
     outputFile,
     sectionName,
     sourceAsList,
@@ -33,12 +42,9 @@ BuildIntegrationRules[file_String /; FileExistsQ[file], outDir_String /; Directo
   },
   sectionName = FileBaseName[file];
   PrintTemporary["Exporting all notebooks from " <> sectionName];
-
-
-
   sourceAsList = Prepend[
-    Map[inputTextToString, NotebookImport[file, "Code" -> "InputText"]],
-    subSectionComment[FileBaseName[file]]
+    MapIndexed[inputTextToString[#1, inputBaseName, First[#2]]&, NotebookImport[file, "Code" -> "InputText"]],
+    subSectionComment[inputBaseName]
   ];
   If[Not@DirectoryQ[outDir2],
     CreateDirectory[outDir2]
@@ -47,7 +53,32 @@ BuildIntegrationRules[file_String /; FileExistsQ[file], outDir_String /; Directo
   Export[outputFile, StringRiffle[sourceAsList, {"", "\n", "\n"}], "Text", CharacterEncoding -> "ASCII"]
 ];
 
-inputTextToString[str_String /; SyntaxQ[str]] := StringReplace[str, {"\\\n" -> " ", Whitespace.. -> " "}];
+tagNotebookSource[str_String, ref_String] := StringReplace[str,
+  "Int[" ~~ arg__ ~~ ", x_Symbol]" :> "Int[" ~~ arg ~~ ", x_Symbol, _:RubiNotebookReference[\"" ~~ ref ~~ "\"]]"
+];
+
+cacheNotebookPosition[file_String, cell_Integer] := With[{ref = {"File" -> file, "Cell" -> cell}},
+  With[{hash = Hash[ref, "CRC32", "HexString"]},
+    Global`RubiNotebookReference[hash]["Resolve"] = ref;
+    hash
+  ]
+];
+
+exportNotebookReferences[outDir_?DirectoryQ] := Save[
+  FileNameJoin[{outDir, $rubiNotebookReferenceFile}],
+  (*Cases[DownValues[Rubi`Private`RubiNotebookReference], HoldPattern[ Verbatim[HoldPattern][ Rubi`Private`RubiNotebookReference[str_]] :> val_] :> (str -> val)]*)
+  Global`RubiNotebookReference
+];
+
+inputTextToString[str_String /; SyntaxQ[str], file_String, cell_Integer] := With[
+  {
+    hash = cacheNotebookPosition[file, cell]
+  },
+  tagNotebookSource[
+    StringReplace[str, {"\\\n" -> " ", Whitespace.. -> " "}],
+    hash
+  ]
+];
 inputTextToString[args___] := Throw[{args}];
 
 sectionComment[message_String] := TemplateApply["\n(* ::Section:: *)\n(* `` *)", message];

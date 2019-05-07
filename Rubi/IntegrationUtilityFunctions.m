@@ -8003,11 +8003,11 @@ FixIntRules[rulelist_] := Block[{Int, Subst, Simp, Dist},
 
 
 FixIntRule[rule_] :=
-  If[AtomQ[rule[[1,1,-1]]],
-    FixIntRule[rule,rule[[1,1,-1]]],
-  If[Head[rule[[1,1,-1]]]===Pattern && AtomQ[rule[[1,1,-1,1]]],
-    FixIntRule[rule,rule[[1,1,-1,1]]],
-  Print["Invalid integration rule: ",rule[[1,1,-1]]]]]
+  If[AtomQ[rule[[1,1,2]]],
+    FixIntRule[rule,rule[[1,1,2]]],
+  If[Head[rule[[1,1,2]]]===Pattern && AtomQ[rule[[1,1,2,1]]],
+    FixIntRule[rule,rule[[1,1,2,1]]],
+  Print["Invalid integration rule: ",rule[[1,1,2]]]]]
 
 
 (* ::Subsection::Closed:: *)

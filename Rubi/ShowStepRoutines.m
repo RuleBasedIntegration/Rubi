@@ -42,7 +42,7 @@ ModifyRule[num_, rule_RuleDelayed, flag_] :=
           Not[FreeQ[Hold[rule], CannotIntegrate]] ||
           Not[FreeQ[Hold[rule], Preprocess]],
         rule,
-        lhsStrg = FormatLhs[rule];
+        lhsStrg = FormatLhs[DeleteCases[rule, Verbatim[Optional][_, _RubiNotebookReference], 10]];
         If[rule[[2, 0]] === Condition,
           condStrg = FormatConditions[Extract[rule, {2, 2}, Defer]];
           If[rule[[2, 1, 0]] === With || rule[[2, 1, 0]] === Module || rule[[2, 1, 0]] === Block,
