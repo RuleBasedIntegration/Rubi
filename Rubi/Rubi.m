@@ -81,7 +81,7 @@ RubiClearMemoryImages[] := Module[{files = FileNames["*.mx", {FileNameJoin[{$rub
 ];
 
 LoadRules::inv = "Could not load file or section: ``";
-LoadRules[path_List]:=LoadRules[FileNameJoin[path]]
+LoadRules[path_List] := LoadRules[FileNameJoin[path]]
 LoadRules[fileName_String /; FileExtension[fileName] =!= "m"] := LoadRules[FileNameJoin[{$ruleDir, fileName <> ".m"}]];
 LoadRules[fileName_String /; FileExistsQ[fileName]] := (
   StatusBarPrint["Loading " <> FileBaseName@fileName <> ".m..."];
