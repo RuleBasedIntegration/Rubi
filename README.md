@@ -12,6 +12,12 @@ One major advantage of Rubi is that it can provide the exact steps that are requ
 Since Rubi rules follow a decision tree, the transformation and the required conditions can be provided for each
 integration step.
 
+## Quick installation
+
+```mathematica
+PacletInstall["https://github.com/RuleBasedIntegration/Rubi/releases/download/4.16.1.0/Rubi-4.16.1.0.paclet"]
+```
+
 ## Documentation
 
 The user documentation of the Rubi project can be found under [rulebasedintegration.org](https://rulebasedintegration.org).
