@@ -94,6 +94,8 @@ ClearStatusBar[] := If[$Notebooks, CurrentValue[EvaluationNotebook[], WindowStat
 
 
 Unprotect[Int];  Clear[Int];  Clear[Unintegrable];  Clear[CannotIntegrate];
+(*auto-highlighting for Int[]*)
+SyntaxInformation[Int] = {"LocalVariables" -> {"Integrate", {2, 2}}}; 
 
 (* The order of loading the rule-files below is crucial to ensure a functional Rubi integrator! *)
 LoadRules[$utilityPackage];
