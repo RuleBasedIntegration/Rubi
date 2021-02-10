@@ -23,17 +23,19 @@ Dist::usage = "Dist[expn1,expn2,var] distributes <expn1> over <expn2>.";
 Subst::usage = "Subst[expn1,var,expn2] substitutes <expn2> for <var> in <expn1>.";
 Step::usage = "Step[Int[expn, var]] displays the first step in the integration of <expn> with respect to <var> and returns the intermediate result.";
 Steps::usage = "Steps[Int[expn, var]] displays all the steps in the integration of <expn> with respect to <var> and returns the antiderivative.";
-Stats::usage = "Stats[Int[expn, var]] prints statistical information of the integration before returning the antiderivative <expn> with respect to <var>." <>
-    "It consists of (a) the number of steps used to integrate, (b) the number of distinct rules used, (c) is the leaf count size of the input," <>
+Stats::usage = "Stats[Int[expn, var]] prints statistical information of the integration before returning the antiderivative <expn> with respect to <var>. " <>
+    "It consists of (a) the number of steps used to integrate, (b) the number of distinct rules used, (c) is the leaf count size of the input, " <>
     "(d) the leaf count size of the antiderivative, and (e) the rule-to-size ratio of the integration (i.e. the quotient of (b) and (c)).";
 
 $RubiVersion::usage = "$RubiVersion shows the currently loaded version of Rubi.";
 RubiRule::usage = "RubiRule is a symbolic wrapper that is used when displaying integration steps.";
 RubiIntermediateResult::usage = "RubiIntermediateResult is a symbolic wrapper that is used when displaying integration steps.";
-RubiStats::usage = "RubiStats is a symbolic wrapper that contains statistical information about an integration." <>
-    "It consists of (a) the number of steps used to integrate, (b) the number of distinct rules used, (c) is the leaf count size of the input," <>
+RubiStats::usage = "RubiStats is a symbolic wrapper that contains statistical information about an integration. " <>
+    "It consists of (a) the number of steps used to integrate, (b) the number of distinct rules used, (c) is the leaf count size of the input, " <>
     "(d) the leaf count size of the antiderivative, and (e) the rule-to-size ratio of the integration (i.e. the quotient of (b) and (c)).";
-RubiPrintInformation::usage = "RubiPrintInformation is an option to Steps and Stats that prints information if set to True and returns as a list otherwise.";
+RubiPrintInformation::usage = "RubiPrintInformation is an option to Steps and Stats that prints information if set to True and returns as a list otherwise. " <>
+    "For Steps only: RubiPrintInformation can also be set to TeXForm or TraditionalForm to produce a stylized step-by-step solution; " <>
+    "issues a message when set to anything other than True, False, TeXForm or TraditionalForm, but returns the steps as a list nevertheless.";
 RubiClearMemoryImages::usage = "RubiClearMemoryImages[] deletes the memory files that are created for each system to speed-up the loading time of the package. " <>
     "The memory files are recreated during the next loading of the Rubi package.";
 
@@ -94,6 +96,11 @@ ClearStatusBar[] := If[$Notebooks, CurrentValue[EvaluationNotebook[], WindowStat
 
 
 Unprotect[Int];  Clear[Int];  Clear[Unintegrable];  Clear[CannotIntegrate];
+
+(*auto-highlighting for Int[]*)
+SyntaxInformation[Int]={"LocalVariables"->{"Integrate",{2,2}}};
+(*Formatted display of Subst*)
+Subst /: MakeBoxes[HoldPattern@Subst[expr_,src_,tar_], TraditionalForm] := RowBox@{UnderscriptBox[StyleBox["subst.", FontSize -> Medium], RowBox[{MakeBoxes[src, TraditionalForm], ":\[Rule]", MakeBoxes[tar, TraditionalForm]}]], MakeBoxes[expr, TraditionalForm]}
 
 (* The order of loading the rule-files below is crucial to ensure a functional Rubi integrator! *)
 LoadRules[$utilityPackage];
@@ -338,7 +345,10 @@ SetAttributes[Steps, {HoldFirst}];
 Options[Steps] = {
   RubiPrintInformation -> True
 };
+SyntaxInformation[Steps] = {"ArgumentsPattern" -> {_, OptionsPattern[]}, "OptionNames" -> ToString /@ First /@ Options[Steps]}; (* front end examination for Options*)
 Int::wrngUsage = "Wrong usage of the `1` function. Please use `1`[Int[expr, x]].";
+Steps::wrngOpt = "Value of option `1` is not recognized. Acceptable specifications are `2`.";
+Steps[fpar___, Null, epar___] := Steps[fpar, Default[Steps, Length[{epar}]+1], epar] (*allow writing Steps[Int[expr],,opts]; cf. https://mathematica.stackexchange.com/questions/95407/skipping-middle-optional-arguments*)
 Steps[Int[expr_, x_], opts : OptionsPattern[]] := Steps[Int[expr, x], $IterationLimit, opts];
 Steps[Int[expr_, x_], n_Integer, OptionsPattern[]] := Module[{result, steps},
   If[$LoadShowSteps =!= True,
@@ -356,10 +366,30 @@ Steps[Int[expr_, x_], n_Integer, OptionsPattern[]] := Module[{result, steps},
       n - 1
     ]
   ];
-  If[OptionValue[RubiPrintInformation] === True,
-    PrintRubiSteps[steps];
-    result,
-    {steps, result}
+  Switch[OptionValue[RubiPrintInformation],
+    True,
+      PrintRubiSteps[steps]; result,
+    False,
+      {steps, result},
+    TeXForm, (*not actually used, but is good as an option name*)
+      With[{TeX2Str = Convert`TeX`ExpressionToTeX(*ToString@*TeXForm is also OK*)}, 
+        {steps, result}
+        // Flatten // Most
+        // Cases[RubiIntermediateResult[x_]:>"=&"<>(TeX2Str[HoldForm @@ x])<>"\\\\"]
+        // {"\\begin{aligned}", TeX2Str@HoldForm@Int[expr, var], Sequence @@ #, "\\end{aligned}"} & 
+        // StringReplace[{"\\, d" <> ToString[var] ->  "\\, \\mathrm{d}" <> ToString[var],  "\\int" -> "\\displaystyle \\int"}]
+        // StringRiffle],
+    TraditionalForm,
+      Grid[{"\[LongEqual]", TraditionalForm@#}& /@ 
+        Cases[Flatten@First@{steps, result},
+		  RubiIntermediateResult[x_] :> HoldForm@@x
+	    ] // Prepend[{"",TraditionalForm@HoldForm@Int[expr,var]}], 
+        Alignment -> Left],
+    _, 
+      Message[Steps::wrngOpt, 
+        RubiPrintInformation -> OptionValue[RubiPrintInformation], 
+        First /@ Options[Steps]
+      ]; {steps, result}
   ]
 ] /; Head[x] === Symbol && If[TrueQ[n > 0], True, Message[Steps::negSteps]; False];
 Steps[___] := (Message[Int::wrngUsage, Steps]; $Failed);
