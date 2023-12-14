@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (* Mathematica Init file    *)
 (* Created by Mathematica Plugin for IntelliJ IDEA *)
 
@@ -26,14 +28,13 @@ Rubi`Private`$MXFile = FileNameJoin[{
   ]
 }];
 
-(*Quiet[*)
-  (*Unprotect["Int"];*)
-  (*Remove["Int"];*)
-(*];*)
+Quiet[Unprotect["Int"]; Remove["Int"]];
 
 If[FileExistsQ[Rubi`Private`$MXFile],
   Quiet@ClearAll["Rubi`*"];
   Get[Rubi`Private`$MXFile],
   Get["Rubi`Rubi`"];
   DumpSave[Rubi`Private`$MXFile, "Rubi`"];
-]
+];
+
+Print[$RubiVersion<>" running on Mathematica "<>ToString[$VersionNumber]];
