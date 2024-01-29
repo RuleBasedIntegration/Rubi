@@ -1756,6 +1756,9 @@ QuotientOfLinearsP[u_,x_] :=
 
 
 QuotientOfLinearsParts::usage = "If u is equivalent to an expression of the form (a+b*x)/(c+d*x), QuotientOfLinearsParts[u,x] returns the list {a, b, c, d}.";
+
+QuotientOfLinearsParts::error = "unexpected form."
+
 QuotientOfLinearsParts[a_*u_,x_] :=
   Apply[Function[{a*#1, a*#2, #3, #4}], QuotientOfLinearsParts[u,x]] /;
 FreeQ[a,x]
@@ -1780,7 +1783,7 @@ QuotientOfLinearsParts[u_,x_] :=
     {0, 1, 1, 0},
   If[FreeQ[u,x],
     {u, 0, 1, 0},
-  Print["QuotientOfLinearsParts error!"];
+  Message[QuotientOfLinearsParts::error];
   {u, 0, 1, 0}]]
 
 
@@ -3329,6 +3332,8 @@ ExpandToSum[u_,v_,x_Symbol] :=
 (*ExpandToSum[u,x] returns u expanded into a sum of monomials of x.*)
 
 
+ExpandToSum::error = "Unrecognized expression for expansion.";
+
 ExpandToSum[u_,x_Symbol] :=
   If[PolyQ[u,x],
     Simp[Apply[Plus,Map[Function[Coeff[u,x,#]*x^#], Expon[u,x,List]]],x],
@@ -3340,7 +3345,7 @@ ExpandToSum[u_,x_Symbol] :=
     Function[#[[1]]*x^#[[4]] + #[[2]]*x^#[[3]]][GeneralizedBinomialParts[u,x]],
   If[GeneralizedTrinomialQ[u,x],
     Function[#[[1]]*x^#[[5]] + #[[2]]*x^#[[4]] + #[[3]]*x^(2*#[[4]]-#[[5]])][GeneralizedTrinomialParts[u,x]],
-  Print["Warning: Unrecognized expression for expansion ",u];
+  Message[ExpandToSum::error];
   Expand[u,x]]]]]]
 
 
@@ -4093,8 +4098,9 @@ Star::usage = "Star[u,v] displays as u*v, and returns the product of u and v wit
 DownValues[Star]={};
 
 
+Star::error = "Inert multiplication by zero!";
 Star[u_,v_] := (
-  Print["*** Warning ***:  0*", v, "]"];
+  Message[Star::error];
   0 ) /; 
 EqQ[u,0]
 
@@ -5398,7 +5404,7 @@ SimplifyAntiderivative[ArcCoth[a_.*Tan[u_]],x_Symbol] :=
 FreeQ[a,x] && GtQ[a^2,0] && ComplexFreeQ[u]
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Basis: ArcTanh[a Tanh[z]]==-I ArcTan[a Tan[I z]]*)
 
 
@@ -5419,7 +5425,7 @@ SimplifyAntiderivative[ArcTanh[Tanh[u_]],x_Symbol] :=
   SimplifyAntiderivative[u,x]
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Basis: D[ArcCoth[a*Tanh[f[x]]], x] == -(I*D[ArcTan[a*Tan[I*f[x]]], x])*)
 
 
@@ -5494,7 +5500,7 @@ SimplifyAntiderivative[ArcTanh[a_.*Cot[u_]],x_Symbol] :=
 FreeQ[a,x] && GtQ[a^2,0] && ComplexFreeQ[u]
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Basis: ArcCoth[a Coth[z]]==-I ArcCot[a Cot[I z]]*)
 
 
@@ -5664,7 +5670,7 @@ SimplifyAntiderivativeSum[u_,x_Symbol] := u
 (*RectifyTangent*)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Basis: ArcTan[I a Tan[f[x]]]==I ArcTanh[a Tan[f[x]]]*)
 
 
@@ -5740,7 +5746,7 @@ RectifyTangent[u_,a_,b_,x_Symbol] :=
 (* *)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Basis: ArcTan[I a+I b Tan[f[x]]]==I ArcTanh[a+b Tan[f[x]]]*)
 
 
@@ -5786,7 +5792,7 @@ RectifyTangent[u_,a_,b_,r_,x_Symbol] :=
 (* *)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Basis: D[ArcTanh[a + b*Tanh[f[x]]], x] == D[f[x] - ArcTanh[(2*a*b*Cosh[2*f[x]] - (1 - a^2 - b^2)*Sinh[2*f[x]])/(a^2 - (1 + b)^2 - (1 - a^2 - b^2)*Cosh[2*f[x]] + 2*a*b*Sinh[2*f[x]])], x]*)
 
 
@@ -5807,7 +5813,7 @@ FreeQ[{a,b,c},x] *)
 (*RectifyCotangent*)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Basis: ArcCot[I a Cot[f[x]]]==-I ArcCoth[a Cot[f[x]]]*)
 
 
@@ -5879,7 +5885,7 @@ RectifyCotangent[u_,a_,b_,x_Symbol] :=
 (* *)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Basis: ArcTan[I a+I b Cot[f[x]]]==I ArcTanh[a+b Cot[f[x]]]*)
 
 
@@ -5925,7 +5931,7 @@ RectifyCotangent[u_,a_,b_,r_,x_Symbol] :=
 (* *)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Basis: D[ArcTanh[a + b*Coth[f[x]]], x] == D[f[x] - ArcTanh[(2*a*b*Cosh[2*f[x]] - (1 - a^2 - b^2)*Sinh[2*f[x]])/(-a^2 + (1 + b)^2 - (1 - a^2 - b^2)*Cosh[2*f[x]] + 2*a*b*Sinh[2*f[x]])], x]*)
 
 
@@ -7701,7 +7707,7 @@ IntTerm[u_,x_Symbol] :=
   Star[FreeFactors[u,x], Int[NonfreeFactors[u,x],x]]
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Fix integration rules functions*)
 
 
