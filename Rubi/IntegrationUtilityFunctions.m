@@ -363,10 +363,12 @@ IntegralFreeQ[u_] :=
 
 EqQ::usage = "If u-v equals 0, EqQ[u,v] returns True; else it returns False.";
 EqQ[u_,v_] := Quiet[PossibleZeroQ[u-v]] || Refine[u==v]===True
+EqQ[args___] := Null /; CheckArguments[EqQ[args], 2]
 
 
 NeQ::usage = "If u-v equals 0, NeQ[u,v] returns False; else it returns True.";
 NeQ[u_,v_] := Not[Quiet[PossibleZeroQ[u-v]] || Refine[u==v]===True]
+NeQ[args___] := Null /; CheckArguments[NeQ[args], 2]
 
 
 (* ::Subsection::Closed:: *)
@@ -375,18 +377,22 @@ NeQ[u_,v_] := Not[Quiet[PossibleZeroQ[u-v]] || Refine[u==v]===True]
 
 IGtQ::usage = "n must be a rational number.  If u is an integer and u>n, IGtQ[u,n] returns True; else it returns False.";
 IGtQ[u_,n_] := IntegerQ[u] && u>n
+IGtQ[args___] := Null /; CheckArguments[IGtQ[args], 2]
 
 
 ILtQ::usage = "n must be a rational number.  If u is an integer and u<n, ILtQ[u,n] returns True; else it returns False.";
 ILtQ[u_,n_] := IntegerQ[u] && u<n
+ILtQ[args___] := Null /; CheckArguments[ILtQ[args], 2]
 
 
 IGeQ::usage = "n must be a rational number.  If u is an integer and u>=n, IGeQ[u,n] returns True; else it returns False.";
 IGeQ[u_,n_] := IntegerQ[u] && u>=n
+IGeQ[args___] := Null /; CheckArguments[IGeQ[args], 2]
 
 
 ILeQ::usage = "n must be a rational number.  If u is an integer and u<=n, ILeQ[u,n] returns True; else it returns False.";
 ILeQ[u_,n_] := IntegerQ[u] && u<=n
+ILeQ[args___] := Null /; CheckArguments[ILeQ[args], 2]
 
 
 (* ::Subsection::Closed:: *)
