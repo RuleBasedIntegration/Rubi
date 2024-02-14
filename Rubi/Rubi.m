@@ -469,7 +469,7 @@ Int[e_, x_, flag : (Stats | Step | Steps)] := flag[Int[e, x]] /; (Message[Int::o
 (* Define Unintegrable and CannotIntegrate*)
 
 
-Int::definite = "Rubi does not check the domain of integration is continuous.";
+Int::definite = "Rubi does not check that the domain of integration is continuous.";
 Int[u_, {x_Symbol, a_, b_}] := With[{result = Int[u, x]}, 
 	Message[Int::definite]; 
 	Limit[result, x -> b] - Limit[result, x -> a]];
