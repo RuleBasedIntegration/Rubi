@@ -378,7 +378,7 @@ If[$LoadShowSteps === True,
   StatusBarPrint[""]];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (* Define Steps, Step and Stats*)
 
 
@@ -465,11 +465,15 @@ Int::oldFlag = "The usage Int[expr_, x_, `1`] is depreciated. Please use `1`[Int
 Int[e_, x_, flag : (Stats | Step | Steps)] := flag[Int[e, x]] /; (Message[Int::oldFlag, flag]; True);
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (* Define Unintegrable and CannotIntegrate*)
 
 
-Int[u_, {x_Symbol, a_, b_}] := With[{result = Int[u, x]}, Limit[result, x -> b] - Limit[result, x -> a]];
+Int::definite = "Rubi does not check the domain of integration is continuous.";
+Int[u_, {x_Symbol, a_, b_}] := With[{result = Int[u, x]}, 
+	Message[Int::definite]; 
+	Limit[result, x -> b] - Limit[result, x -> a]];
+
 Int[{u__}, x_Symbol] := Map[Function[Int[#, x]], {u}];
 
 Protect[Int];
