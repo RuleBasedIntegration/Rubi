@@ -472,7 +472,7 @@ Int[e_, x_, flag : (Stats | Step | Steps)] := flag[Int[e, x]] /; (Message[Int::o
 Int::definite = "Rubi does not check whether the domain of integration is continuous.";
 Int[u_, {x_Symbol, a_, b_}] := With[{result = Int[u, x]}, 
 	Message[Int::definite]; 
-	Limit[result, x -> b] - Limit[result, x -> a]];
+	Limit[result, x -> b, Direction -> 1] - Limit[result, x -> a, Direction -> -1]];
 
 Int[{u__}, x_Symbol] := Map[Function[Int[#, x]], {u}];
 
